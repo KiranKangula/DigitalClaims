@@ -10,22 +10,28 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import utils.ConfigReader;
 
 public class Hooks {
 	public static WebDriver driver;
 
     @Before
     public void openBrowser() throws Exception {
+        ConfigReader configReader = new ConfigReader();
+      if(configReader.getProperty("browser").contentEquals("chrome")) {
+          WebDriverManager.chromedriver().setup();
+          ChromeOptions options = new ChromeOptions();
+          if(configReader.getProperty("headless").contentEquals("true")) {
+              options.addArguments("--headless", "--window-size=1440,768", "--disable-gpu");
+          }
+              driver = new ChromeDriver(options);
+          driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+          driver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
+          driver.manage().deleteAllCookies();
+          driver.manage().window().maximize();
+          driver.get(configReader.getProperty("baseUrl"));
+      }
 
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        //options.addArguments("--headless", "--window-size=1440,768", "--disable-gpu");
-        driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
-        driver.manage().deleteAllCookies();
-        driver.manage().window().maximize();
-        driver.get("https://bat.ospc.wsib.ca/");
     }
 
     @After

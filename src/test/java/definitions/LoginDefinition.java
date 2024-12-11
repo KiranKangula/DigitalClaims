@@ -9,13 +9,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import pages.HomePage;
 import pages.LoginPage;
+import utils.ConfigReader;
 
 public class LoginDefinition {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private LoginPage loginPage;
 	private HomePage homePage;
-	
+	ConfigReader prop=new ConfigReader();
 	public LoginDefinition() throws Exception {
 		driver = Hooks.driver;
 		wait = new WebDriverWait(driver, 5);
@@ -30,7 +31,7 @@ public class LoginDefinition {
 
 	@When("^User submit email and password$")
 	public void submitEmailPassword() {
-		loginPage.loginToSite("Kiran_Kangula@wsib.on.ca", "Welcome1");
+		loginPage.loginToSite(prop.getProperty("OSPC_username"), prop.getProperty("OSPC_Password"));
 	}
 
 	@Then("^User should be able to login sucessfully and new page open$")
