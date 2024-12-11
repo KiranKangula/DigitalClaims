@@ -30,7 +30,7 @@ public class LoginDefinition {
 
 	@When("^User submit email and password$")
 	public void submitEmailPassword() {
-		loginPage.loginToSite("standard_user", "secret_sauce");
+		loginPage.loginToSite("Kiran_Kangula@wsib.on.ca", "Welcome1");
 	}
 
 	@Then("^User should be able to login sucessfully and new page open$")

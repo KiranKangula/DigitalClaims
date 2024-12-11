@@ -12,7 +12,7 @@ import utils.BaseDriverClass;
 // https://www.saucedemo.com/
 public class LoginPage extends BaseDriverClass {
 
-	@FindBy(xpath = "//input[@id='user-name']")
+	@FindBy(xpath = "//input[@id='email']")
 	@CacheLookup
 	private WebElement usernameTextField;
 
@@ -20,7 +20,7 @@ public class LoginPage extends BaseDriverClass {
 	@CacheLookup
 	private WebElement passwordTextField;
 
-	@FindBy(xpath = "//input[@id='login-button']")
+	@FindBy(xpath = "//button[@id='next']")
 	@CacheLookup
 	private WebElement loginButton;
 

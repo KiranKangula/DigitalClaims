@@ -19,7 +19,7 @@ public class Hooks {
 
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless", "--window-size=1440,768", "--disable-gpu");
+        //options.addArguments("--headless", "--window-size=1440,768", "--disable-gpu");
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);

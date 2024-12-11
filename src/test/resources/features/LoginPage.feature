@@ -1,4 +1,4 @@
-Feature: Login to Saucedemo Application
+Feature: Login to OSPC Application
 
 Scenario: Login Functionality
 Given User is on login page

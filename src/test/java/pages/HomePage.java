@@ -10,7 +10,7 @@ import utils.BaseDriverClass;
 
 public class HomePage extends BaseDriverClass {
 
-	@FindBy(xpath = "//span[contains(text(),'Products')]")
+	@FindBy(xpath = "//*[@id='divTitle']/h1")
 	@CacheLookup
 	private WebElement homepageHeader;
 
