@@ -11,6 +11,8 @@ import pages.LoginPage;
 import pages.OSPCClaimOverview;
 import utils.ConfigReader;
 
+import java.time.Duration;
+
 public class OSPCClaims {
 	private WebDriver driver;
 	private WebDriverWait wait;
@@ -20,7 +22,7 @@ public class OSPCClaims {
 	ConfigReader prop=new ConfigReader();
 	public OSPCClaims() throws Exception {
 		driver = Hooks.driver;
-		wait = new WebDriverWait(driver, 5);
+		wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 		loginPage = new LoginPage(driver, wait);
 		homePage = new HomePage(driver, wait);
 		OSPCClaimOverview = new OSPCClaimOverview(driver, wait);

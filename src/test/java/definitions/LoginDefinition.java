@@ -11,6 +11,8 @@ import pages.HomePage;
 import pages.LoginPage;
 import utils.ConfigReader;
 
+import java.time.Duration;
+
 public class LoginDefinition {
 	private WebDriver driver;
 	private WebDriverWait wait;
@@ -19,7 +21,7 @@ public class LoginDefinition {
 	ConfigReader prop=new ConfigReader();
 	public LoginDefinition() throws Exception {
 		driver = Hooks.driver;
-		wait = new WebDriverWait(driver, 5);
+		wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 		loginPage = new LoginPage(driver, wait);
 		homePage = new HomePage(driver, wait);
 	}
