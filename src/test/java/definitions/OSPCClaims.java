@@ -32,14 +32,13 @@ public class OSPCClaims {
 	}
 
 
-	@When("User clicks on ClaimNumber")
-	public void userClicksOnClaimNumber() {
-		homePage.clickClaim(prop.getProperty("claimnumber"));
+	@When("User clicks on {string}")
+	public void userClicksOnClaimNumber(String claimnumber) {
+		homePage.clickClaim(claimnumber);
 	}
 
 	@Then("User should be navigated to My Claims Overview screen")
 	public void userShouldBeNavigatedToMyClaimsOverviewScreen() {
 		Assert.assertTrue(OSPCClaimOverview.verifyOnClaimOverview());
 	}
-
 }
