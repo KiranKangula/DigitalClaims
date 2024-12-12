@@ -34,7 +34,7 @@ public class OSPCClaims {
 
 	@When("User clicks on ClaimNumber")
 	public void userClicksOnClaimNumber() {
-		homePage.clickClaim();
+		homePage.clickClaim(prop.getProperty("claimnumber"));
 	}
 
 	@Then("User should be navigated to My Claims Overview screen")

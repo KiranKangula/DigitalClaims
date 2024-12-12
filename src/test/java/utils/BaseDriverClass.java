@@ -17,4 +17,8 @@ public class BaseDriverClass {
     protected void waitUntilElementVisible(WebElement element) {
         wait.until(ExpectedConditions.visibilityOf(element));
     }
+
+    protected WebDriver getDriver() {
+        return driver;
+    }
 }
