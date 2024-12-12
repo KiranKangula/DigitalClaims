@@ -25,9 +25,10 @@ public class Hooks {
           options.addArguments("--force-device-scale-factor=1");
           options.addArguments("--start-maximized");
           options.addArguments("--disable-gpu");
+          options.addArguments("--no-proxy-server");
           //options.addArguments("--remote-debugging-port=9222");
           options.addArguments("--disable-extensions");
-          //options.addArguments("--disable-dev-shm-usage");
+          options.addArguments("--disable-dev-shm-usage");
           //options.addArguments("--window-size=1920,1080");
           options.addArguments("--no-sandbox");
           //options.addArguments("test-type");
