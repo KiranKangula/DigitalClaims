@@ -14,10 +14,10 @@ import utils.ConfigReader;
 
 public class Hooks {
 	public static WebDriver driver;
-
+    ConfigReader configReader = new ConfigReader();
     @Before
     public void openBrowser() throws Exception {
-        ConfigReader configReader = new ConfigReader();
+
       if(configReader.getProperty("browser").contentEquals("chrome")) {
           WebDriverManager.chromedriver().setup();
           ChromeOptions options = new ChromeOptions();
