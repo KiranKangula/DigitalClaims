@@ -6,7 +6,7 @@ import java.util.Properties;
 
 public class ConfigReader {
     private Properties properties;
-    private final String propertyFilePath = "src/test/resources/config.properties"; // Adjust path accordingly
+    private final String propertyFilePath = "src/test/resources/ospcconfig.properties"; // Adjust path accordingly
 
     public ConfigReader() {
         properties = new Properties();
