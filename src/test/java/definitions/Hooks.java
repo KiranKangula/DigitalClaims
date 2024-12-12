@@ -5,11 +5,13 @@ import java.util.concurrent.TimeUnit;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
+import io.cucumber.java.an.E;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.edge.EdgeDriver;
 import utils.ConfigReader;
 
 public class Hooks {
@@ -18,33 +20,39 @@ public class Hooks {
     @Before
     public void openBrowser() throws Exception {
 
-      if(configReader.getProperty("browser").contentEquals("chrome")) {
-          WebDriverManager.chromedriver().setup();
-          ChromeOptions options = new ChromeOptions();
-          options.setExperimentalOption("useAutomationExtension", false);
-          options.addArguments("--force-device-scale-factor=1");
-          options.addArguments("--start-maximized");
-          options.addArguments("--disable-gpu");
-          options.addArguments("--no-proxy-server");
-          //options.addArguments("--remote-debugging-port=9222");
-          options.addArguments("--disable-extensions");
-          options.addArguments("--disable-dev-shm-usage");
-          //options.addArguments("--window-size=1920,1080");
-          options.addArguments("--no-sandbox");
-          //options.addArguments("test-type");
-          options.addArguments("--disable-infobars");
-          options.addArguments("--ignore-certificate-errors");
-          if(configReader.getProperty("headless").contentEquals("true")) {
-              options.addArguments("--headless", "--window-size=1440,768", "--disable-gpu");
-          }
+        if(configReader.getProperty("browser").contentEquals("chrome")) {
+            WebDriverManager.chromedriver().setup();
+            ChromeOptions options = new ChromeOptions();
 
-              driver = new ChromeDriver(options);
-          driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-          driver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
-          driver.manage().deleteAllCookies();
-          driver.manage().window().maximize();
-          driver.get(configReader.getProperty("baseUrl"));
-      }
+            // Configure ChromeOptions to bypass 403 errors and improve compatibility
+            options.setExperimentalOption("useAutomationExtension", false);
+            options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+            options.addArguments("--remote-allow-origins=*");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--remote-allow-origins=*");
+            // Enable headless mode only when required
+            if(configReader.getProperty("headless").contentEquals("true")) {
+                options.addArguments("--headless", "--window-size=1440,768", "--disable-gpu");
+            }
+
+            driver = new ChromeDriver(options);
+            driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+            driver.manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
+            driver.manage().deleteAllCookies();
+
+            // Maximize window if not headless
+            if (!configReader.getProperty("headless").contentEquals("true")) {
+                driver.manage().window().maximize();
+            }
+
+            driver.get(configReader.getProperty("baseUrl"));
+        }
+        if(configReader.getProperty("browser").contentEquals("edge")) {
+            WebDriverManager.edgedriver().setup();
+            driver = new EdgeDriver();
+            driver.get(configReader.getProperty("baseUrl"));
+        }
 
     }
 
