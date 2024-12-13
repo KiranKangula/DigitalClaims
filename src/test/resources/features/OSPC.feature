@@ -41,4 +41,4 @@ Background: : Login to OSPC
 
     Examples:
       | claimnumber | subject | message                   |
-      | 32649808    | Payments| Test Message for Payments |
+      | 32649808    | Payments| <dynamic> |

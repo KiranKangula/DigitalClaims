@@ -99,6 +99,7 @@ public class OSPCClaims {
 
 	@And("User selects {string} and enter {string}")
 	public void userSelectsAndEnter(String subject, String message) {
+
 		Assert.assertTrue(OSPCClaimOverview.sendusamessage(subject, message));
 
 	}
