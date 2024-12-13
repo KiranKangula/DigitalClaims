@@ -108,4 +108,10 @@ public class OSPCClaims {
 	public void userClicksOnSendButtonAndLandsOnMessageSentScreen() {
 		Assert.assertTrue(OSPCClaimOverview.sendandconfirm());
 	}
+
+	@And("Return to Mail and verify the sent message")
+	public void returnToMailAndVerifyTheSentMessage() {
+		Assert.assertTrue(OSPCClaimOverview.mailscreen());
+
+	}
 }

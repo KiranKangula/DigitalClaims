@@ -14,6 +14,8 @@ import utils.ConfigReader;
 
 public class OSPCClaimOverview extends BaseDriverClass {
 	ConfigReader prop = new ConfigReader();
+	public static String randommessage;
+
 	@FindBy(xpath = "//*[@id='mainHeading']")
 	@CacheLookup
 	private WebElement myclaimoverview;
@@ -126,6 +128,13 @@ public class OSPCClaimOverview extends BaseDriverClass {
 	@CacheLookup
 	private WebElement ReturntoMail;
 
+	@FindBy(id = "mailListPageHeading")
+	@CacheLookup
+	private WebElement mailListPageHeading;
+
+	@FindBy(xpath = "//*[@id=\"mailListDatatable\"]/div/div[1]/div[2]/div[1]/div/div[4]/div")
+	@CacheLookup
+	private WebElement SentMessageBody;
 
 	public OSPCClaimOverview(WebDriver driver, WebDriverWait wait) {
 		super(driver, wait);
@@ -236,14 +245,14 @@ public class OSPCClaimOverview extends BaseDriverClass {
 
 	public boolean sendusamessage(String subject, String message) {
 		if (message.equals("<dynamic>")) {
-			message = generateRandomText(); // Replace "<dynamic>" with random text
+			randommessage = generateRandomText(); // Replace "<dynamic>" with random text
 		}
 		SubjectDropdown.click();
 		String dynamicXPath = "//*[contains(text(),'" + subject + "')]";
 		WebElement SubjectElement = getDriver().findElement(By.xpath(dynamicXPath));
 		waitUntilElementVisible(SubjectElement);
 		SubjectElement.click();
-		txtBody.sendKeys(message);
+		txtBody.sendKeys(randommessage);
 		return SubjectDropdown.getText().contentEquals(subject);
 	}
 
@@ -252,5 +261,11 @@ public class OSPCClaimOverview extends BaseDriverClass {
 		waitUntilElementVisible(ReturntoMail);
 		//Assert.assertEquals(ReturntoMail.getText(), "Message sent");
 		return ReturntoMail.isDisplayed();
+	}
+
+	public boolean mailscreen() {
+		ReturntoMail.click();
+		waitUntilElementVisible(mailListPageHeading);
+		return SentMessageBody.getText().contentEquals(randommessage);
 	}
 }

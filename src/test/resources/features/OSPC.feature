@@ -38,7 +38,11 @@ Background: : Login to OSPC
     And User clicks on Send us a message link and Lands on Send us a message screen
     And User selects "<subject>" and enter "<message>"
     And User clicks on Send button and Lands on Message sent screen
+    And Return to Mail and verify the sent message
+    Then Switch to New tab and Login to ClaimCenter
+    And Search for "<claimnumber>"
+    Then User should be able to see the message displayed from OSPC
 
     Examples:
-      | claimnumber | subject | message                   |
+      | claimnumber | subject | message   |
       | 32649808    | Payments| <dynamic> |
