@@ -3,15 +3,20 @@ package definitions;
 import java.util.concurrent.TimeUnit;
 
 import io.cucumber.java.After;
+import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.an.E;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import utils.ConfigReader;
 
 public class Hooks {
@@ -50,23 +55,35 @@ public class Hooks {
         }
         if(configReader.getProperty("browser").contentEquals("edge")) {
             WebDriverManager.edgedriver().setup();
-            driver = new EdgeDriver();
+            EdgeOptions options = new EdgeOptions();
+            options.setExperimentalOption("useAutomationExtension", false);
+            options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+            options.addArguments("--remote-allow-origins=*");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--remote-allow-origins=*");
+
+            if(configReader.getProperty("headless").contentEquals("true")) {
+                options.addArguments("--headless", "--window-size=1440,768", "--disable-gpu");
+            }
+            driver = new EdgeDriver(options);
             driver.get(configReader.getProperty("baseUrl"));
         }
 
     }
 
-    @After
+    @AfterStep
     public void embedScreenshot(Scenario scenario) {
 
-//        if(scenario.isFailed()) {
-//            try {
-//                byte[] screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
-//                scenario.embed(screenshot, "image/png");
-//            } catch (WebDriverException noSupportScreenshot) {
-//                System.err.println(noSupportScreenshot.getMessage());
-//            }
-//        }
+        if(scenario.isFailed() || configReader.getProperty("screenshots").contentEquals("true")) {
+            try {
+                final byte[] screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
+                String screenshotname = scenario.getName().replaceAll(" ","_")+".png";
+                scenario.attach(screenshot, "image/png", screenshotname);
+            } catch (WebDriverException noSupportScreenshot) {
+                System.err.println(noSupportScreenshot.getMessage());
+            }
+        }
         driver.quit();
     }
 }

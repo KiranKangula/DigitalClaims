@@ -21,7 +21,7 @@ public class LoginDefinition {
 	ConfigReader prop=new ConfigReader();
 	public LoginDefinition() throws Exception {
 		driver = Hooks.driver;
-		wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
 		loginPage = new LoginPage(driver, wait);
 		homePage = new HomePage(driver, wait);
 	}

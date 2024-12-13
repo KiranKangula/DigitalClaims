@@ -1,5 +1,6 @@
 package definitions;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -22,7 +23,7 @@ public class OSPCClaims {
 	ConfigReader prop=new ConfigReader();
 	public OSPCClaims() throws Exception {
 		driver = Hooks.driver;
-		wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
 		loginPage = new LoginPage(driver, wait);
 		homePage = new HomePage(driver, wait);
 		OSPCClaimOverview = new OSPCClaimOverview(driver, wait);
@@ -42,5 +43,52 @@ public class OSPCClaims {
 	@Then("User should be navigated to My Claims Overview screen")
 	public void userShouldBeNavigatedToMyClaimsOverviewScreen() {
 		Assert.assertTrue(OSPCClaimOverview.verifyOnClaimOverview());
+	}
+
+	@And("User should be navigated to Benefit Payments screen")
+	public void userShouldBeNavigatedToBenefitPaymentsScreen() {
+		Assert.assertTrue(OSPCClaimOverview.verifyOnBenefitpayments());
+	}
+
+	@And("User should be navigated to Healthcare benefit screen")
+	public void userShouldBeNavigatedToHealthcareBenefitScreen() {
+		Assert.assertTrue(OSPCClaimOverview.verifyOnHealthcarebenefits());
+	}
+
+	@And("User should be navigated to Non Health care benefit screen")
+	public void userShouldBeNavigatedToNonHealthCareBenefitScreen() {
+		Assert.assertTrue(OSPCClaimOverview.verifyOnNonHealthcarebenefits());
+	}
+
+	@And("User should be navigated to Appeals screen")
+	public void userShouldBeNavigatedToAppealsScreen() {
+		Assert.assertTrue(OSPCClaimOverview.verifyOnAppeals());
+	}
+
+	@And("User should be navigated to Submit Document screen")
+	public void userShouldBeNavigatedToSubmitDocumentScreen() {
+		Assert.assertTrue(OSPCClaimOverview.verifyOnSubmitDocuments());
+
+	}
+
+	@And("User should be able to upload a document")
+	public void userShouldBeAbleToUploadADocument() {
+		Assert.assertTrue(OSPCClaimOverview.uploadDocuments());
+	}
+
+	@And("User should be able to select WSIB form {string}")
+	public void userShouldBeAbleToSelectWSIBForm(String wsibform) {
+		Assert.assertTrue(OSPCClaimOverview.selectWSIBForm(wsibform));
+
+	}
+
+	@And("Select confirmation checkbox and Click on Submit button")
+	public void selectConfirmationCheckboxAndClickOnSubmitButton() throws InterruptedException {
+		Assert.assertTrue(OSPCClaimOverview.SubmitDocument());
+	}
+
+	@And("Verify the Document History is updated")
+	public void verifyTheDocumentHistoryIsUpdated() {
+		Assert.assertTrue(OSPCClaimOverview.DocumentHistory());
 	}
 }
