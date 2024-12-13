@@ -17,15 +17,28 @@ Background: : Login to OSPC
 #    Examples:
 #      | claimnumber |
 #      | 32649417    |
-#      | 32649808    |
+#
+#  Scenario Outline: Upload WSIB form Document and Verify Submitted Document Screen
+#    Given User is on my Claim screen
+#    When User clicks on "<claimnumber>"
+#    Then User should be navigated to My Claims Overview screen
+#    And User should be navigated to Submit Document screen
+#    And User should be able to upload a document with "<filename>"
+#    And User should be able to select WSIB form "<wsibform>"
+#    And Select confirmation checkbox and Click on Submit button
+#    And Verify the Document History is updated with "<filename>"
+#    Examples:
+#      | claimnumber | wsibform              | filename                                                |
+#      | 32649808    | Dental report (0278A) | 0717B_202410_LongTermRateEarningsQuestionnaire_ACES.pdf |
 
-  Scenario: Upload Document and Verify Submitted Document Screen
+  Scenario Outline: Send a message from OSPC
     Given User is on my Claim screen
-    When User clicks on "32649808"
+    When User clicks on "<claimnumber>"
     Then User should be navigated to My Claims Overview screen
-    And User should be navigated to Submit Document screen
-    And User should be able to upload a document
-    And User should be able to select WSIB form "Benefit for Loss of Retirement Income Designation of Beneficiary Form (2048A)"
-    And Select confirmation checkbox and Click on Submit button
-    And Verify the Document History is updated
+    And User clicks on Send us a message link and Lands on Send us a message screen
+    And User selects "<subject>" and enter "<message>"
+    And User clicks on Send button and Lands on Message sent screen
 
+    Examples:
+      | claimnumber | subject | message                   |
+      | 32649808    | Payments| Test Message for Payments |

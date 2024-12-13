@@ -102,6 +102,31 @@ public class OSPCClaimOverview extends BaseDriverClass {
 	@CacheLookup
 	private WebElement DocumentDate;
 
+	@FindBy(xpath = "\t//*[@id=\"sendUsMessageLink\"]/a/span")
+	@CacheLookup
+	private WebElement SendusmessageLink;
+
+	@FindBy(id = "secondaryHeading")
+	@CacheLookup
+	private WebElement SendusmessageHeader;
+
+	@FindBy(id = "ddlSubject-wrapper")
+	@CacheLookup
+	private WebElement SubjectDropdown;
+
+	@FindBy(id = "txtBody")
+	@CacheLookup
+	private WebElement txtBody;
+
+	@FindBy(xpath = "//*[@id=\"btnSend\"]/span/span")
+	@CacheLookup
+	private WebElement SendButton;
+
+	@FindBy(xpath = "//*[@id=\"returnToMailLink\"]/span")
+	@CacheLookup
+	private WebElement ReturntoMail;
+
+
 	public OSPCClaimOverview(WebDriver driver, WebDriverWait wait) {
 		super(driver, wait);
 		PageFactory.initElements(driver, this);
@@ -152,9 +177,9 @@ public class OSPCClaimOverview extends BaseDriverClass {
 		return submitdocumentsheading.isDisplayed();
 	}
 
-	public Boolean uploadDocuments() {
+	public Boolean uploadDocuments(String filename) {
 
-		String path = "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\Document Upload\\" + prop.getProperty("OSPC_filename");
+		String path = "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\Document Upload\\" + filename;
 		WebElement input = getDriver().findElement(By.cssSelector("input[type='file']"));
 		((JavascriptExecutor) getDriver()).executeScript("arguments[0].style.display = 'block';", input);
 		input.sendKeys(path);
@@ -189,17 +214,40 @@ public class OSPCClaimOverview extends BaseDriverClass {
 
 	}
 
-	public Boolean DocumentHistory() {
+	public Boolean DocumentHistory(String filename) {
 		DocumentHistoryLink.click();
-		waitUntilElementVisible(submitdocumentsheading);
+		waitUntilElementVisible(submittedDocumentsHeading);
 		for (int i = 0; i < 50; i++) {
 			if (DocumentDescription.getText().isEmpty() || !DocumentDate.getText().contentEquals(getCurrentDate("dd MMM yyyy"))) {
 				getDriver().navigate().refresh();
-			} else return DocumentDescription.getText().contentEquals(prop.getProperty("OSPC_filename")) &&
+			} else return DocumentDescription.getText().contentEquals(filename) &&
                     DocumentDate.getText().contentEquals(getCurrentDate("dd MMM yyyy"));
 		}
 		return false;
     }
 
 
+	public boolean verifyOnSendMessageScreen() {
+		SendusmessageLink.click();
+		waitUntilElementVisible(SendusmessageHeader);
+		Assert.assertEquals(SendusmessageHeader.getText(), "Send us a message");
+		return SendusmessageHeader.isDisplayed();
+	}
+
+	public boolean sendusamessage(String subject, String message) {
+		SubjectDropdown.click();
+		String dynamicXPath = "//*[contains(text(),'" + subject + "')]";
+		WebElement SubjectElement = getDriver().findElement(By.xpath(dynamicXPath));
+		waitUntilElementVisible(SubjectElement);
+		SubjectElement.click();
+		txtBody.sendKeys(message);
+		return SubjectDropdown.getText().contentEquals(subject);
+	}
+
+	public boolean sendandconfirm() {
+		SendButton.click();
+		waitUntilElementVisible(ReturntoMail);
+		//Assert.assertEquals(ReturntoMail.getText(), "Message sent");
+		return ReturntoMail.isDisplayed();
+	}
 }

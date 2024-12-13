@@ -71,11 +71,6 @@ public class OSPCClaims {
 
 	}
 
-	@And("User should be able to upload a document")
-	public void userShouldBeAbleToUploadADocument() {
-		Assert.assertTrue(OSPCClaimOverview.uploadDocuments());
-	}
-
 	@And("User should be able to select WSIB form {string}")
 	public void userShouldBeAbleToSelectWSIBForm(String wsibform) {
 		Assert.assertTrue(OSPCClaimOverview.selectWSIBForm(wsibform));
@@ -87,8 +82,29 @@ public class OSPCClaims {
 		Assert.assertTrue(OSPCClaimOverview.SubmitDocument());
 	}
 
-	@And("Verify the Document History is updated")
-	public void verifyTheDocumentHistoryIsUpdated() {
-		Assert.assertTrue(OSPCClaimOverview.DocumentHistory());
+	@And("User should be able to upload a document with {string}")
+	public void userShouldBeAbleToUploadADocumentWithFilename(String filename) {
+		Assert.assertTrue(OSPCClaimOverview.uploadDocuments(filename));
+	}
+
+	@And("Verify the Document History is updated with {string}")
+	public void verifyTheDocumentHistoryIsUpdatedWith(String filename) {
+		Assert.assertTrue(OSPCClaimOverview.DocumentHistory(filename));
+	}
+
+	@And("User clicks on Send us a message link and Lands on Send us a message screen")
+	public void userClicksOnSendUsAMessageLink() {
+		Assert.assertTrue(OSPCClaimOverview.verifyOnSendMessageScreen());
+	}
+
+	@And("User selects {string} and enter {string}")
+	public void userSelectsAndEnter(String subject, String message) {
+		Assert.assertTrue(OSPCClaimOverview.sendusamessage(subject, message));
+
+	}
+
+	@And("User clicks on Send button and Lands on Message sent screen")
+	public void userClicksOnSendButtonAndLandsOnMessageSentScreen() {
+		Assert.assertTrue(OSPCClaimOverview.sendandconfirm());
 	}
 }

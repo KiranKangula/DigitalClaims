@@ -72,18 +72,23 @@ public class Hooks {
 
     }
 
-    @AfterStep
-    public void embedScreenshot(Scenario scenario) {
+    @After
+    public void closeDriver() {
+        driver.quit();
+    }
 
-        if(scenario.isFailed() || configReader.getProperty("screenshots").contentEquals("true")) {
+    @AfterStep
+    public void takeScreenshot(Scenario scenario) {
+
+                if(scenario.isFailed() || configReader.getProperty("screenshots").contentEquals("true")) {
             try {
                 final byte[] screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
                 String screenshotname = scenario.getName().replaceAll(" ","_")+".png";
+
                 scenario.attach(screenshot, "image/png", screenshotname);
             } catch (WebDriverException noSupportScreenshot) {
                 System.err.println(noSupportScreenshot.getMessage());
             }
         }
-        driver.quit();
     }
 }
