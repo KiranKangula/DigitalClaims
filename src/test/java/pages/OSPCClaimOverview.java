@@ -12,6 +12,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.BaseDriverClass;
 import utils.ConfigReader;
 
+import java.util.List;
+
 public class OSPCClaimOverview extends BaseDriverClass {
 	ConfigReader prop = new ConfigReader();
 	public static String randommessage;
@@ -175,6 +177,10 @@ public class OSPCClaimOverview extends BaseDriverClass {
 	@CacheLookup
 	private WebElement viewClaimLink;
 
+	@FindBy(css = "div.rt-tbody.jut__DataTable__tableBody")
+	@CacheLookup
+	private WebElement tableBody;
+
 
 
 
@@ -333,8 +339,28 @@ public class OSPCClaimOverview extends BaseDriverClass {
 		waitUntilElementVisible(secondaryHeading);
 		returnToClaimsHomelLink.click();
 
+		// Locate all rows in the table
+		List<WebElement> rows = tableBody.findElements(By.cssSelector("div.rt-tr"));
 
-		return secondaryHeading.isDisplayed();
+		// Iterate through each row to search for the claim number
+		for (WebElement row : rows) {
+			// Locate the Claim Number cell (assuming it's the first column)
+			WebElement claimCell = row.findElement(By.cssSelector("div.rt-td a.bluelink"));
+			String cNumber = claimCell.getText();
 
+			// Check if the claim number matches the desired value
+			if (cNumber.equals(claimnumber)) {
+				System.out.println("Claim number " + claimnumber + " found.");
+				return true;
+				break;
+			}
+		}
+
+		if (!claimFound) {
+			System.out.println("Claim number " + claimnumber + " not found.");
+			return false;
+		}
+
+			return false;
 	}
 }
