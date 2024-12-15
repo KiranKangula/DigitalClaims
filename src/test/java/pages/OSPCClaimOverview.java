@@ -17,7 +17,6 @@ public class OSPCClaimOverview extends BaseDriverClass {
 	public static String randommessage;
 
 	@FindBy(xpath = "//*[@id='mainHeading']")
-	@CacheLookup
 	private WebElement myclaimoverview;
 
 	@FindBy(xpath = "//*[@id=\"benefitPaymentLink\"]/a/span")
@@ -136,6 +135,49 @@ public class OSPCClaimOverview extends BaseDriverClass {
 	@CacheLookup
 	private WebElement SentMessageBody;
 
+	@FindBy(xpath = "//*[@id=\"addClaimButton\"]/span/span")
+	@CacheLookup
+	private WebElement AddClaimButton;
+
+	@FindBy(id = "claimNumberInput")
+	@CacheLookup
+	private WebElement ClaimNumberInput;
+
+	@FindBy(id = "yearOfBirthInput")
+	@CacheLookup
+	private WebElement yearOfBirthInput;
+
+	@FindBy(id = "personalIdentificationInput")
+	@CacheLookup
+	private WebElement personalIdentificationInput;
+
+	@FindBy(xpath = "//*[@id=\"termOfUseCheckBox\"]/div/div/div/div[1]/span")
+	@CacheLookup
+	private WebElement termOfUseCheckBox;
+
+	@FindBy(id = "nextButton")
+	@CacheLookup
+	private WebElement SubmitButton;
+
+	@FindBy(id = "pageHeadingLabel")
+	@CacheLookup
+	private WebElement pageHeadingLabel;
+
+	@FindBy(id = "secondaryHeading")
+	@CacheLookup
+	private WebElement secondaryHeading;
+
+	@FindBy(id = "returnToClaimsHomelLink")
+	@CacheLookup
+	private WebElement returnToClaimsHomelLink;
+
+	@FindBy(id = "viewClaimLink")
+	@CacheLookup
+	private WebElement viewClaimLink;
+
+
+
+
 	public OSPCClaimOverview(WebDriver driver, WebDriverWait wait) {
 		super(driver, wait);
 		PageFactory.initElements(driver, this);
@@ -226,12 +268,19 @@ public class OSPCClaimOverview extends BaseDriverClass {
 	public Boolean DocumentHistory(String filename) {
 		DocumentHistoryLink.click();
 		waitUntilElementVisible(submittedDocumentsHeading);
-		for (int i = 0; i < 50; i++) {
-			if (DocumentDescription.getText().isEmpty() || !DocumentDate.getText().contentEquals(getCurrentDate("dd MMM yyyy"))) {
+		for (int i = 0; i < 10; i++) {
+			System.out.println("Running the step for "+ i+ " times.");
+			try {
+
+				if (DocumentDescription.getText().isEmpty() || !DocumentDate.getText().contentEquals(getCurrentDate("dd MMM yyyy"))) {
+					getDriver().navigate().refresh();
+				} else return DocumentDescription.getText().contentEquals(filename) &&
+						DocumentDate.getText().contentEquals(getCurrentDate("dd MMM yyyy"));
+			}
+			catch (Exception e){
 				getDriver().navigate().refresh();
-			} else return DocumentDescription.getText().contentEquals(filename) &&
-                    DocumentDate.getText().contentEquals(getCurrentDate("dd MMM yyyy"));
-		}
+			}
+			}
 		return false;
     }
 
@@ -267,5 +316,25 @@ public class OSPCClaimOverview extends BaseDriverClass {
 		ReturntoMail.click();
 		waitUntilElementVisible(mailListPageHeading);
 		return SentMessageBody.getText().contentEquals(randommessage);
+	}
+
+	public boolean addClaim() {
+		AddClaimButton.click();
+		waitUntilElementVisible(pageHeadingLabel);
+		return pageHeadingLabel.isDisplayed();
+	}
+
+	public boolean AddaClaimOSPC(String claimnumber, String yob, String pin) {
+		ClaimNumberInput.sendKeys(claimnumber);
+		yearOfBirthInput.sendKeys(yob);
+		personalIdentificationInput.sendKeys(pin);
+		termOfUseCheckBox.click();
+		SubmitButton.click();
+		waitUntilElementVisible(secondaryHeading);
+		returnToClaimsHomelLink.click();
+
+
+		return secondaryHeading.isDisplayed();
+
 	}
 }

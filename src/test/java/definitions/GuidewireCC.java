@@ -44,4 +44,14 @@ public class GuidewireCC {
     public void userShouldBeAbleToSeeTheMessageDisplayedFromOSPC() {
         Assert.assertTrue(guidewirecc.verifySentMessage());
     }
+
+    @And("Navigate to Portal Authorization screen")
+    public void navigateToPortalAuthorizationScreen() {
+        Assert.assertTrue(guidewirecc.navigatePortalAuthScreen());
+    }
+
+    @And("Remove the {string} from profile")
+    public void removeTheFromProfile(String claimnumber) {
+        Assert.assertTrue(guidewirecc.removeClaimfromPortalAuth(claimnumber));
+    }
 }

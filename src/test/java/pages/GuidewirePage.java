@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,6 +12,7 @@ import utils.BaseDriverClass;
 import utils.ConfigReader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static pages.OSPCClaimOverview.randommessage;
 
@@ -57,6 +59,46 @@ public class GuidewirePage extends BaseDriverClass {
 	@CacheLookup
 	private WebElement SummaryTitlebar;
 
+	@FindBy(id = "TabBar:AdminTab")
+	@CacheLookup
+	private WebElement AdminTab;
+
+	@FindBy(id = "Admin:MenuLinks:Admin_PortalAuthorizationAdminPage")
+	@CacheLookup
+	private WebElement PortalAuthorizationLink;
+
+	@FindBy(id = "PortalAuthorizationAdminPage:PortalAuthAdminScreen:PortalUserSearchFieldsDV:SearchClaimNumberUserInput")
+	@CacheLookup
+	private WebElement SearchClaimNumberUserInput;
+
+	@FindBy(xpath = "//*[@id=\"PortalAuthorizationAdminPage:PortalAuthAdminScreen:PortalAuthUsersLV_tb:ToolbarButton\"]/span[2]")
+	@CacheLookup
+	private WebElement SearchPortalAuth;
+
+	@FindBy(id = "PortalAuthorizationAdminPage:PortalAuthAdminScreen:PortalAuthUsersLV:0:UserNameCell")
+	@CacheLookup
+	private WebElement EmailProfileLink;
+
+	@FindBy(id = "PortalAuthUserDetailPopup:PortalAuthUserDV_tb:Edit")
+	@CacheLookup
+	private WebElement EditButton;
+
+	@FindBy(id = "PortalAuthUserDetailPopup:PortalAuthUserGrantedAuthoritiesLV")
+	@CacheLookup
+	private WebElement PortalAuthTable;
+
+	@FindBy(id = "PortalAuthUserDetailPopup:PortalAuthUserGrantedAuthoritiesLV_tb:deleteAuthoritiesButton")
+	@CacheLookup
+	private WebElement PortalAuthDeleteButton;
+
+	@FindBy(id = "PortalAuthUserDetailPopup:PortalAuthUserDV_tb:Update")
+	@CacheLookup
+	private WebElement PortalAuthOKButton;
+
+	@FindBy(id = "PortalAuthorizationAdminPage:PortalAuthAdminScreen:0")
+	@CacheLookup
+	private WebElement PortalAuthAdminScreen;
+
 	public GuidewirePage(WebDriver driver, WebDriverWait wait) {
 		super(driver, wait);
 		PageFactory.initElements(driver, this);
@@ -92,5 +134,36 @@ public class GuidewirePage extends BaseDriverClass {
 	public boolean verifySentMessage() {
 		MessagingLink.click();
 		return MessagingBody.getText().contentEquals(randommessage);
+	}
+
+	public boolean navigatePortalAuthScreen() {
+        AdminTab.click();
+		PortalAuthorizationLink.click();
+		waitUntilElementVisible(SearchClaimNumberUserInput);
+		return SearchClaimNumberUserInput.isDisplayed();
+    }
+
+	public boolean removeClaimfromPortalAuth(String claimnumber) {
+		SearchClaimNumberUserInput.sendKeys(claimnumber);
+		SearchPortalAuth.click();
+		EmailProfileLink.click();
+		EditButton.click();
+		List<WebElement> rows = PortalAuthTable.findElements(By.tagName("tr"));
+		for(WebElement row: rows)
+		{
+			List<WebElement> cells = row.findElements(By.tagName("td"));
+			for(WebElement cell:cells)
+			{
+				if(cell.getText().equals(claimnumber)){
+					WebElement checkbox=row.findElement(By.xpath(".//input[@type='checkbox']"));
+					checkbox.click();
+					break;
+				}
+			}
+		}
+		PortalAuthDeleteButton.click();
+		PortalAuthOKButton.click();
+		waitUntilElementVisible(PortalAuthAdminScreen);
+		return PortalAuthAdminScreen.isDisplayed();
 	}
 }

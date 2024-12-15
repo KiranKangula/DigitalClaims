@@ -114,4 +114,15 @@ public class OSPCClaims {
 		Assert.assertTrue(OSPCClaimOverview.mailscreen());
 
 	}
+
+	@When("User click on Add a Claim button")
+	public void userClickOnAddAClaimButton() {
+		Assert.assertTrue(OSPCClaimOverview.addClaim());
+
+	}
+
+	@Then("User should be able to add claim with {string}, {string} and {string}")
+	public void userShouldBeAbleToAddClaimWithAnd(String Claimnumber, String YOB, String PIN) {
+		Assert.assertTrue(OSPCClaimOverview.AddaClaimOSPC(Claimnumber,YOB, PIN));
+	}
 }
