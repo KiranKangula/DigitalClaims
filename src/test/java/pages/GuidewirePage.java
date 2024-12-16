@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.BaseDriverClass;
 import utils.ConfigReader;
@@ -99,19 +100,49 @@ public class GuidewirePage extends BaseDriverClass {
 	@CacheLookup
 	private WebElement PortalAuthAdminScreen;
 
+	@FindBy(id = "TabBar:LogoutTabBarLink")
+	private WebElement GWCCLogout;
+
+	@FindBy(id = "Claim:MenuLinks:Claim_ClaimPartiesGroup")
+	private WebElement ClaimParticipantsLink;
+
+	@FindBy(id = "ClaimContacts:ClaimContactsScreen:PeopleInvolvedDetailedListDetail:PeopleInvolvedDetailedLV")
+	private WebElement ClaimParticipantsTable;
+
+	@FindBy(id = "ClaimContacts:ClaimContactsScreen:PeopleInvolvedDetailedListDetail:ContactBasicsDV_tb:ContactDetailToolbarButtonSet:LinkContactToolbarButtonSet:LinkContactToolbarButtons_SyncFromAddressBookButton")
+	private WebElement CopyfromContactManagerButton;
+
+	@FindBy(id = "Claim:MenuLinks:Claim_ClaimDocumentsGroup")
+	private WebElement ClaimDocumentsLink;
+
+	@FindBy(id = "ClaimDocuments:DocumentsMemosScreen:ClaimDocumentSearchDV:Hidden")
+	private WebElement HiddenDropdown;
+
+	@FindBy(id = "ClaimDocuments:DocumentsMemosScreen:ClaimDocumentSearchDV:RedactionRequired")
+	private WebElement RedactionRequiredDropdown;
+
+	@FindBy(id = "ClaimDocuments:DocumentsMemosScreen:ClaimDocumentSearchDV:NoAccess")
+	private WebElement NoAccessDropdown;
+
+	@FindBy(id = "ClaimDocuments:DocumentsMemosScreen:ClaimDocumentSearchDV:SearchAndResetInputSet:SearchLinksInputSet:Search_link")
+	private WebElement Search_link;
+
+	@FindBy(xpath = "//*[@id='ClaimDocuments:DocumentsMemosScreen:DocumentsLV']/tbody")
+	private WebElement DocumentsTable;
+
 	public GuidewirePage(WebDriver driver, WebDriverWait wait) {
 		super(driver, wait);
 		PageFactory.initElements(driver, this);
 	}
 
-	public void switchtab() {
+	public ArrayList<String> switchtab() {
 		// Dynamically create the XPath using the claim number
 		String gettitle = getDriver().getCurrentUrl();
 		((JavascriptExecutor) getDriver()).executeScript("window.open();");
 		ArrayList<String> tabs = new ArrayList<String>(getDriver().getWindowHandles());
 		getDriver().switchTo().window(tabs.get(1));
 		getDriver().get(prop.getProperty("GWURl"));
-		//return tabs.get(0);
+		return tabs;
 	}
 
 	public void loginToGWCC(String username, String password) {
@@ -165,5 +196,64 @@ public class GuidewirePage extends BaseDriverClass {
 		PortalAuthOKButton.click();
 		waitUntilElementVisible(PortalAuthAdminScreen);
 		return PortalAuthAdminScreen.isDisplayed();
+	}
+
+	public void GWCClogout() {
+		GWCCLogout.click();
+	}
+
+	public boolean removeDirectDeposit() {
+		ClaimParticipantsLink.click();
+		List<WebElement> rows = ClaimParticipantsTable.findElements(By.tagName("tr"));
+		for(WebElement row: rows)
+		{
+			List<WebElement> cells = row.findElements(By.tagName("td"));
+			for(WebElement cell:cells)
+			{
+				if(cell.getText().equals("Worker")){
+					WebElement Role=row.findElement(By.xpath(".//span[@value='Worker']"));
+					Role.click();
+					break;
+				}
+			}
+		}
+		CopyfromContactManagerButton.click();
+		return true;
+
+	}
+
+	public boolean verifyLandedDocument(String author, String description) throws InterruptedException {
+		ClaimDocumentsLink.click();
+		Select hidden = new Select(HiddenDropdown);
+		hidden.selectByValue("Yes");
+		Select Redaction = new Select(RedactionRequiredDropdown);
+		Redaction.selectByValue("Yes");
+		Select NoAccess = new Select(NoAccessDropdown);
+		NoAccess.selectByValue("Yes");
+		Search_link.click();
+		boolean recordFound = false;
+
+		for (int i = 0; i < 10; i++) {
+			List<WebElement> rows = DocumentsTable.findElements(By.tagName("tr"));
+			for (WebElement row : rows) {
+				String Author = row.findElement(By.xpath(".//span[@label='Author']")).getText().toLowerCase();
+				String Description = row.findElement(By.xpath(".//span[@label='Description']")).getText().toLowerCase();
+				String FinalDate = row.findElement(By.xpath(".//span[@label='Date Finalized']")).getText().toLowerCase();
+
+				if (Description.contains(description.toLowerCase()) && Author.contains(author.toLowerCase()) && FinalDate.contentEquals(getCurrentDate("dd/MMM/yyyy"))) {
+					recordFound = true;
+					break;
+				}
+			}
+			if (recordFound) {
+				break;
+			} else {
+				Thread.sleep(5000);
+				Search_link.click();
+			}
+		}
+
+		return recordFound;
+
 	}
 }

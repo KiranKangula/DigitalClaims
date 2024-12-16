@@ -65,7 +65,14 @@
             <version>7.9.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
+		<!-- https://mvnrepository.com/artifact/com.epam.healenium/healenium-web -->
+		<dependency>
+			<groupId>com.epam.healenium</groupId>
+			<artifactId>healenium-web</artifactId>
+			<version>3.5.4</version>
+		</dependency>
+
+		<dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-testng</artifactId>
             <version>7.20.1</version>

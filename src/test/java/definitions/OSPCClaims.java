@@ -7,6 +7,7 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import pages.GuidewirePage;
 import pages.HomePage;
 import pages.LoginPage;
 import pages.OSPCClaimOverview;
@@ -19,6 +20,7 @@ public class OSPCClaims {
 	private WebDriverWait wait;
 	private LoginPage loginPage;
 	private HomePage homePage;
+	private GuidewirePage guidewirecc;
 	private OSPCClaimOverview OSPCClaimOverview;
 	ConfigReader prop=new ConfigReader();
 	public OSPCClaims() throws Exception {
@@ -26,6 +28,7 @@ public class OSPCClaims {
 		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
 		loginPage = new LoginPage(driver, wait);
 		homePage = new HomePage(driver, wait);
+		guidewirecc = new GuidewirePage(driver, wait);
 		OSPCClaimOverview = new OSPCClaimOverview(driver, wait);
 	}
 
@@ -123,6 +126,11 @@ public class OSPCClaims {
 
 	@Then("User should be able to add claim with {string}, {string} and {string}")
 	public void userShouldBeAbleToAddClaimWithAnd(String Claimnumber, String YOB, String PIN) {
-		Assert.assertTrue(OSPCClaimOverview.AddaClaimOSPC(Claimnumber,YOB, PIN));
+		Assert.assertTrue(OSPCClaimOverview.AddaClaimOSPC(Claimnumber,YOB, PIN, guidewirecc));
+	}
+
+	@And("Switch back to OSPC and verify if the {string} is removed")
+	public void switchBackToOSPCAndVerifyIfTheIsRemoved(String claimnumber) throws InterruptedException {
+		Assert.assertTrue(OSPCClaimOverview.claimRemovalConfirmationOSPC(claimnumber));
 	}
 }

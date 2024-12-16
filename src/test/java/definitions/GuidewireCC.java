@@ -54,4 +54,14 @@ public class GuidewireCC {
     public void removeTheFromProfile(String claimnumber) {
         Assert.assertTrue(guidewirecc.removeClaimfromPortalAuth(claimnumber));
     }
+
+    @And("Search for Claim number")
+    public void searchForClaimNumber() {
+        Assert.assertTrue(guidewirecc.searchClaim(DirectDeposit.Claimnumber));
+    }
+
+    @And("Verify the document is landed in GWCC with {string}, {string}")
+    public void verifyTheDocumentIsDisplayedIsLandedInGWCCWith(String Author, String Description) throws InterruptedException {
+        Assert.assertTrue(guidewirecc.verifyLandedDocument(Author,Description));
+    }
 }

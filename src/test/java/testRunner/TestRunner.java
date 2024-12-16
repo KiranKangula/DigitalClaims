@@ -6,10 +6,10 @@ import org.testng.annotations.DataProvider;
 //import org.testng.annotations.DataProvider;
 
 @CucumberOptions(
-        features = "src/test/resources/features",
+        features = "src/test/resources/features/OSPC.feature",
         glue = "definitions",
         monochrome = true,
-        plugin = {"pretty", "html:target/cucumber-reports.html"},
+        plugin = {"pretty", "html:target/TestResults/cucumber-reports.html"},
         publish = true
 )
 public class TestRunner extends AbstractTestNGCucumberTests {

@@ -36,7 +36,7 @@ public class LoginDefinition {
 		loginPage.loginToSite(prop.getProperty("OSPC_username"), prop.getProperty("OSPC_Password"));
 	}
 
-	@Then("^User should be able to login sucessfully and new page open$")
+	@Then("^User should be able to login successfully and new page open$")
 	public void successLogin() {
 		Assert.assertTrue(homePage.verifyOnHomePage());
 	}	

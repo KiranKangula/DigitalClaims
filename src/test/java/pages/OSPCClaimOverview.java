@@ -1,10 +1,7 @@
 package pages;
 
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -12,7 +9,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.BaseDriverClass;
 import utils.ConfigReader;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class OSPCClaimOverview extends BaseDriverClass {
 	ConfigReader prop = new ConfigReader();
@@ -22,164 +21,127 @@ public class OSPCClaimOverview extends BaseDriverClass {
 	private WebElement myclaimoverview;
 
 	@FindBy(xpath = "//*[@id=\"benefitPaymentLink\"]/a/span")
-	@CacheLookup
 	private WebElement benefitpaymentslink;
 
 	@FindBy(id = "benefitPaymentHeading")
-	@CacheLookup
 	private WebElement benefitpaymentsheading;
 
 	@FindBy(xpath = "//*[@id=\"healthCareBenefitslink\"]/a/span")
-	@CacheLookup
 	private WebElement healthcarebenefitslink;
 
 	@FindBy(id = "mainHeading")
-	@CacheLookup
 	private WebElement healthcarebenefitsheading;
 
 	@FindBy(xpath = "//*[@id=\"nonHealthCareBenefitslink\"]/a/span")
-	@CacheLookup
 	private WebElement nonhealthcarebenefitslink;
 
 	@FindBy(id = "pageHeadingLabel")
-	@CacheLookup
 	private WebElement nonhealthcarebenefitsheading;
 
 	@FindBy(xpath = "//*[@id=\"appealsLink\"]/a/span")
-	@CacheLookup
 	private WebElement appealslink;
 
 	@FindBy(id = "mainHeading")
-	@CacheLookup
 	private WebElement appealsheading;
 
 	@FindBy(xpath = "//*[@id=\"DistributionPopUpNo\"]/div")
-	@CacheLookup
 	private WebElement ModelWindow;
 
 	@FindBy(xpath = "//*[@id=\"claimDocumentsLink\"]/a/span")
-	@CacheLookup
 	private WebElement submitdocumentslink;
 
 	@FindBy(xpath = "//h1[contains(text(),'Submit document(s)')]")
-	@CacheLookup
 	private WebElement submitdocumentsheading;
 
 	@FindBy(xpath = "//*[@id=\"docSource0\"]/div[1]/label")
-	@CacheLookup
 	private WebElement OSPCWsibFormYes;
 
 	@FindBy(xpath = "//*[@id=\"termOfUseCheckbox\"]/div/div/div[1]/span")
-	@CacheLookup
 	private WebElement OSPCConfirmCheckbox;
 
 	@FindBy(id = "wsibformselection-wrapper")
-	@CacheLookup
 	private WebElement OSPCWSIBformDropdown;
 
 	@FindBy(xpath = "//span[(text()='Submit')]")
-	@CacheLookup
 	private WebElement OSPCDocumentSubmit;
 
 	@FindBy(xpath = "//h2[contains(text(),'Confirmation')]")
-	@CacheLookup
 	private WebElement submitdocumentsconfirmation;
 
 	@FindBy(xpath = "//span[contains(text(),'Close')]")
-	@CacheLookup
 	private WebElement CloseButton;
 
 	@FindBy(xpath = "//*[@id=\"claimDocumentHistoryLink\"]/a/span")
-	@CacheLookup
 	private WebElement DocumentHistoryLink;
 
 	@FindBy(id = "submittedDocumentsHeading")
-	@CacheLookup
 	private WebElement submittedDocumentsHeading;
 
 	@FindBy(xpath = "//*[@id=\"SubmittedDocumentsDataTable\"]/div/div[1]/div[2]/div[1]/div/div[1]")
-	@CacheLookup
 	private WebElement DocumentDescription;
 
 	@FindBy(xpath = "//*[@id=\"SubmittedDocumentsDataTable\"]/div/div[1]/div[2]/div[1]/div/div[2]")
-	@CacheLookup
 	private WebElement DocumentDate;
 
 	@FindBy(xpath = "\t//*[@id=\"sendUsMessageLink\"]/a/span")
-	@CacheLookup
 	private WebElement SendusmessageLink;
 
 	@FindBy(id = "secondaryHeading")
-	@CacheLookup
 	private WebElement SendusmessageHeader;
 
 	@FindBy(id = "ddlSubject-wrapper")
-	@CacheLookup
 	private WebElement SubjectDropdown;
 
 	@FindBy(id = "txtBody")
-	@CacheLookup
 	private WebElement txtBody;
 
 	@FindBy(xpath = "//*[@id=\"btnSend\"]/span/span")
-	@CacheLookup
 	private WebElement SendButton;
 
 	@FindBy(xpath = "//*[@id=\"returnToMailLink\"]/span")
-	@CacheLookup
 	private WebElement ReturntoMail;
 
 	@FindBy(id = "mailListPageHeading")
-	@CacheLookup
 	private WebElement mailListPageHeading;
 
 	@FindBy(xpath = "//*[@id=\"mailListDatatable\"]/div/div[1]/div[2]/div[1]/div/div[4]/div")
-	@CacheLookup
 	private WebElement SentMessageBody;
 
 	@FindBy(xpath = "//*[@id=\"addClaimButton\"]/span/span")
-	@CacheLookup
 	private WebElement AddClaimButton;
 
 	@FindBy(id = "claimNumberInput")
-	@CacheLookup
 	private WebElement ClaimNumberInput;
 
 	@FindBy(id = "yearOfBirthInput")
-	@CacheLookup
 	private WebElement yearOfBirthInput;
 
 	@FindBy(id = "personalIdentificationInput")
-	@CacheLookup
 	private WebElement personalIdentificationInput;
 
 	@FindBy(xpath = "//*[@id=\"termOfUseCheckBox\"]/div/div/div/div[1]/span")
-	@CacheLookup
 	private WebElement termOfUseCheckBox;
 
 	@FindBy(id = "nextButton")
-	@CacheLookup
 	private WebElement SubmitButton;
 
 	@FindBy(id = "pageHeadingLabel")
-	@CacheLookup
 	private WebElement pageHeadingLabel;
 
 	@FindBy(id = "secondaryHeading")
-	@CacheLookup
 	private WebElement secondaryHeading;
 
 	@FindBy(id = "returnToClaimsHomelLink")
-	@CacheLookup
 	private WebElement returnToClaimsHomelLink;
 
 	@FindBy(id = "viewClaimLink")
-	@CacheLookup
 	private WebElement viewClaimLink;
 
 	@FindBy(css = "div.rt-tbody.jut__DataTable__tableBody")
-	@CacheLookup
 	private WebElement tableBody;
+
+	@FindBy(id = "isDuplicateClaimMsg")
+	private WebElement isDuplicateClaimMsg;
 
 
 
@@ -330,12 +292,29 @@ public class OSPCClaimOverview extends BaseDriverClass {
 		return pageHeadingLabel.isDisplayed();
 	}
 
-	public boolean AddaClaimOSPC(String claimnumber, String yob, String pin) {
+	public boolean AddaClaimOSPC(String claimnumber, String yob, String pin, GuidewirePage guidewirecc) {
+
 		ClaimNumberInput.sendKeys(claimnumber);
 		yearOfBirthInput.sendKeys(yob);
 		personalIdentificationInput.sendKeys(pin);
 		termOfUseCheckBox.click();
 		SubmitButton.click();
+		try {
+			if (isDuplicateClaimMsg.isDisplayed()) {
+				ArrayList<String> tabs = guidewirecc.switchtab();
+				guidewirecc.loginToGWCC(prop.getProperty("GWCC_Username"), prop.getProperty("GWCC_Password"));
+				guidewirecc.navigatePortalAuthScreen();
+				guidewirecc.removeClaimfromPortalAuth(claimnumber);
+				guidewirecc.GWCClogout();
+				getDriver().close();
+				getDriver().switchTo().window(tabs.get(0));
+				termOfUseCheckBox.click();
+				SubmitButton.click();
+			}
+		}
+		catch(NoSuchElementException ignored)
+		{}
+
 		waitUntilElementVisible(secondaryHeading);
 		returnToClaimsHomelLink.click();
 
@@ -352,15 +331,44 @@ public class OSPCClaimOverview extends BaseDriverClass {
 			if (cNumber.equals(claimnumber)) {
 				System.out.println("Claim number " + claimnumber + " found.");
 				return true;
-				break;
+            }
+			else {
+				System.out.println("Claim number " + claimnumber + " not found.");
+				return false;
 			}
 		}
-
-		if (!claimFound) {
-			System.out.println("Claim number " + claimnumber + " not found.");
-			return false;
-		}
-
 			return false;
 	}
+
+	public boolean claimRemovalConfirmationOSPC(String claimnumber) throws InterruptedException {
+		Set<String> windowHandles = getDriver().getWindowHandles();
+		List<String> tabs = new ArrayList<>(windowHandles);
+		getDriver().close();
+		getDriver().switchTo().window(tabs.get(0));
+		getDriver().navigate().refresh();
+		//Thread.sleep(5000);
+		waitUntilElementVisible(tableBody);
+
+		// Locate all rows in the table
+		List<WebElement> rows = tableBody.findElements(By.cssSelector("div.rt-tr"));
+
+		// Iterate through each row to search for the claim number
+		for (WebElement row : rows) {
+			// Locate the Claim Number cell (assuming it's the first column)
+			WebElement claimCell = row.findElement(By.cssSelector("div.rt-td a.bluelink"));
+			String cNumber = claimCell.getText();
+
+			// Check if the claim number matches the desired value
+			if (cNumber.equals(claimnumber)) {
+				System.out.println("Claim number " + claimnumber + " found.");
+				return false;
+			}
+			else {
+				System.out.println("Claim number " + claimnumber + " not found.");
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

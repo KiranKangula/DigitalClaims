@@ -2,6 +2,8 @@ package definitions;
 
 import java.util.concurrent.TimeUnit;
 
+
+import com.epam.healenium.SelfHealingDriver;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
@@ -20,7 +22,7 @@ import org.openqa.selenium.edge.EdgeOptions;
 import utils.ConfigReader;
 
 public class Hooks {
-	public static WebDriver driver;
+	public static WebDriver delegate;
     ConfigReader configReader = new ConfigReader();
     @Before
     public void openBrowser() throws Exception {
@@ -41,7 +43,9 @@ public class Hooks {
                 options.addArguments("--headless", "--window-size=1440,768", "--disable-gpu");
             }
 
-            driver = new ChromeDriver(options);
+            delegate = new ChromeDriver(options);
+            SelfHealingDriver driver = SelfHealingDriver.create(delegate);
+
             driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
             driver.manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
             driver.manage().deleteAllCookies();
