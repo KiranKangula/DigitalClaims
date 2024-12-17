@@ -22,7 +22,7 @@ public class OSPCClaims {
 	private HomePage homePage;
 	private GuidewirePage guidewirecc;
 	private OSPCClaimOverview OSPCClaimOverview;
-	ConfigReader prop=new ConfigReader();
+	ConfigReader prop= Hooks.getConfigReader();
 	public OSPCClaims() throws Exception {
 		driver = Hooks.driver;
 		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));

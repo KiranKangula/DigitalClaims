@@ -25,7 +25,7 @@ public class DirectDeposit {
 	private GuidewirePage guidewirecc;
 	private OSPCClaimOverview OSPCClaimOverview;
 	private OSPCDirectDeposit OSPCDirectDeposit;
-	ConfigReader prop=new ConfigReader();
+	ConfigReader prop= Hooks.getConfigReader();
 	public static String Claimnumber;
 	public DirectDeposit() throws Exception {
         driver = Hooks.driver;

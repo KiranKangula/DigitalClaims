@@ -1,7 +1,9 @@
 package definitions;
 
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -19,7 +21,7 @@ public class GuidewireCC {
     private LoginPage loginPage;
     private HomePage homePage;
     private GuidewirePage guidewirecc;
-    ConfigReader prop=new ConfigReader();
+    ConfigReader prop= Hooks.getConfigReader();
 
     public GuidewireCC() throws Exception {
         driver = Hooks.driver;
@@ -63,5 +65,25 @@ public class GuidewireCC {
     @And("Verify the document is landed in GWCC with {string}, {string}")
     public void verifyTheDocumentIsDisplayedIsLandedInGWCCWith(String Author, String Description) throws InterruptedException {
         Assert.assertTrue(guidewirecc.verifyLandedDocument(Author,Description));
+    }
+
+    @Given("User is on GWlogin page")
+    public void userIsOnGWloginPage() {
+        Assert.assertTrue(guidewirecc.verifyonGWCC());
+    }
+
+    @When("User submit username and password")
+    public void userSubmitUsernameAndPassword() {
+        guidewirecc.loginToGWCC(prop.getProperty("GWCC_Username"), prop.getProperty("GWCC_Password") );
+    }
+
+    @Then("User should be able to login successfully into GWCC")
+    public void userShouldBeAbleToLoginSuccessfullyIntoGWCC() {
+        Assert.assertTrue(guidewirecc.GWCCLoginsuccess());
+    }
+
+    @Given("User Logged into ClaimCenter")
+    public void userLoggedIntoClaimCenter() {
+        Assert.assertTrue(guidewirecc.GWCCLoginsuccess());
     }
 }

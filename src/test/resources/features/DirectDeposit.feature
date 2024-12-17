@@ -3,7 +3,7 @@ Feature: Direct Deposit
   Background: Login to OSPC
     Given User is on login page
     When User submit email and password
-    Then User should be able to login sucessfully and new page open
+    Then User should be able to login successfully and new page open
 
 Scenario Outline: Add Direct Deposit Information in OSPC
     Given User is on my Claim screen

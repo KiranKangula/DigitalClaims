@@ -3,7 +3,6 @@ package definitions;
 import java.util.concurrent.TimeUnit;
 
 
-import com.epam.healenium.SelfHealingDriver;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
@@ -22,8 +21,22 @@ import org.openqa.selenium.edge.EdgeOptions;
 import utils.ConfigReader;
 
 public class Hooks {
-	public static WebDriver delegate;
-    ConfigReader configReader = new ConfigReader();
+	public static WebDriver driver;
+    private static ConfigReader configReader;
+
+    @Before
+    public void setup(Scenario scenario)
+    {
+        String featureName = scenario.getUri().getPath().split("/")
+                [scenario.getUri().getPath().split("/").length-1].replace(".feature", "");
+        String propertyFilePath= "src/test/resources/config/"+ featureName+ ".properties";
+        configReader = new ConfigReader(propertyFilePath);
+    }
+
+    public static ConfigReader getConfigReader(){
+        return configReader;
+    }
+
     @Before
     public void openBrowser() throws Exception {
 
@@ -43,8 +56,7 @@ public class Hooks {
                 options.addArguments("--headless", "--window-size=1440,768", "--disable-gpu");
             }
 
-            delegate = new ChromeDriver(options);
-            SelfHealingDriver driver = SelfHealingDriver.create(delegate);
+            driver = new ChromeDriver(options);
 
             driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
             driver.manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);

@@ -1,5 +1,6 @@
 package pages;
 
+import definitions.Hooks;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,7 +12,7 @@ import utils.BaseDriverClass;
 import utils.ConfigReader;
 
 public class HomePage extends BaseDriverClass {
-	ConfigReader prop=new ConfigReader();
+	ConfigReader prop= Hooks.getConfigReader();
 
 	@FindBy(xpath = "//*[@id='divTitle']/h1")
 	@CacheLookup

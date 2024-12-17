@@ -5,12 +5,11 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class ConfigReader {
-    private Properties properties;
-    private final String propertyFilePath = "src/test/resources/ospcconfig.properties"; // Adjust path accordingly
+    private Properties properties = new Properties();
 
-    public ConfigReader() {
-        properties = new Properties();
-        try (FileInputStream fileInputStream = new FileInputStream(propertyFilePath)) {
+    public ConfigReader(String fileName) {
+
+        try (FileInputStream fileInputStream = new FileInputStream(fileName)) {
             properties.load(fileInputStream);
         } catch (IOException e) {
             e.printStackTrace();

@@ -6,7 +6,7 @@ import org.testng.annotations.DataProvider;
 //import org.testng.annotations.DataProvider;
 
 @CucumberOptions(
-        features = "src/test/resources/features/OSPC.feature",
+        features = "src/test/resources/features/GWClaimCenter.feature",
         glue = "definitions",
         monochrome = true,
         plugin = {"pretty", "html:target/TestResults/cucumber-reports.html"},

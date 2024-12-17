@@ -1,5 +1,6 @@
 package pages;
 
+import definitions.Hooks;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.CacheLookup;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 public class OSPCClaimOverview extends BaseDriverClass {
-	ConfigReader prop = new ConfigReader();
+	ConfigReader prop= Hooks.getConfigReader();
 	public static String randommessage;
 
 	@FindBy(xpath = "//*[@id='mainHeading']")
