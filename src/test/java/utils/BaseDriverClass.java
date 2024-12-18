@@ -1,5 +1,6 @@
 package utils;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -41,6 +42,25 @@ public class BaseDriverClass {
         }
         return builder.toString();
     }
+
+    // Utility to click using JavascriptExecutor
+    private void jsClick(WebElement element) {
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].click();", element);
+    }
+
+    // Utility to send keys using JavascriptExecutor
+    private void jsSendKeys(WebElement element, String value) {
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].value='" + value + "';", element);
+    }
+
+    // Utility to scroll to an element
+    private void scrollToElement(WebElement element) {
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].scrollIntoView(true);", element);
+    }
+
 
     protected WebDriver getDriver() {
         return driver;
