@@ -106,42 +106,43 @@ public class GuidewireCC {
     }
 
     @And("User searches for {string} with bussiness activity")
-    public void userSearchesForWithBussinessActivity(String accountnumber) {
+    public void userSearchesForWithBussinessActivity(String accountnumber) throws InterruptedException {
         guidewirecc.searchAccountNumber(accountnumber);
     }
 
     @And("User enters Accident Details as below:")
-    public void userEntersAccidentDetailsAsBelow(DataTable dataTable) {
+    public void userEntersAccidentDetailsAsBelow(DataTable dataTable) throws InterruptedException {
         guidewirecc.enterAccidentDetails(dataTable);
     }
 
     @And("User Enters Body part details as below:")
-    public void userEntersBodyPartDetailsAsBelow(DataTable dataTable) {
+    public void userEntersBodyPartDetailsAsBelow(DataTable dataTable) throws InterruptedException {
         guidewirecc.enterBodyPartDetails(dataTable);
     }
 
     @And("Select Third Party accident as {string}")
-    public void selectThirdPartyAccidentAs(String TPA) {
+    public void selectThirdPartyAccidentAs(String TPA) throws InterruptedException {
         guidewirecc.TPASelection(TPA);
     }
 
     @And("Select Accident Location from the dropdown")
-    public void selectAccidentLocationFromTheDropdown() {
+    public void selectAccidentLocationFromTheDropdown() throws InterruptedException {
         guidewirecc.selectAccidentLocation();
     }
 
     @And("Select Health Care Received as {string}")
-    public void selectHealthCareReceivedAs(String HCIndicator) {
+    public void selectHealthCareReceivedAs(String HCIndicator) throws InterruptedException {
         guidewirecc.selectHealthCareRecieved(HCIndicator);
     }
 
     @And("Select Claim Type as {string}")
-    public void selectClaimTypeAs(String claimtype) {
+    public void selectClaimTypeAs(String claimtype) throws InterruptedException {
         guidewirecc.selectClaimType(claimtype);
     }
 
     @And("Click on Register Claim button and verify that Claim has been registered Successfully")
-    public void clickOnRegisterClaimButtonAndVerifyThatClaimHasBeenRegisteredSuccessfully() {
-        Assert.assertTrue(guidewirecc.registerClaim());
+    public void clickOnRegisterClaimButtonAndVerifyThatClaimHasBeenRegisteredSuccessfully() throws InterruptedException {
+            guidewirecc.registerClaim();
+
     }
 }

@@ -71,7 +71,7 @@ public class GuidewirePage extends BaseDriverClass {
 	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:AdditionalInfoInputSet:SINDoesNotExist')]") private WebElement SINDoesNotExist;
 	@FindBy(xpath = "//*[@id=\"WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:AddressValidation\"]/span[2]") private WebElement ValidateAddressButton;
 	@FindBy(xpath = "//*[contains(@id,'AddressBookMatchWorksheet_CreateNewContactButton')]/span[2]") private WebElement CreateNewWorkerCM;
-	@FindBy(xpath = "//*[contains(@id,'WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:employerName:employerNameMenuIcon')]") private WebElement employerNameMenuIcon;
+	@FindBy(xpath = "//a[contains(@id,'WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:employerName:employerNameMenuIcon')]") private WebElement employerNameMenuIcon;
 	@FindBy(xpath = "//*[contains(@id,'WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:employerName:MenuItem_Search')]") private WebElement MenuItem_Search;
 	@FindBy(xpath = "//*[contains(@id,'AddressBookPolicyCenterPanel:AddressBookPolicyCenterSearchPanelSet:AddressBookSearchDV:accountNumber')]") private WebElement accountNumberInput;
 	@FindBy(xpath = "//*[contains(@id,'AddressBookPolicyCenterSearchPanelSet:AddressBookSearchDV:SearchAndResetInputSet:SearchLinksInputSet:Search_link')]") private WebElement EmployerSearch_link;
@@ -94,6 +94,9 @@ public class GuidewirePage extends BaseDriverClass {
 	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimType')]") private WebElement ClaimType;
 	@FindBy(xpath = "//*[@id=\"WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ToolbarButton__dup_1\"]/span[2]") private WebElement RegisterClaim;
 	@FindBy(xpath = "//*[@id=\"NewClaimSaved:NewClaimSavedScreen:NewClaimSavedDV:Header\"]") private WebElement NewClaimHeader;
+	@FindBy(xpath = "//*[@id=\"NewClaimSaved:NewClaimSavedScreen:NewClaimSavedDV:GoToClaim\"]/span") private WebElement GoToClaim;
+	@FindBy(xpath = "//*[contains(@id,'Claim:ClaimInfoBar:WSIB_WorkerSelfEnrollmentPIN_link')]") private WebElement PIN;
+	@FindBy(xpath = "//*[contains(@id,'Claim:ClaimInfoBar:DOB_link')]") private WebElement DOB;
 
 	public GuidewirePage(WebDriver driver, WebDriverWait wait) {
 		super(driver, wait);
@@ -269,16 +272,16 @@ public class GuidewirePage extends BaseDriverClass {
 					LastName.sendKeys(value);
 					break;
 				case "Primary Phone":
-					PrimaryPhone.sendKeys(value);
+					jsSendKeys(PrimaryPhone, value);
 					break;
 				case "Postal Code":
-					Address_PostalCode.sendKeys(value);
+					jsSendKeys(Address_PostalCode, value);
 					break;
 				case "Gender":
 					new Select(Gender).selectByVisibleText(value);
 					break;
 				case "Date of Birth":
-					DateOfBirth.sendKeys(value);
+					jsSendKeys(DateOfBirth, value);
 					break;
 				default:
 					throw new IllegalArgumentException("Unknown field: " + field);
@@ -287,6 +290,7 @@ public class GuidewirePage extends BaseDriverClass {
 
 		AddressLookUp.click();
 		AddressSelectButton.click();
+		SINDoesNotExist.click();
 		UpdateContactButton.click();
 		waitUntilElementVisible(ValidateAddressButton);
 		ValidateAddressButton.click();
@@ -294,7 +298,8 @@ public class GuidewirePage extends BaseDriverClass {
 
 	}
 
-	public void searchAccountNumber(String accountnumber) {
+	public void searchAccountNumber(String accountnumber) throws InterruptedException {
+		Thread.sleep(2000);
 		employerNameMenuIcon.click();
 		MenuItem_Search.click();
 		accountNumberInput.sendKeys(accountnumber);
@@ -304,10 +309,11 @@ public class GuidewirePage extends BaseDriverClass {
 		SelectBussActivity.click();
 		BussinessActivitySelect_link.click();
 		new Select(BranchAddressPicker).selectByIndex(1);
+		Thread.sleep(2000);
 		new Select(MailingAddressPicker).selectByIndex(1);
 	}
 
-	public void enterAccidentDetails(DataTable dataTable) {
+	public void enterAccidentDetails(DataTable dataTable) throws InterruptedException {
 
 		// Convert the DataTable to a Map to access fields and values
 		Map<String, String> workerDetails = dataTable.asMap(String.class, String.class);
@@ -319,6 +325,7 @@ public class GuidewirePage extends BaseDriverClass {
 
 			switch (field) {
 				case "Date of Accident":
+					Thread.sleep(2000);
 					DateofAccident.sendKeys(value);
 					break;
 				case "Date Reported":
@@ -331,7 +338,7 @@ public class GuidewirePage extends BaseDriverClass {
 
 	}
 
-	public void enterBodyPartDetails(DataTable dataTable) {
+	public void enterBodyPartDetails(DataTable dataTable) throws InterruptedException {
 
 		// Convert the DataTable to a Map to access fields and values
 		Map<String, String> workerDetails = dataTable.asMap(String.class, String.class);
@@ -352,9 +359,11 @@ public class GuidewirePage extends BaseDriverClass {
 					new Select(AccidentType).selectByVisibleText(value);
 					break;
 				case "Detailed Accident Type":
+					Thread.sleep(2000);
 					new Select(DetailedAccidentType).selectByVisibleText(value);
 					break;
 				case "Nature of Injury":
+					Thread.sleep(2000);
 					new Select(NatureOfInjury).selectByVisibleText(value);
 					break;
 				default:
@@ -363,7 +372,8 @@ public class GuidewirePage extends BaseDriverClass {
 		}
 	}
 
-	public void TPASelection(String tpa) {
+	public void TPASelection(String tpa) throws InterruptedException {
+		Thread.sleep(2000);
 		if (tpa.contentEquals("Yes")) {
 			ThirdPartyYes.click();
 		} else {
@@ -371,22 +381,29 @@ public class GuidewirePage extends BaseDriverClass {
 		}
 	}
 
-	public void selectAccidentLocation() {
+	public void selectAccidentLocation() throws InterruptedException {
+		Thread.sleep(2000);
 		new Select(AccidentLocation).selectByIndex(1);
 	}
 
-	public void selectHealthCareRecieved(String hcIndicator) {
-			new Select(HealthCareReceived).selectByVisibleText(hcIndicator);
+	public void selectHealthCareRecieved(String hcIndicator) throws InterruptedException {
+		Thread.sleep(2000);
+		new Select(HealthCareReceived).selectByVisibleText(hcIndicator);
 
 	}
 
-	public void selectClaimType(String claimtype) {
+	public void selectClaimType(String claimtype) throws InterruptedException {
+		Thread.sleep(2000);
 		new Select(ClaimType).selectByVisibleText(claimtype);
 	}
 
-	public boolean registerClaim() {
+	public String[] registerClaim() throws InterruptedException {
+		Thread.sleep(2000);
 		RegisterClaim.click();
 		waitUntilElementVisible(NewClaimHeader);
-		return NewClaimHeader.isDisplayed();
+		GoToClaim.click();
+		String claimdetails[] = {NewClaimHeader.getText().split(" ")[2], DOB.getText().split("")[1], PIN.getText().split("")[1]};
+		return	claimdetails;
+
 	}
 }
