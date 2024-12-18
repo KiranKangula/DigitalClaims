@@ -146,6 +146,7 @@ public class GuidewireCC {
     @And("Click on Register Claim button and verify that Claim has been registered Successfully")
     public void clickOnRegisterClaimButtonAndVerifyThatClaimHasBeenRegisteredSuccessfully() throws InterruptedException, IOException {
             String claimdata[] = guidewirecc.registerClaim();
+            System.out.println("ClaimData  "+ claimdata[0]+ "-"+ claimdata[1]+ "-"+ claimdata[2]);
             Map<String, String> newData = new HashMap<>();
             newData.put("Claim Number", claimdata[0]);
             newData.put("DOB", claimdata[1]);

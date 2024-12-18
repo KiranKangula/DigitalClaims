@@ -401,8 +401,9 @@ public class GuidewirePage extends BaseDriverClass {
 		Thread.sleep(2000);
 		RegisterClaim.click();
 		waitUntilElementVisible(NewClaimHeader);
+		String claimnumber = NewClaimHeader.getText().split(" ")[1];
 		GoToClaim.click();
-		String claimdetails[] = {NewClaimHeader.getText().split(" ")[2], DOB.getText().split("")[1], PIN.getText().split("")[1]};
+		String claimdetails[] = {claimnumber, DOB.getText().split(" ")[1], PIN.getText().split(" ")[1]};
 		return	claimdetails;
 
 	}
