@@ -245,10 +245,11 @@ public class GuidewirePage extends BaseDriverClass {
 
 	public void selectSourceofInformation(String source) {
 		Select sourcee = new Select(SourceofInformation);
-		sourcee.selectByValue(source);
+		sourcee.selectByVisibleText(source);
 	}
 
-	public void createNewWorker(DataTable dataTable) {
+	public void createNewWorker(DataTable dataTable) throws InterruptedException {
+		Thread.sleep(2000);
 		ClaimantMenuIcon.click();
 		NewWorkerMenuItem.click();
 
@@ -274,7 +275,7 @@ public class GuidewirePage extends BaseDriverClass {
 					Address_PostalCode.sendKeys(value);
 					break;
 				case "Gender":
-					new Select(Gender).selectByValue(value);
+					new Select(Gender).selectByVisibleText(value);
 					break;
 				case "Date of Birth":
 					DateOfBirth.sendKeys(value);
@@ -286,8 +287,106 @@ public class GuidewirePage extends BaseDriverClass {
 
 		AddressLookUp.click();
 		AddressSelectButton.click();
-
+		UpdateContactButton.click();
+		waitUntilElementVisible(ValidateAddressButton);
+		ValidateAddressButton.click();
+		CreateNewWorkerCM.click();
 
 	}
 
+	public void searchAccountNumber(String accountnumber) {
+		employerNameMenuIcon.click();
+		MenuItem_Search.click();
+		accountNumberInput.sendKeys(accountnumber);
+		EmployerSearch_link.click();
+		waitUntilElementVisible(EmployerSelect_link);
+		EmployerSelect_link.click();
+		SelectBussActivity.click();
+		BussinessActivitySelect_link.click();
+		new Select(BranchAddressPicker).selectByIndex(1);
+		new Select(MailingAddressPicker).selectByIndex(1);
+	}
+
+	public void enterAccidentDetails(DataTable dataTable) {
+
+		// Convert the DataTable to a Map to access fields and values
+		Map<String, String> workerDetails = dataTable.asMap(String.class, String.class);
+
+		// Fill in the worker information dynamically based on the map
+		for (Map.Entry<String, String> entry : workerDetails.entrySet()) {
+			String field = entry.getKey();
+			String value = entry.getValue();
+
+			switch (field) {
+				case "Date of Accident":
+					DateofAccident.sendKeys(value);
+					break;
+				case "Date Reported":
+					DateReportedToEmployer.sendKeys(value);
+					break;
+				default:
+					throw new IllegalArgumentException("Unknown field: " + field);
+			}
+		}
+
+	}
+
+	public void enterBodyPartDetails(DataTable dataTable) {
+
+		// Convert the DataTable to a Map to access fields and values
+		Map<String, String> workerDetails = dataTable.asMap(String.class, String.class);
+
+		// Fill in the worker information dynamically based on the map
+		for (Map.Entry<String, String> entry : workerDetails.entrySet()) {
+			String field = entry.getKey();
+			String value = entry.getValue();
+
+			switch (field) {
+				case "Area of Body":
+					new Select(AreaofBody).selectByVisibleText(value);
+					break;
+				case "Area of Injury":
+					new Select(AreaofInjury).selectByVisibleText(value);
+					break;
+				case "Accident Type":
+					new Select(AccidentType).selectByVisibleText(value);
+					break;
+				case "Detailed Accident Type":
+					new Select(DetailedAccidentType).selectByVisibleText(value);
+					break;
+				case "Nature of Injury":
+					new Select(NatureOfInjury).selectByVisibleText(value);
+					break;
+				default:
+					throw new IllegalArgumentException("Unknown field: " + field);
+			}
+		}
+	}
+
+	public void TPASelection(String tpa) {
+		if (tpa.contentEquals("Yes")) {
+			ThirdPartyYes.click();
+		} else {
+			ThirdPartyNo.click();
+		}
+	}
+
+	public void selectAccidentLocation() {
+		new Select(AccidentLocation).selectByIndex(1);
+	}
+
+	public void selectHealthCareRecieved(String hcIndicator) {
+			new Select(HealthCareReceived).selectByVisibleText(hcIndicator);
+
+	}
+
+	public void selectClaimType(String claimtype) {
+		new Select(ClaimType).selectByVisibleText(claimtype);
+	}
+
+	public boolean registerClaim() {
+		RegisterClaim.click();
+		waitUntilElementVisible(NewClaimHeader);
+		return NewClaimHeader.isDisplayed();
+	}
 }

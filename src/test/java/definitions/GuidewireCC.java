@@ -101,7 +101,47 @@ public class GuidewireCC {
     }
 
     @And("User enters new worker information as below:")
-    public void userEntersNewWorkerInformationAsBelow(DataTable dataTable) {
+    public void userEntersNewWorkerInformationAsBelow(DataTable dataTable) throws InterruptedException {
         guidewirecc.createNewWorker(dataTable);
+    }
+
+    @And("User searches for {string} with bussiness activity")
+    public void userSearchesForWithBussinessActivity(String accountnumber) {
+        guidewirecc.searchAccountNumber(accountnumber);
+    }
+
+    @And("User enters Accident Details as below:")
+    public void userEntersAccidentDetailsAsBelow(DataTable dataTable) {
+        guidewirecc.enterAccidentDetails(dataTable);
+    }
+
+    @And("User Enters Body part details as below:")
+    public void userEntersBodyPartDetailsAsBelow(DataTable dataTable) {
+        guidewirecc.enterBodyPartDetails(dataTable);
+    }
+
+    @And("Select Third Party accident as {string}")
+    public void selectThirdPartyAccidentAs(String TPA) {
+        guidewirecc.TPASelection(TPA);
+    }
+
+    @And("Select Accident Location from the dropdown")
+    public void selectAccidentLocationFromTheDropdown() {
+        guidewirecc.selectAccidentLocation();
+    }
+
+    @And("Select Health Care Received as {string}")
+    public void selectHealthCareReceivedAs(String HCIndicator) {
+        guidewirecc.selectHealthCareRecieved(HCIndicator);
+    }
+
+    @And("Select Claim Type as {string}")
+    public void selectClaimTypeAs(String claimtype) {
+        guidewirecc.selectClaimType(claimtype);
+    }
+
+    @And("Click on Register Claim button and verify that Claim has been registered Successfully")
+    public void clickOnRegisterClaimButtonAndVerifyThatClaimHasBeenRegisteredSuccessfully() {
+        Assert.assertTrue(guidewirecc.registerClaim());
     }
 }
