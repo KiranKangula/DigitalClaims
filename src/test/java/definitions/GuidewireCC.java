@@ -13,8 +13,11 @@ import pages.HomePage;
 import pages.LoginPage;
 import pages.OSPCClaimOverview;
 import utils.ConfigReader;
+import utils.ExcelUtils;
 
+import java.io.IOException;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -141,8 +144,13 @@ public class GuidewireCC {
     }
 
     @And("Click on Register Claim button and verify that Claim has been registered Successfully")
-    public void clickOnRegisterClaimButtonAndVerifyThatClaimHasBeenRegisteredSuccessfully() throws InterruptedException {
-            guidewirecc.registerClaim();
+    public void clickOnRegisterClaimButtonAndVerifyThatClaimHasBeenRegisteredSuccessfully() throws InterruptedException, IOException {
+            String claimdata[] = guidewirecc.registerClaim();
+            Map<String, String> newData = new HashMap<>();
+            newData.put("Claim Number", claimdata[0]);
+            newData.put("DOB", claimdata[1]);
+            newData.put("PIN", claimdata[2]);
+            ExcelUtils.saveExcelData( "GWCC", newData);
 
     }
 }
