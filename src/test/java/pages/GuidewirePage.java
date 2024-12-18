@@ -1,6 +1,7 @@
 package pages;
 
 import definitions.Hooks;
+import io.cucumber.datatable.DataTable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -14,6 +15,7 @@ import utils.ConfigReader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static pages.OSPCClaimOverview.randommessage;
 
@@ -246,10 +248,45 @@ public class GuidewirePage extends BaseDriverClass {
 		sourcee.selectByValue(source);
 	}
 
-	public void createNewWorker(String firstname) {
+	public void createNewWorker(DataTable dataTable) {
 		ClaimantMenuIcon.click();
 		NewWorkerMenuItem.click();
-		FirstName.sendKeys();
+
+		// Convert the DataTable to a Map to access fields and values
+		Map<String, String> workerDetails = dataTable.asMap(String.class, String.class);
+
+		// Fill in the worker information dynamically based on the map
+		for (Map.Entry<String, String> entry : workerDetails.entrySet()) {
+			String field = entry.getKey();
+			String value = entry.getValue();
+
+			switch (field) {
+				case "First Name":
+					FirstName.sendKeys(value);
+					break;
+				case "Last Name":
+					LastName.sendKeys(value);
+					break;
+				case "Primary Phone":
+					PrimaryPhone.sendKeys(value);
+					break;
+				case "Postal Code":
+					Address_PostalCode.sendKeys(value);
+					break;
+				case "Gender":
+					new Select(Gender).selectByValue(value);
+					break;
+				case "Date of Birth":
+					DateOfBirth.sendKeys(value);
+					break;
+				default:
+					throw new IllegalArgumentException("Unknown field: " + field);
+			}
+		}
+
+		AddressLookUp.click();
+		AddressSelectButton.click();
+
 
 	}
 

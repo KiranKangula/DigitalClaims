@@ -101,7 +101,7 @@ public class GuidewireCC {
     }
 
     @And("User enters new worker information as below:")
-    public void userEntersNewWorkerInformationAsBelow() {
-
+    public void userEntersNewWorkerInformationAsBelow(DataTable dataTable) {
+        guidewirecc.createNewWorker(dataTable);
     }
 }
