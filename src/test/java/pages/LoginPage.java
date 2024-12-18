@@ -9,20 +9,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import utils.BaseDriverClass;
 
-// https://www.saucedemo.com/
 public class LoginPage extends BaseDriverClass {
 
-	@FindBy(xpath = "//input[@id='email']")
-	@CacheLookup
-	private WebElement usernameTextField;
-
-	@FindBy(xpath = "//input[@id='password']")
-	@CacheLookup
-	private WebElement passwordTextField;
-
-	@FindBy(xpath = "//button[@id='next']")
-	@CacheLookup
-	private WebElement loginButton;
+	@FindBy(xpath = "//input[@id='email']") private WebElement usernameTextField;
+	@FindBy(xpath = "//input[@id='password']") private WebElement passwordTextField;
+	@FindBy(xpath = "//button[@id='next']") private WebElement loginButton;
 
 	public LoginPage(WebDriver driver, WebDriverWait wait) {
 		super(driver, wait);

@@ -14,9 +14,7 @@ import utils.ConfigReader;
 public class HomePage extends BaseDriverClass {
 	ConfigReader prop= Hooks.getConfigReader();
 
-	@FindBy(xpath = "//*[@id='divTitle']/h1")
-	@CacheLookup
-	private WebElement homepageHeader;
+	@FindBy(xpath = "//*[@id='divTitle']/h1") private WebElement homepageHeader;
 
 	public HomePage(WebDriver driver, WebDriverWait wait) {
 		super(driver, wait);

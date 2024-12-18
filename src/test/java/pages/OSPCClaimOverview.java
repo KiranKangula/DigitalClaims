@@ -18,134 +18,48 @@ public class OSPCClaimOverview extends BaseDriverClass {
 	ConfigReader prop= Hooks.getConfigReader();
 	public static String randommessage;
 
-	@FindBy(xpath = "//*[@id='mainHeading']")
-	private WebElement myclaimoverview;
-
-	@FindBy(xpath = "//*[@id=\"benefitPaymentLink\"]/a/span")
-	private WebElement benefitpaymentslink;
-
-	@FindBy(id = "benefitPaymentHeading")
-	private WebElement benefitpaymentsheading;
-
-	@FindBy(xpath = "//*[@id=\"healthCareBenefitslink\"]/a/span")
-	private WebElement healthcarebenefitslink;
-
-	@FindBy(id = "mainHeading")
-	private WebElement healthcarebenefitsheading;
-
-	@FindBy(xpath = "//*[@id=\"nonHealthCareBenefitslink\"]/a/span")
-	private WebElement nonhealthcarebenefitslink;
-
-	@FindBy(id = "pageHeadingLabel")
-	private WebElement nonhealthcarebenefitsheading;
-
-	@FindBy(xpath = "//*[@id=\"appealsLink\"]/a/span")
-	private WebElement appealslink;
-
-	@FindBy(id = "mainHeading")
-	private WebElement appealsheading;
-
-	@FindBy(xpath = "//*[@id=\"DistributionPopUpNo\"]/div")
-	private WebElement ModelWindow;
-
-	@FindBy(xpath = "//*[@id=\"claimDocumentsLink\"]/a/span")
-	private WebElement submitdocumentslink;
-
-	@FindBy(xpath = "//h1[contains(text(),'Submit document(s)')]")
-	private WebElement submitdocumentsheading;
-
-	@FindBy(xpath = "//*[@id=\"docSource0\"]/div[1]/label")
-	private WebElement OSPCWsibFormYes;
-
-	@FindBy(xpath = "//*[@id=\"termOfUseCheckbox\"]/div/div/div[1]/span")
-	private WebElement OSPCConfirmCheckbox;
-
-	@FindBy(id = "wsibformselection-wrapper")
-	private WebElement OSPCWSIBformDropdown;
-
-	@FindBy(xpath = "//span[(text()='Submit')]")
-	private WebElement OSPCDocumentSubmit;
-
-	@FindBy(xpath = "//h2[contains(text(),'Confirmation')]")
-	private WebElement submitdocumentsconfirmation;
-
-	@FindBy(xpath = "//span[contains(text(),'Close')]")
-	private WebElement CloseButton;
-
-	@FindBy(xpath = "//*[@id=\"claimDocumentHistoryLink\"]/a/span")
-	private WebElement DocumentHistoryLink;
-
-	@FindBy(id = "submittedDocumentsHeading")
-	private WebElement submittedDocumentsHeading;
-
-	@FindBy(xpath = "//*[@id=\"SubmittedDocumentsDataTable\"]/div/div[1]/div[2]/div[1]/div/div[1]")
-	private WebElement DocumentDescription;
-
-	@FindBy(xpath = "//*[@id=\"SubmittedDocumentsDataTable\"]/div/div[1]/div[2]/div[1]/div/div[2]")
-	private WebElement DocumentDate;
-
-	@FindBy(xpath = "\t//*[@id=\"sendUsMessageLink\"]/a/span")
-	private WebElement SendusmessageLink;
-
-	@FindBy(id = "secondaryHeading")
-	private WebElement SendusmessageHeader;
-
-	@FindBy(id = "ddlSubject-wrapper")
-	private WebElement SubjectDropdown;
-
-	@FindBy(id = "txtBody")
-	private WebElement txtBody;
-
-	@FindBy(xpath = "//*[@id=\"btnSend\"]/span/span")
-	private WebElement SendButton;
-
-	@FindBy(xpath = "//*[@id=\"returnToMailLink\"]/span")
-	private WebElement ReturntoMail;
-
-	@FindBy(id = "mailListPageHeading")
-	private WebElement mailListPageHeading;
-
-	@FindBy(xpath = "//*[@id=\"mailListDatatable\"]/div/div[1]/div[2]/div[1]/div/div[4]/div")
-	private WebElement SentMessageBody;
-
-	@FindBy(xpath = "//*[@id=\"addClaimButton\"]/span/span")
-	private WebElement AddClaimButton;
-
-	@FindBy(id = "claimNumberInput")
-	private WebElement ClaimNumberInput;
-
-	@FindBy(id = "yearOfBirthInput")
-	private WebElement yearOfBirthInput;
-
-	@FindBy(id = "personalIdentificationInput")
-	private WebElement personalIdentificationInput;
-
-	@FindBy(xpath = "//*[@id=\"termOfUseCheckBox\"]/div/div/div/div[1]/span")
-	private WebElement termOfUseCheckBox;
-
-	@FindBy(id = "nextButton")
-	private WebElement SubmitButton;
-
-	@FindBy(id = "pageHeadingLabel")
-	private WebElement pageHeadingLabel;
-
-	@FindBy(id = "secondaryHeading")
-	private WebElement secondaryHeading;
-
-	@FindBy(id = "returnToClaimsHomelLink")
-	private WebElement returnToClaimsHomelLink;
-
-	@FindBy(id = "viewClaimLink")
-	private WebElement viewClaimLink;
-
-	@FindBy(css = "div.rt-tbody.jut__DataTable__tableBody")
-	private WebElement tableBody;
-
-	@FindBy(id = "isDuplicateClaimMsg")
-	private WebElement isDuplicateClaimMsg;
-
-
-
+	@FindBy(xpath = "//*[@id='mainHeading']") private WebElement myclaimoverview;
+	@FindBy(xpath = "//*[@id=\"benefitPaymentLink\"]/a/span") private WebElement benefitpaymentslink;
+	@FindBy(id = "benefitPaymentHeading") private WebElement benefitpaymentsheading;
+	@FindBy(xpath = "//*[@id=\"healthCareBenefitslink\"]/a/span") private WebElement healthcarebenefitslink;
+	@FindBy(id = "mainHeading") private WebElement healthcarebenefitsheading;
+	@FindBy(xpath = "//*[@id=\"nonHealthCareBenefitslink\"]/a/span") private WebElement nonhealthcarebenefitslink;
+	@FindBy(id = "pageHeadingLabel") private WebElement nonhealthcarebenefitsheading;
+	@FindBy(xpath = "//*[@id=\"appealsLink\"]/a/span") private WebElement appealslink;
+	@FindBy(id = "mainHeading") private WebElement appealsheading;
+	@FindBy(xpath = "//*[@id=\"DistributionPopUpNo\"]/div") private WebElement ModelWindow;
+	@FindBy(xpath = "//*[@id=\"claimDocumentsLink\"]/a/span") private WebElement submitdocumentslink;
+	@FindBy(xpath = "//h1[contains(text(),'Submit document(s)')]") private WebElement submitdocumentsheading;
+	@FindBy(xpath = "//*[@id=\"docSource0\"]/div[1]/label") private WebElement OSPCWsibFormYes;
+	@FindBy(xpath = "//*[@id=\"termOfUseCheckbox\"]/div/div/div[1]/span") private WebElement OSPCConfirmCheckbox;
+	@FindBy(id = "wsibformselection-wrapper") private WebElement OSPCWSIBformDropdown;
+	@FindBy(xpath = "//span[(text()='Submit')]") private WebElement OSPCDocumentSubmit;
+	@FindBy(xpath = "//h2[contains(text(),'Confirmation')]") private WebElement submitdocumentsconfirmation;
+	@FindBy(xpath = "//span[contains(text(),'Close')]") private WebElement CloseButton;
+	@FindBy(xpath = "//*[@id=\"claimDocumentHistoryLink\"]/a/span") private WebElement DocumentHistoryLink;
+	@FindBy(id = "submittedDocumentsHeading") private WebElement submittedDocumentsHeading;
+	@FindBy(xpath = "//*[@id=\"SubmittedDocumentsDataTable\"]/div/div[1]/div[2]/div[1]/div/div[1]") private WebElement DocumentDescription;
+	@FindBy(xpath = "//*[@id=\"SubmittedDocumentsDataTable\"]/div/div[1]/div[2]/div[1]/div/div[2]") private WebElement DocumentDate;
+	@FindBy(xpath = "\t//*[@id=\"sendUsMessageLink\"]/a/span") private WebElement SendusmessageLink;
+	@FindBy(id = "secondaryHeading") private WebElement SendusmessageHeader;
+	@FindBy(id = "ddlSubject-wrapper") private WebElement SubjectDropdown;
+	@FindBy(id = "txtBody") private WebElement txtBody;
+	@FindBy(xpath = "//*[@id=\"btnSend\"]/span/span") private WebElement SendButton;
+	@FindBy(xpath = "//*[@id=\"returnToMailLink\"]/span") private WebElement ReturntoMail;
+	@FindBy(id = "mailListPageHeading") private WebElement mailListPageHeading;
+	@FindBy(xpath = "//*[@id=\"mailListDatatable\"]/div/div[1]/div[2]/div[1]/div/div[4]/div") private WebElement SentMessageBody;
+	@FindBy(xpath = "//*[@id=\"addClaimButton\"]/span/span") private WebElement AddClaimButton;
+	@FindBy(id = "claimNumberInput") private WebElement ClaimNumberInput;
+	@FindBy(id = "yearOfBirthInput") private WebElement yearOfBirthInput;
+	@FindBy(id = "personalIdentificationInput") private WebElement personalIdentificationInput;
+	@FindBy(xpath = "//*[@id=\"termOfUseCheckBox\"]/div/div/div/div[1]/span") private WebElement termOfUseCheckBox;
+	@FindBy(id = "nextButton") private WebElement SubmitButton;
+	@FindBy(id = "pageHeadingLabel") private WebElement pageHeadingLabel;
+	@FindBy(id = "secondaryHeading") private WebElement secondaryHeading;
+	@FindBy(id = "returnToClaimsHomelLink") private WebElement returnToClaimsHomelLink;
+	@FindBy(id = "viewClaimLink") private WebElement viewClaimLink;
+	@FindBy(css = "div.rt-tbody.jut__DataTable__tableBody") private WebElement tableBody;
+	@FindBy(id = "isDuplicateClaimMsg") private WebElement isDuplicateClaimMsg;
 
 	public OSPCClaimOverview(WebDriver driver, WebDriverWait wait) {
 		super(driver, wait);

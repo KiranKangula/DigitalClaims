@@ -18,65 +18,28 @@ public class OSPCDirectDeposit extends BaseDriverClass {
 	ConfigReader prop= Hooks.getConfigReader();
 	public static String randommessage;
 
-	@FindBy(id = "directDepositButton")
-	private WebElement directDepositButton;
-
-	@FindBy(xpath = "//*[@id=\"diBodySection\"]/div/div/div[2]/div[1]/button/span/span/span")
-	private WebElement AddDirectdepositLink;
-
-	@FindBy(xpath = "\t//*[@id=\"diBodySection\"]/div/div/div[2]/div[1]/div[6]/button/span/span/span")
-	private WebElement editDirectdepositLink;
-
-
-
-	@FindBy(id = "monthDropdown-wrapper")
-	private WebElement monthDropdown;
-
-	@FindBy(id = "yearDropdown-wrapper")
-	private WebElement yearDropdown;
-
-	@FindBy(xpath = "//*[@id=\"dobinputSection\"]/div/div/button/span/span")
-	private WebElement ConfirmButton;
-
-	@FindBy(id = "transitInput")
-	private WebElement transitInput;
-
-	@FindBy(id = "institutionInput")
-	private WebElement institutionInput;
-
-	@FindBy(id = "accountNumber1")
-	private WebElement accountNumber;
-
-	@FindBy(id = "accountNumber2")
-	private WebElement Reenter_accountNumber;
-
-	@FindBy(xpath = "//*[@id=\"termagreeSection\"]/div/div/div/div[1]/span")
-	private WebElement confirmCheckbox;
-
-	@FindBy(id = "nextButton")
-	private WebElement nextButton;
-
-	@FindBy(id = "review")
-	private WebElement reviewStep;
-
-	@FindBy(xpath = "//*[@id=\"termagreeSection\"]/div[1]/div[1]/div/div/div[1]/span")
-	private WebElement confirmCheckbox_Review;
-
-	@FindBy(xpath = "//*[@id=\"diBodySection\"]/div/div/div[3]/div/div[4]/div/span[2]/a/span")
-	private WebElement SubmitButton;
-
-	@FindBy(xpath = "//*[@id=\"navigationSection\"]/a/span")
-	private WebElement navigationSection;
-
-	@FindBy(xpath = "//*[@id=\"diBodySection\"]/div/div/div[2]/div[1]/div")
-	private WebElement NoDirectDepositMessage;
-
+	@FindBy(id = "directDepositButton") private WebElement directDepositButton;
+	@FindBy(xpath = "//*[@id=\"diBodySection\"]/div/div/div[2]/div[1]/button/span/span/span") private WebElement AddDirectdepositLink;
+	@FindBy(xpath = "\t//*[@id=\"diBodySection\"]/div/div/div[2]/div[1]/div[6]/button/span/span/span") private WebElement editDirectdepositLink;
+	@FindBy(id = "monthDropdown-wrapper") private WebElement monthDropdown;
+	@FindBy(id = "yearDropdown-wrapper") private WebElement yearDropdown;
+	@FindBy(xpath = "//*[@id=\"dobinputSection\"]/div/div/button/span/span") private WebElement ConfirmButton;
+	@FindBy(id = "transitInput") private WebElement transitInput;
+	@FindBy(id = "institutionInput") private WebElement institutionInput;
+	@FindBy(id = "accountNumber1") private WebElement accountNumber;
+	@FindBy(id = "accountNumber2") private WebElement Reenter_accountNumber;
+	@FindBy(xpath = "//*[@id=\"termagreeSection\"]/div/div/div/div[1]/span") private WebElement confirmCheckbox;
+	@FindBy(id = "nextButton") private WebElement nextButton;
+	@FindBy(id = "review") private WebElement reviewStep;
+	@FindBy(xpath = "//*[@id=\"termagreeSection\"]/div[1]/div[1]/div/div/div[1]/span") private WebElement confirmCheckbox_Review;
+	@FindBy(xpath = "//*[@id=\"diBodySection\"]/div/div/div[3]/div/div[4]/div/span[2]/a/span") private WebElement SubmitButton;
+	@FindBy(xpath = "//*[@id=\"navigationSection\"]/a/span") private WebElement navigationSection;
+	@FindBy(xpath = "//*[@id=\"diBodySection\"]/div/div/div[2]/div[1]/div") private WebElement NoDirectDepositMessage;
 
 	public OSPCDirectDeposit(WebDriver driver, WebDriverWait wait) {
 		super(driver, wait);
 		PageFactory.initElements(driver, this);
 	}
-
 
 	public boolean LandOnDirectDeposit() {
 		directDepositButton.click();

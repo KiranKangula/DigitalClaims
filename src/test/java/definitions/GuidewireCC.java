@@ -1,5 +1,6 @@
 package definitions;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -14,6 +15,8 @@ import pages.OSPCClaimOverview;
 import utils.ConfigReader;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.Map;
 
 public class GuidewireCC {
     private WebDriver driver;
@@ -85,5 +88,20 @@ public class GuidewireCC {
     @Given("User Logged into ClaimCenter")
     public void userLoggedIntoClaimCenter() {
         Assert.assertTrue(guidewirecc.GWCCLoginsuccess());
+    }
+
+    @When("User initiates Manual Registration")
+    public void userInitiatesManualRegistration() {
+        Assert.assertTrue(guidewirecc.KickManualRegistration());
+    }
+
+    @Then("User selects Source of Information as {string}")
+    public void userSelectsSourceOfInformationAs(String source) {
+        guidewirecc.selectSourceofInformation(source);
+    }
+
+    @And("User enters new worker information as below:")
+    public void userEntersNewWorkerInformationAsBelow() {
+
     }
 }
