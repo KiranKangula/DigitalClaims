@@ -58,42 +58,64 @@ public class ExcelUtils {
      */
     public static void saveExcelData(String sheetName, Map<String, String> rowData) throws IOException {
         String filePath = BASE_PATH + prop.getProperty("env") + "/testData.xlsx";
-        FileInputStream fis = new FileInputStream(filePath);
-        Workbook workbook = new XSSFWorkbook(fis);
-        Sheet sheet = workbook.getSheet(sheetName);
+        Workbook workbook;
+        Sheet sheet;
+
+        // Check if the file exists; if not, create a new workbook and sheet
+        File file = new File(filePath);
+        if (file.exists()) {
+            FileInputStream fis = new FileInputStream(filePath);
+            workbook = new XSSFWorkbook(fis);
+            sheet = workbook.getSheet(sheetName);
+            if (sheet == null) {
+                sheet = workbook.createSheet(sheetName); // Create sheet if missing
+            }
+        } else {
+            workbook = new XSSFWorkbook();
+            sheet = workbook.createSheet(sheetName);
+        }
+
+        // Initialize headers
+        Row headerRow = sheet.getRow(0);
+        if (headerRow == null) {
+            headerRow = sheet.createRow(0); // Create header row
+            int headerIndex = 0;
+            for (String key : rowData.keySet()) {
+                Cell headerCell = headerRow.createCell(headerIndex++);
+                headerCell.setCellValue(key); // Add headers
+            }
+        }
+
+        // Ensure headers match rowData keys
+        List<String> headers = new ArrayList<>();
+        for (Cell cell : headerRow) {
+            headers.add(cell.getStringCellValue());
+        }
+        for (String key : rowData.keySet()) {
+            if (!headers.contains(key)) {
+                Cell newHeaderCell = headerRow.createCell(headers.size());
+                newHeaderCell.setCellValue(key);
+                headers.add(key);
+            }
+        }
 
         // Add new row at the end
         int lastRowNum = sheet.getLastRowNum() + 1;
         Row newRow = sheet.createRow(lastRowNum);
 
-        // Get existing headers or create them
-        Row headerRow = sheet.getRow(0);
-        List<String> headers = new ArrayList<>();
-        if (headerRow == null) {
-            headerRow = sheet.createRow(0); // Create header row if missing
-        }
-        for (int i = 0; i < rowData.size(); i++) {
-            Cell headerCell = headerRow.getCell(i);
-            if (headerCell == null) {
-                headerCell = headerRow.createCell(i);
-                headerCell.setCellValue((String) rowData.keySet().toArray()[i]);
-            }
-            headers.add(headerCell.getStringCellValue());
-        }
-
-        // Write data into cells
+        // Write data into cells based on headers
         for (int i = 0; i < headers.size(); i++) {
             String header = headers.get(i);
+            String value = rowData.getOrDefault(header, "");
             Cell cell = newRow.createCell(i);
-            cell.setCellValue(rowData.getOrDefault(header, ""));
+            cell.setCellValue(value);
         }
 
         // Save changes
         FileOutputStream fos = new FileOutputStream(filePath);
         workbook.write(fos);
         workbook.close();
-    }
-}
+}}
 
 /// Reading data Example
 
