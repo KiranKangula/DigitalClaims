@@ -32,7 +32,7 @@ public class Hooks {
     public static List<Map<String, String>> data;
     public static ThreadLocal<Map<String, String>> currentRow = ThreadLocal.withInitial(()-> null);
     public static int currentIndex=0;
-    @Before
+    @Before(order = 0)
     public void setup(Scenario scenario)
     {
         String featureName = scenario.getUri().getPath().split("/")
@@ -41,7 +41,7 @@ public class Hooks {
         configReader = new ConfigReader(propertyFilePath);
     }
 
-    @Before
+    @Before(order = 1)
     public void loadData(Scenario scenario) throws IOException {
         String excelfilepath = "src/test/resources/data/"+ configReader.getProperty("env") + "/testData.xlsx";
         String sheetname = getSheetName(scenario);
@@ -50,10 +50,10 @@ public class Hooks {
             return;
         }
         data = ExcelUtils.readExcelData(sheetname);
-        //data.forEach(row-> scenario.log(String.join(", ", row)));
+        data.forEach(row-> System.out.println(row));
     }
 
-    @Before
+    @Before(order = 2)
     public void setScenarioData(Scenario scenario) {
         if (data != null && !data.isEmpty()) {
             if (currentRow == null) {
@@ -62,6 +62,7 @@ public class Hooks {
 
             if (currentIndex < data.size()) {
                 currentRow.set(data.get(currentIndex));
+                scenario.log("Setting the scenario: "+ currentRow.get());
                 currentIndex++;
             } else {
                 scenario.log("No more rows available in the test data for this scenario.");
