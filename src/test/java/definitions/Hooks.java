@@ -54,14 +54,20 @@ public class Hooks {
     }
 
     @Before
-    public void setScenarioData(Scenario scenario){
-        if(data != null && !data.isEmpty()){
-            if(currentIndex<data.size())
-            {
-                currentRow.set(data.get(currentIndex));
-                currentIndex++;
+    public void setScenarioData(Scenario scenario) {
+        if (data != null && !data.isEmpty()) {
+            if (currentRow == null) {
+                currentRow = ThreadLocal.withInitial(() -> null);
             }
 
+            if (currentIndex < data.size()) {
+                currentRow.set(data.get(currentIndex));
+                currentIndex++;
+            } else {
+                scenario.log("No more rows available in the test data for this scenario.");
+            }
+        } else {
+            scenario.log("Test data is not loaded or is empty.");
         }
     }
 
