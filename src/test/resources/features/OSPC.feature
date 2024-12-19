@@ -5,16 +5,17 @@ Background: : Login to OSPC
   When User submit email and password
   Then User should be able to login successfully and new page open
 
+  @SheetName_GWCC
   Scenario Outline: Login and Add a Claim
     Given User is on my Claim screen
     When User click on Add a Claim button
-    Then User should be able to add claim with "<Claim number>", "<Year of Birth>" and "<PIN>"
+    Then User should be able to add claim with "<Claim Number>", "<DOB>" and "<PIN>"
     Then Switch to New tab and Login to ClaimCenter
     And Navigate to Portal Authorization screen
-    And Remove the "<Claim number>" from profile
-    And Switch back to OSPC and verify if the "<Claim number>" is removed
+    And Remove the "<Claim Number>" from profile
+    And Switch back to OSPC and verify if the "<Claim Number>" is removed
     Examples:
-      | Claim number | Year of Birth | PIN    |
+      | Claim Number | DOB           | PIN    |
       | 32649902     |  1950         | 807437 |
 
 

@@ -18,7 +18,7 @@ public class ExcelUtils {
      * @return List of maps, where each map represents a row with column names as keys
      * @throws IOException If an I/O error occurs
      */
-    public static List<Map<String, String>> readExcelData(String sheetName) throws IOException {
+    public static List<List<String>> readExcelData(String sheetName) throws IOException {
         String filePath = BASE_PATH + prop.getProperty("env") + "/testData.xlsx";
         FileInputStream fis = new FileInputStream(filePath);
         Workbook workbook = new XSSFWorkbook(fis);

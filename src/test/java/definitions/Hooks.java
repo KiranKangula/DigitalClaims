@@ -1,5 +1,8 @@
 package definitions;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
@@ -19,6 +22,8 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import utils.ConfigReader;
+import utils.ExcelUtils;
+
 
 public class Hooks {
 	public static WebDriver driver;
@@ -31,6 +36,28 @@ public class Hooks {
                 [scenario.getUri().getPath().split("/").length-1].replace(".feature", "");
         String propertyFilePath= "src/test/resources/config/"+ featureName+ ".properties";
         configReader = new ConfigReader(propertyFilePath);
+    }
+
+    @Before
+    public void loadData(Scenario scenario) throws IOException {
+        String excelfilepath = "src/test/resources/data"+ configReader.getProperty("env") + "/testData.xlsx";
+        String sheetname = getSheetName(scenario);
+        if(sheetname==null || sheetname.isEmpty()){
+            scenario.log("Sheet name could not be determined for this scenario");
+            return;
+        }
+        List<List<String>> data = ExcelUtils.readExcelData(sheetname);
+        data.forEach(row-> scenario.log(String.join(", ", row)));
+    }
+
+    private String getSheetName(Scenario scenario) {
+
+        return scenario.getSourceTagNames()
+                .stream()
+                .filter(tag-> tag.startsWith("@SheetName_"))
+                .map(tag-> tag.replace("@SheetName_", ""))
+                .findFirst()
+                .orElse(null);
     }
 
     public static ConfigReader getConfigReader(){
