@@ -25,19 +25,23 @@ public class ExcelUtils {
              Workbook workbook = WorkbookFactory.create(fis)) {
 
             Sheet sheet = workbook.getSheet(sheetName);
-            for (Row row : sheet) {
+            Iterator<Row> rowIterator = sheet.iterator();
+
+            // Read header row to get column names
+            Row headerRow = rowIterator.next();
+            List<String> headers = new ArrayList<>();
+            for (Cell cell : headerRow) {
+                headers.add(cell.getStringCellValue());
+            }
+
+            // Read the rest of the rows and map values to headers
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
                 List<String> rowData = new ArrayList<>();
-                for (Cell cell : row) {
-                    switch (cell.getCellType()) {
-                        case STRING:
-                            rowData.add(cell.getStringCellValue());
-                            break;
-                        case NUMERIC:
-                            rowData.add(String.valueOf(cell.getNumericCellValue()));
-                            break;
-                        default:
-                            rowData.add("");
-                    }
+                for (int i = 0; i < headers.size(); i++) {
+                    Cell cell = row.getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    String cellValue = getCellValueAsString(cell);
+                    rowData.put(headers.get(i), cellValue);
                 }
                 data.add(rowData);
             }
@@ -45,6 +49,26 @@ public class ExcelUtils {
             e.printStackTrace();
         }
         return data;
+    }
+
+    private static String getCellValueAsString(Cell cell) {
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue();
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    return cell.getDateCellValue().toString();
+                } else {
+                    return String.valueOf(cell.getNumericCellValue());
+                }
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case BLANK:
+                return "";
+            default:
+                return cell.toString();
+        }
+    }
     }
 
     /**
