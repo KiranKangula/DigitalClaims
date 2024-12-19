@@ -3,6 +3,7 @@ package definitions;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 
@@ -28,7 +29,9 @@ import utils.ExcelUtils;
 public class Hooks {
 	public static WebDriver driver;
     private static ConfigReader configReader;
-    public static List<List<String>> data;
+    public static List<Map<String, String>> data;
+    public static ThreadLocal<Map<String, String>> currentRow;
+    public static int currentIndex=0;
     @Before
     public void setup(Scenario scenario)
     {
@@ -40,14 +43,26 @@ public class Hooks {
 
     @Before
     public void loadData(Scenario scenario) throws IOException {
-        String excelfilepath = "src/test/resources/data"+ configReader.getProperty("env") + "/testData.xlsx";
+        String excelfilepath = "src/test/resources/data/"+ configReader.getProperty("env") + "/testData.xlsx";
         String sheetname = getSheetName(scenario);
         if(sheetname==null || sheetname.isEmpty()){
             scenario.log("Sheet name could not be determined for this scenario");
             return;
         }
         data = ExcelUtils.readExcelData(sheetname);
-        data.forEach(row-> scenario.log(String.join(", ", row)));
+        //data.forEach(row-> scenario.log(String.join(", ", row)));
+    }
+
+    @Before
+    public void setScenarioData(Scenario scenario){
+        if(data != null && !data.isEmpty()){
+            if(currentIndex<data.size())
+            {
+                currentRow.set(data.get(currentIndex));
+                currentIndex++;
+            }
+
+        }
     }
 
     private String getSheetName(Scenario scenario) {
@@ -72,7 +87,7 @@ public class Hooks {
             ChromeOptions options = new ChromeOptions();
 
             // Configure ChromeOptions to bypass 403 errors and improve compatibility
-            options.setExperimentalOption("useAutomationExtension", false);
+            options.setExperimentalOption("useAutomationExtension", Optional.of(false));
             options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
             options.addArguments("--remote-allow-origins=*");
             options.addArguments("--disable-dev-shm-usage");
@@ -99,7 +114,7 @@ public class Hooks {
         if(configReader.getProperty("browser").contentEquals("edge")) {
             WebDriverManager.edgedriver().setup();
             EdgeOptions options = new EdgeOptions();
-            options.setExperimentalOption("useAutomationExtension", false);
+            options.setExperimentalOption("useAutomationExtension", Optional.of(false));
             options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
             options.addArguments("--remote-allow-origins=*");
             options.addArguments("--disable-dev-shm-usage");

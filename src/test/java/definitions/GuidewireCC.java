@@ -28,7 +28,7 @@ public class GuidewireCC {
     private HomePage homePage;
     private GuidewirePage guidewirecc;
     ConfigReader prop= Hooks.getConfigReader();
-
+    List<Map<String, String>> data = Hooks.data;
     public GuidewireCC() throws Exception {
         driver = Hooks.driver;
         wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
@@ -60,6 +60,7 @@ public class GuidewireCC {
 
     @And("Remove the {string} from profile")
     public void removeTheFromProfile(String claimnumber) {
+        claimnumber = Hooks.currentRow.get().get("Claim Number");
         Assert.assertTrue(guidewirecc.removeClaimfromPortalAuth(claimnumber));
     }
 

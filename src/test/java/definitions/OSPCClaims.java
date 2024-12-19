@@ -15,6 +15,7 @@ import utils.ConfigReader;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 public class OSPCClaims {
 	private WebDriver driver;
@@ -25,6 +26,7 @@ public class OSPCClaims {
 	private OSPCClaimOverview OSPCClaimOverview;
 
 	ConfigReader prop= Hooks.getConfigReader();
+	List<Map<String, String>> data = Hooks.data;
 	public OSPCClaims() throws Exception {
 		driver = Hooks.driver;
 		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
@@ -127,19 +129,16 @@ public class OSPCClaims {
 	}
 
 	@Then("User should be able to add claim with {string}, {string} and {string}")
-	public void userShouldBeAbleToAddClaimWithAnd(String ClaimNumber, String DOB, String PIN) {
-		List<List<String>> data = Hooks.data;
-		for(List<String> row : data){
-			ClaimNumber = row.get(2);
-			DOB= row.get(1);
-			PIN = row.get(0);
-		}
-
-		Assert.assertTrue(OSPCClaimOverview.AddaClaimOSPC(ClaimNumber,DOB, PIN, guidewirecc));
+	public void userShouldBeAbleToAddClaimWithAnd(String ClaimNumber, String YOB, String PIN) {
+			ClaimNumber = Hooks.currentRow.get().get("Claim Number");
+			YOB= Hooks.currentRow.get().get("DOB").split("/")[2];
+			PIN = Hooks.currentRow.get().get("PIN");
+		Assert.assertTrue(OSPCClaimOverview.AddaClaimOSPC(ClaimNumber,YOB, PIN, guidewirecc));
 	}
 
 	@And("Switch back to OSPC and verify if the {string} is removed")
 	public void switchBackToOSPCAndVerifyIfTheIsRemoved(String claimnumber) throws InterruptedException {
+			claimnumber = Hooks.currentRow.get().get("Claim Number");
 		Assert.assertTrue(OSPCClaimOverview.claimRemovalConfirmationOSPC(claimnumber));
 	}
 }

@@ -1,12 +1,12 @@
 Feature: Online Service for People with Claims(OSPC)
 
-Background: : Login to OSPC
+Background: Login to OSPC
   Given User is on login page
   When User submit email and password
   Then User should be able to login successfully and new page open
 
   @SheetName_GWCC
-  Scenario Outline: Login and Add a Claim
+  Scenario: Login and Add a Claim
     Given User is on my Claim screen
     When User click on Add a Claim button
     Then User should be able to add claim with "<ClaimNumber>", "<DOB>" and "<PIN>"
