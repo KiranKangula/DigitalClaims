@@ -19,9 +19,9 @@ public class ExcelUtils {
      * @return List of maps, where each map represents a row with column names as keys
      * @throws IOException If an I/O error occurs
      */
-    public static List<List<String>> readExcelData(String sheetName) throws IOException {
+    public static List<Map<String, String>> readExcelData(String sheetName) throws IOException {
         String filePath = BASE_PATH + prop.getProperty("env") + "/testData.xlsx";
-        List<List<String>> data = new ArrayList<>();
+        List<Map<String, String>> data = new ArrayList<>();
         try (FileInputStream fis = new FileInputStream(new File(filePath));
              Workbook workbook = WorkbookFactory.create(fis)) {
 
@@ -38,11 +38,11 @@ public class ExcelUtils {
             // Read the rest of the rows and map values to headers
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                List<String> rowData = new ArrayList<>();
+                Map<String, String> rowData = new LinkedHashMap<>(); // Corrected to use Map
                 for (int i = 0; i < headers.size(); i++) {
                     Cell cell = row.getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     String cellValue = getCellValueAsString(cell);
-                    rowData.put(headers.get(i), cellValue);
+                    rowData.put(headers.get(i), cellValue); // Use put method to map header to value
                 }
                 data.add(rowData);
             }
