@@ -30,7 +30,7 @@ public class Hooks {
 	public static WebDriver driver;
     private static ConfigReader configReader;
     public static List<Map<String, String>> data;
-    public static ThreadLocal<Map<String, String>> currentRow;
+    public static ThreadLocal<Map<String, String>> currentRow = ThreadLocal.withInitial(()-> null);
     public static int currentIndex=0;
     @Before
     public void setup(Scenario scenario)
