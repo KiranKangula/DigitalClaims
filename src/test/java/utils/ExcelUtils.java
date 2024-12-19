@@ -20,31 +20,30 @@ public class ExcelUtils {
      */
     public static List<List<String>> readExcelData(String sheetName) throws IOException {
         String filePath = BASE_PATH + prop.getProperty("env") + "/testData.xlsx";
-        FileInputStream fis = new FileInputStream(filePath);
-        Workbook workbook = new XSSFWorkbook(fis);
-        Sheet sheet = workbook.getSheet(sheetName);
-        List<Map<String, String>> data = new ArrayList<>();
+        List<List<String>> data = new ArrayList<>();
+        try (FileInputStream fis = new FileInputStream(new File(filePath));
+             Workbook workbook = WorkbookFactory.create(fis)) {
 
-        // Read header row
-        Row headerRow = sheet.getRow(0);
-        List<String> headers = new ArrayList<>();
-        for (Cell cell : headerRow) {
-            headers.add(cell.getStringCellValue());
-        }
-
-        // Read data rows
-        for (int i = 1; i <= sheet.getLastRowNum(); i++) { // Skip header row
-            Row row = sheet.getRow(i);
-            Map<String, String> rowData = new HashMap<>();
-            for (int j = 0; j < headers.size(); j++) {
-                Cell cell = row.getCell(j);
-                String cellValue = (cell != null) ? cell.toString() : "";
-                rowData.put(headers.get(j), cellValue);
+            Sheet sheet = workbook.getSheet(sheetName);
+            for (Row row : sheet) {
+                List<String> rowData = new ArrayList<>();
+                for (Cell cell : row) {
+                    switch (cell.getCellType()) {
+                        case STRING:
+                            rowData.add(cell.getStringCellValue());
+                            break;
+                        case NUMERIC:
+                            rowData.add(String.valueOf(cell.getNumericCellValue()));
+                            break;
+                        default:
+                            rowData.add("");
+                    }
+                }
+                data.add(rowData);
             }
-            data.add(rowData);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        workbook.close();
         return data;
     }
 

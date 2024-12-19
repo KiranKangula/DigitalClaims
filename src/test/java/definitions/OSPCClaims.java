@@ -126,6 +126,7 @@ public class OSPCClaims {
 
 	@Then("User should be able to add claim with {string}, {string} and {string}")
 	public void userShouldBeAbleToAddClaimWithAnd(String Claimnumber, String YOB, String PIN) {
+		
 		Assert.assertTrue(OSPCClaimOverview.AddaClaimOSPC(Claimnumber,YOB, PIN, guidewirecc));
 	}
 
