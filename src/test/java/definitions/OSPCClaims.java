@@ -14,6 +14,7 @@ import pages.OSPCClaimOverview;
 import utils.ConfigReader;
 
 import java.time.Duration;
+import java.util.List;
 
 public class OSPCClaims {
 	private WebDriver driver;
@@ -22,6 +23,7 @@ public class OSPCClaims {
 	private HomePage homePage;
 	private GuidewirePage guidewirecc;
 	private OSPCClaimOverview OSPCClaimOverview;
+
 	ConfigReader prop= Hooks.getConfigReader();
 	public OSPCClaims() throws Exception {
 		driver = Hooks.driver;
@@ -125,9 +127,15 @@ public class OSPCClaims {
 	}
 
 	@Then("User should be able to add claim with {string}, {string} and {string}")
-	public void userShouldBeAbleToAddClaimWithAnd(String Claimnumber, String YOB, String PIN) {
-		
-		Assert.assertTrue(OSPCClaimOverview.AddaClaimOSPC(Claimnumber,YOB, PIN, guidewirecc));
+	public void userShouldBeAbleToAddClaimWithAnd(String ClaimNumber, String DOB, String PIN) {
+		List<List<String>> data = Hooks.data;
+		for(List<String> row : data){
+			ClaimNumber = row.get(2);
+			DOB= row.get(1);
+			PIN = row.get(0);
+		}
+
+		Assert.assertTrue(OSPCClaimOverview.AddaClaimOSPC(ClaimNumber,DOB, PIN, guidewirecc));
 	}
 
 	@And("Switch back to OSPC and verify if the {string} is removed")

@@ -9,14 +9,11 @@ Background: : Login to OSPC
   Scenario Outline: Login and Add a Claim
     Given User is on my Claim screen
     When User click on Add a Claim button
-    Then User should be able to add claim with "<Claim Number>", "<DOB>" and "<PIN>"
+    Then User should be able to add claim with "<ClaimNumber>", "<DOB>" and "<PIN>"
     Then Switch to New tab and Login to ClaimCenter
     And Navigate to Portal Authorization screen
-    And Remove the "<Claim Number>" from profile
-    And Switch back to OSPC and verify if the "<Claim Number>" is removed
-    Examples:
-      | Claim Number | DOB           | PIN    |
-      | 32649902     |  1950         | 807437 |
+    And Remove the "<ClaimNumber>" from profile
+    And Switch back to OSPC and verify if the "<ClaimNumber>" is removed
 
 
   Scenario Outline: Login and Click on Claim and Verify each page is landed

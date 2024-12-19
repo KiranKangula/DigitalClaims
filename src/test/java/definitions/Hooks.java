@@ -28,7 +28,7 @@ import utils.ExcelUtils;
 public class Hooks {
 	public static WebDriver driver;
     private static ConfigReader configReader;
-
+    public static List<List<String>> data;
     @Before
     public void setup(Scenario scenario)
     {
@@ -46,7 +46,7 @@ public class Hooks {
             scenario.log("Sheet name could not be determined for this scenario");
             return;
         }
-        List<List<String>> data = ExcelUtils.readExcelData(sheetname);
+        data = ExcelUtils.readExcelData(sheetname);
         data.forEach(row-> scenario.log(String.join(", ", row)));
     }
 
