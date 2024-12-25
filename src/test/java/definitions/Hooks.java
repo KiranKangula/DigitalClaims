@@ -27,11 +27,14 @@ import utils.ExcelUtils;
 
 
 public class Hooks {
-	public static WebDriver driver;
     private static ConfigReader configReader;
     public static List<Map<String, String>> data;
-    public static ThreadLocal<Map<String, String>> currentRow = ThreadLocal.withInitial(()-> null);
+    //public static ThreadLocal<Map<String, String>> currentRow = ThreadLocal.withInitial(()-> null);
     public static int currentIndex=0;
+    //private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+    public static ThreadLocal<Map<String, String>> currentRow = ThreadLocal.withInitial(() -> null);
+    private static ThreadLocal<WebDriver> driver = ThreadLocal.withInitial(() -> null);
+
     @Before(order = 0)
     public void setup(Scenario scenario)
     {
@@ -86,60 +89,62 @@ public class Hooks {
         return configReader;
     }
 
+    public static WebDriver getDriver() {
+        return driver.get();
+    }
+
     @Before
     public void openBrowser() throws Exception {
+        WebDriver webDriver;
+        String browser = configReader.getProperty("browser");
+        boolean isHeadless = configReader.getProperty("headless").contentEquals("true");
 
-        if(configReader.getProperty("browser").contentEquals("chrome")) {
-            WebDriverManager.chromedriver().setup();
-            ChromeOptions options = new ChromeOptions();
-
-            // Configure ChromeOptions to bypass 403 errors and improve compatibility
-            options.setExperimentalOption("useAutomationExtension", Optional.of(false));
-            options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
-            options.addArguments("--remote-allow-origins=*");
-            options.addArguments("--disable-dev-shm-usage");
-            options.addArguments("--no-sandbox");
-            options.addArguments("--remote-allow-origins=*");
-            // Enable headless mode only when required
-            if(configReader.getProperty("headless").contentEquals("true")) {
-                options.addArguments("--headless", "--window-size=1440,768", "--disable-gpu");
-            }
-
-            driver = new ChromeDriver(options);
-
-            driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-            driver.manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
-            driver.manage().deleteAllCookies();
-
-            // Maximize window if not headless
-            if (!configReader.getProperty("headless").contentEquals("true")) {
-                driver.manage().window().maximize();
-            }
-
-            driver.get(configReader.getProperty("baseUrl"));
-        }
-        if(configReader.getProperty("browser").contentEquals("edge")) {
-            WebDriverManager.edgedriver().setup();
-            EdgeOptions options = new EdgeOptions();
-            options.setExperimentalOption("useAutomationExtension", Optional.of(false));
-            options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
-            options.addArguments("--remote-allow-origins=*");
-            options.addArguments("--disable-dev-shm-usage");
-            options.addArguments("--no-sandbox");
-            options.addArguments("--remote-allow-origins=*");
-
-            if(configReader.getProperty("headless").contentEquals("true")) {
-                options.addArguments("--headless", "--window-size=1440,768", "--disable-gpu");
-            }
-            driver = new EdgeDriver(options);
-            driver.get(configReader.getProperty("baseUrl"));
+        switch (browser) {
+            case "chrome":
+                WebDriverManager.chromedriver().setup();
+                ChromeOptions chromeOptions = new ChromeOptions();
+                chromeOptions.setExperimentalOption("useAutomationExtension", false);
+                chromeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+                chromeOptions.addArguments("--remote-allow-origins=*");
+                chromeOptions.addArguments("--disable-dev-shm-usage", "--no-sandbox");
+                if (isHeadless) {
+                    chromeOptions.addArguments("--headless", "--window-size=1440,768", "--disable-gpu");
+                }
+                webDriver = new ChromeDriver(chromeOptions);
+                break;
+            case "edge":
+                WebDriverManager.edgedriver().setup();
+                EdgeOptions edgeOptions = new EdgeOptions();
+                edgeOptions.setExperimentalOption("useAutomationExtension", false);
+                edgeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+                edgeOptions.addArguments("--remote-allow-origins=*");
+                edgeOptions.addArguments("--disable-dev-shm-usage", "--no-sandbox");
+                if (isHeadless) {
+                    edgeOptions.addArguments("--headless", "--window-size=1440,768", "--disable-gpu");
+                }
+                webDriver = new EdgeDriver(edgeOptions);
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
 
+        webDriver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+        webDriver.manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
+        webDriver.manage().deleteAllCookies();
+        if (!isHeadless) {
+            webDriver.manage().window().maximize();
+        }
+        webDriver.get(configReader.getProperty("baseUrl"));
+        driver.set(webDriver);
     }
 
     @After
     public void closeDriver() {
-        driver.quit();
+        WebDriver webDriver = driver.get();
+        if (webDriver != null) {
+            webDriver.quit();
+            driver.remove();
+        }
     }
 
     @AfterStep
@@ -147,7 +152,7 @@ public class Hooks {
 
                 if(scenario.isFailed() || configReader.getProperty("screenshots").contentEquals("true")) {
             try {
-                final byte[] screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
+                final byte[] screenshot = ((TakesScreenshot)driver.get()).getScreenshotAs(OutputType.BYTES);
                 String screenshotname = scenario.getName().replaceAll(" ","_")+".png";
 
                 scenario.attach(screenshot, "image/png", screenshotname);

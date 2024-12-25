@@ -7,9 +7,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.BaseDriverClass;
 import utils.ConfigReader;
+
+import java.time.Duration;
 
 public class HomePage extends BaseDriverClass {
 	ConfigReader prop= Hooks.getConfigReader();
@@ -30,8 +33,8 @@ public class HomePage extends BaseDriverClass {
 	public void clickClaim(String claimNumber) {
 		// Dynamically create the XPath using the claim number
 		String dynamicXPath = "//*[contains(text(),'" + claimNumber + "')]";
-		WebElement claimElement = getDriver().findElement(By.xpath(dynamicXPath));
-		waitUntilElementVisible(claimElement);
+		WebElement claimElement = new WebDriverWait(getDriver(), Duration.ofSeconds(20))
+				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(dynamicXPath)));
 		claimElement.click();
 	}
 

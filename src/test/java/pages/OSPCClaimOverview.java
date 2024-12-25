@@ -137,12 +137,16 @@ public class OSPCClaimOverview extends BaseDriverClass {
 	public Boolean SubmitDocument() throws InterruptedException {
 		OSPCConfirmCheckbox.click();
 		OSPCDocumentSubmit.click();
-		if(CloseButton.isDisplayed()) {
-			CloseButton.click();
-			Thread.sleep(10000);
-			OSPCConfirmCheckbox.click();
-			OSPCDocumentSubmit.click();
+		try{
+			if(CloseButton.isDisplayed()) {
+				CloseButton.click();
+				Thread.sleep(10000);
+				OSPCConfirmCheckbox.click();
+				OSPCDocumentSubmit.click();
+			}
 		}
+		catch(NoSuchElementException ignored)
+		{}
 		waitUntilElementVisible(submitdocumentsconfirmation);
 		return submitdocumentsconfirmation.isDisplayed();
 

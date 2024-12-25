@@ -51,18 +51,12 @@ public class OSPCDirectDeposit extends BaseDriverClass {
 		AddDirectdepositLink.click();
 		waitUntilElementVisible(monthDropdown);
 		monthDropdown.click();
-		//monthDropdown.sendKeys(Month);
 		Actions actions = new Actions(getDriver());
-		actions.sendKeys(Month).build().perform();//press down arrow key
-		Actions actions2 = new Actions(getDriver());
-		actions2.sendKeys(Keys.ENTER).build().perform();
-
+		actions.sendKeys(Month).build().perform();
+		actions.sendKeys(Keys.ENTER).build().perform();
 		yearDropdown.click();
-		//yearDropdown.sendKeys(Year);
-		Actions actions3 = new Actions(getDriver());
-		actions3.sendKeys(Year).build().perform();//press down arrow key
-		Actions actions4 = new Actions(getDriver());
-		actions4.sendKeys(Keys.ENTER).build().perform();
+		actions.sendKeys(Year).build().perform();
+		actions.sendKeys(Keys.ENTER).build().perform();
 
 		ConfirmButton.click();
 		waitUntilElementVisible(transitInput);
@@ -70,21 +64,17 @@ public class OSPCDirectDeposit extends BaseDriverClass {
 	}
 
 	public boolean editDirectDepositInformation(String Month, String Year) {
+		waitUntilElementVisible(editDirectdepositLink);
 		editDirectdepositLink.click();
 		waitUntilElementVisible(monthDropdown);
 		monthDropdown.click();
-		//monthDropdown.sendKeys(Month);
-		Actions actions = new Actions(getDriver());
-		actions.sendKeys(Month).build().perform();//press down arrow key
-		Actions actions2 = new Actions(getDriver());
-		actions2.sendKeys(Keys.ENTER).build().perform();
 
+		Actions actions = new Actions(getDriver());
+		actions.sendKeys(Month).build().perform();
+		actions.sendKeys(Keys.ENTER).build().perform();
 		yearDropdown.click();
-		//yearDropdown.sendKeys(Year);
-		Actions actions3 = new Actions(getDriver());
-		actions3.sendKeys(Year).build().perform();//press down arrow key
-		Actions actions4 = new Actions(getDriver());
-		actions4.sendKeys(Keys.ENTER).build().perform();
+		actions.sendKeys(Year).build().perform();
+		actions.sendKeys(Keys.ENTER).build().perform();
 
 		ConfirmButton.click();
 		waitUntilElementVisible(transitInput);

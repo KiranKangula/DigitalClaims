@@ -28,7 +28,7 @@ public class DirectDeposit {
 	ConfigReader prop= Hooks.getConfigReader();
 	public static String Claimnumber;
 	public DirectDeposit() throws Exception {
-        driver = Hooks.driver;
+        driver = Hooks.getDriver();
 		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
 		loginPage = new LoginPage(driver, wait);
 		homePage = new HomePage(driver, wait);

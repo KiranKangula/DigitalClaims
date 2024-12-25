@@ -1,18 +1,18 @@
 package utils;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public class BaseDriverClass {
-	private static WebDriver driver;
-    private static WebDriverWait wait;
+	private WebDriver driver;
+    private WebDriverWait wait;
 
     public BaseDriverClass(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
@@ -45,20 +45,40 @@ public class BaseDriverClass {
 
     // Utility to click using JavascriptExecutor
     protected void jsClick(WebElement element) {
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].click();", element);
     }
 
     // Utility to send keys using JavascriptExecutor
     protected void jsSendKeys(WebElement element, String value) {
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].value='" + value + "';", element);
+    }
+
+    // Utility to send keys using Actions and JavascriptExecutor
+    protected void jsMoveSendKeys(WebElement element, String value) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].value='';", element);
+        new Actions(getDriver()).moveToElement(element).click().sendKeys(value).perform();
     }
 
     // Utility to scroll to an element
     protected void scrollToElement(WebElement element) {
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView(true);", element);
+    }
+
+    protected void DynamicTextClick(String text ) throws InterruptedException {
+        String dynamicXPath = "//*[contains(text(),'" + text + "')]";
+        WebElement Element = new WebDriverWait(getDriver(), Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(dynamicXPath)));
+        Thread.sleep(2000);
+        Element.click();
+    }
+
+    protected void ClickusingActions(String element) {
+        Actions actions = new Actions(getDriver());
+        actions.sendKeys(element).build().perform();
+        actions.sendKeys(Keys.ENTER).build().perform();
     }
 
 
