@@ -88,7 +88,7 @@ Background: Login to OSPC
       | Month | Year | Transit number | Institution number | Account number |
       |1      | 2000 |  01001         | 010                |  987654321     |
 
-  @SheetName_eForm6 @eForm6
+  @SheetName_eForm6_PI @eForm6_PI
   Scenario: Login and Submit a Report for Physical Injury
     Given User is on my Claim screen
     When User click on Submit Report button
@@ -98,7 +98,99 @@ Background: Login to OSPC
     And User should be able to select radio "<PhysicalInjury>", Body Part "<BodyPart>"
     And User should be able to enter "<ExistingClaimNumber>" if applicable
     And User should be able to enter "<FirstName>", "<LastName>", "<PhoneNumber>", "<Pronouns>"
-      And Enter Additional details like "<Gender>", "<DateofBirthDay>", "<DateofBirthMonth>", "<DateofBirthYear>","<preferredLanguage>", "<sinNumber>"
-    And Enter "<Address>", "<City>", "<Province>", "<PostalCode>", "<Country>"
-    And Enter "<EmployerName>", "<EmployerPhoneNumber>", "<EmployerAddress>", "<EmployerCity>", "<EmployerProvince>", "<EmployerPostalCode>", "<EmployerCountry>"
+    And Enter Additional personal details
+    And Enter Worker Address Details
+    And Enter Employers Details
     Then Verify the reference number is generated and displayed
+    And Enter the Job Details of the Worker
+    And Enter Tell us about your work details
+    And Enter the Physical injury or illness details
+    And Enter Injury date and time
+    And Enter Areas of Injury
+    And Enter Witnesses contact information
+    And Enter Injury, illness or exposure incident address
+    And Enter Similar or related previous injury or illness details
+    And Enter Health care for injury or illness details
+    And Enter Missed time from work details
+    And Enter Modified Work Details
+    And Enter Return to work details
+    And Enter Additional earnings and benefits information
+    And Enter Authorized representative details
+    And Enter Submit supporting documents details
+    And Enter Additional Comments details
+    And Verify Review and submit report and Select Declaration checkbox
+    And Select decision to Add claim to your account and Submit Report
+
+  @SheetName_eForm6_Illness @eForm6_illness
+  Scenario: Login and Submit a Report for Illness, disease or medical condition
+    Given User is on my Claim screen
+    When User click on Submit Report button
+    Then User should be able to provide consent to the privacy statement
+    And User should be able to select report type "<ReportType>"
+    And User should be able to select Injury Type "<InjuryType>"
+    And User should be able to enter "<ExistingClaimNumber>" if applicable
+    And User should be able to enter "<FirstName>", "<LastName>", "<PhoneNumber>", "<Pronouns>"
+    And Enter Additional personal details
+    And Enter Worker Address Details
+    And Enter Employers Details
+    Then Verify the reference number is generated and displayed
+    And Enter the Job Details of the Worker
+    And Enter Tell us about your work details
+    And Enter the injury or illness details
+    And Enter Illness or medical condition details
+    And Enter Witnesses contact information
+    And Enter Injury, illness or exposure incident address
+    And Enter Similar or related previous injury or illness details
+    And Enter Health care for injury or illness details
+    And Enter Missed time from work details
+    And Enter Modified Work Details
+    And Enter Return to work details
+    And Enter Additional earnings and benefits information
+    And Enter Authorized representative details
+    And Enter Submit supporting documents details
+    And Enter Additional Comments details
+    And Verify Review and submit report and Select Declaration checkbox
+    And Select decision to Add claim to your account and Submit Report
+
+
+  @SheetName_eForm6_Mental @eForm6_Mental
+  Scenario: Login and Submit a Report for mental health
+    Given User is on my Claim screen
+    When User click on Submit Report button
+    Then User should be able to provide consent to the privacy statement
+    And User should be able to select report type "<ReportType>"
+    And User should be able to select Injury Type "<InjuryType>"
+    And User should be able to Describe your Injury
+    And User should be able to enter "<ExistingClaimNumber>" if applicable
+    And User should be able to enter "<FirstName>", "<LastName>", "<PhoneNumber>", "<Pronouns>"
+    And Enter Additional personal details
+    And Enter Worker Address Details
+    And Enter Employers Details
+    Then Verify the reference number is generated and displayed
+    And Enter the Job Details of the Worker
+    And Enter Tell us about your work details
+    And Enter the Mental stress psychological injury details
+    And Enter Mental stress psychological injury date details
+    And Enter Areas of Injury for Mental
+    And Enter Witnesses contact information
+    And Enter Injury, illness or exposure incident address
+    And Enter Similar or related previous injury or illness details
+    And Enter Health care for injury or illness details
+    And Enter Missed time from work details
+    And Enter Modified Work Details
+    And Enter Return to work details
+    And Enter Additional earnings and benefits information
+    And Enter Authorized representative details
+    And Enter Submit supporting documents details
+    And Enter Additional Comments details
+    And Verify Review and submit report and Select Declaration checkbox
+    And Select decision to Add claim to your account and Submit Report
+
+  @eForm6_NIHL
+  Scenario: Login and Submit a Report for NIHL
+    Given User is on my Claim screen
+    When User click on Submit Report button
+    Then User should be able to provide consent to the privacy statement
+    And User should be able to select "Injury or illness" report type
+    And User should be able to select "Noise-induced hearing loss" Injury Type
+    And User should be able to land on Continue to different online service to make a claim for noise-induced hearing loss screen

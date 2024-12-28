@@ -53,6 +53,7 @@ public class DIeForm6 extends BaseDriverClass {
 	@FindBy(id = "dropdownCountry-wrapper") private WebElement EmployerCountryDropdown;
 	@FindBy(xpath = "//*[@id=\"claimsNumberBody\"]/p") private WebElement ReferenceNumber;
 	@FindBy(xpath = "//*[@id=\"onBoardContinueId\"]/span") private WebElement ContinueButton;
+	@FindBy(xpath = "//*[@id=\"privacyPolicyH3\"]") private WebElement NIHLPageHeader;
 
 
 
@@ -95,7 +96,7 @@ public class DIeForm6 extends BaseDriverClass {
 		return PhysicalInjuryRadio.isDisplayed();
 	}
 
-	public boolean selectInjuryType(String injurytype) {
+	public void selectInjuryType(String injurytype) {
 		if(injurytype.contains("Physical")) {
 			PhysicalInjuryRadio.click();
 		}
@@ -109,15 +110,13 @@ public class DIeForm6 extends BaseDriverClass {
 			NoiseInducedHearingLossRadio.click();
 		}
 		NextButton.click();
-		waitUntilElementVisible(InjuryTypeOccuranceYes);
-		return InjuryTypeOccuranceYes.isDisplayed();
 	}
 
 	public boolean selectBodyPart(String PhyscialInjury, String bodypart) {
-		if(PhyscialInjury.contains("Yes")) {
+		if(PhyscialInjury.equalsIgnoreCase("yes")) {
 			InjuryTypeOccuranceYes.click();
 		}
-		else if(PhyscialInjury.contains("No")) {
+		else if(PhyscialInjury.equalsIgnoreCase("no")) {
 			InjuryTypeOccuranceNo.click();
 		}
 
@@ -187,11 +186,11 @@ public class DIeForm6 extends BaseDriverClass {
 		return AddressLine1.isDisplayed();
 	}
 
-	public boolean enterMailingAddress(String address1, String city, String province, String postalcode, String country) throws InterruptedException {
+	public boolean enterMailingAddress(String address) throws InterruptedException {
 		AddressLine1.clear();
-		AddressLine1.sendKeys(address1);
+		AddressLine1.sendKeys(address.split("\\|")[0]);
 		City.clear();
-		City.sendKeys(city);
+		City.sendKeys(address.split("\\|")[1]);
 		ProvinceDropdown.click();
 		Thread.sleep(2000);
 		//DynamicTextClick(province);
@@ -199,12 +198,12 @@ public class DIeForm6 extends BaseDriverClass {
 //		WebElement Element = new WebDriverWait(getDriver(), Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(dynamicXPath)));
 //		Thread.sleep(6000);
 //		Element.click();
-		ClickusingActions(province);
+		ClickusingActions(address.split("\\|")[2]);
 		PostalCode.clear();
-		PostalCode.sendKeys(postalcode);
+		PostalCode.sendKeys(address.split("\\|")[3]);
 		CountryDropdown.click();
 		Thread.sleep(2000);
-		DynamicTextClick(country);
+		DynamicTextClick(address.split("\\|")[4]);
 		Thread.sleep(2000);
 		NextButton.click();
 		waitUntilElementVisible(EmployerName);
@@ -234,5 +233,10 @@ public class DIeForm6 extends BaseDriverClass {
 		String reference =  ReferenceNumber.getText();
 		ContinueButton.click();
 		return reference;
+	}
+
+	public boolean verifyNIHLPage() {
+		waitUntilElementVisible(NIHLPageHeader);
+		return NIHLPageHeader.getText().contains("Continue to different online service to make a claim for noise-induced hearing loss");
 	}
 }

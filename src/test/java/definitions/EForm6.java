@@ -20,18 +20,26 @@ public class EForm6 {
 
     private WebDriver driver;
     private WebDriverWait wait;
-    private LoginPage loginPage;
-    private HomePage homePage;
     private DIeForm6 eform6;
+    private DIeForm6_WorkHistory eform6WorkHistory;
+    private DIeForm6_InjuryDetails eform6InjuryDetails;
+    private DIeForm6_ReviewandSubmit eform6ReviewandSubmit;
+    private DIeForm6_SupportingDocuments eform6SupportingDocuments;
+    private DIeForm6_LostTimeandEarnings eform6LostTimeandEarnings;
+    private DIeForm6_HealthCare eform6HealthCare;
     private GuidewirePage guidewirecc;
     private pages.OSPCClaimOverview OSPCClaimOverview;
     ConfigReader prop= Hooks.getConfigReader();
     public EForm6() throws Exception {
         driver = Hooks.getDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
-        loginPage = new LoginPage(driver, wait);
-        homePage = new HomePage(driver, wait);
         eform6= new DIeForm6(driver, wait);
+        eform6WorkHistory = new DIeForm6_WorkHistory(driver, wait);
+        eform6InjuryDetails = new DIeForm6_InjuryDetails(driver, wait);
+        eform6ReviewandSubmit = new DIeForm6_ReviewandSubmit(driver, wait);
+        eform6SupportingDocuments = new DIeForm6_SupportingDocuments(driver, wait);
+        eform6LostTimeandEarnings = new DIeForm6_LostTimeandEarnings(driver, wait);
+        eform6HealthCare = new DIeForm6_HealthCare(driver, wait);
         guidewirecc = new GuidewirePage(driver, wait);
         OSPCClaimOverview = new OSPCClaimOverview(driver, wait);
     }
@@ -57,14 +65,14 @@ public class EForm6 {
     @And("User should be able to select Injury Type {string}")
     public void userShouldBeAbleToSelectInjuryType(String injurytype) {
         injurytype = Hooks.currentRow.get().get("InjuryType");
-        Assert.assertTrue(eform6.selectInjuryType(injurytype));
+        eform6.selectInjuryType(injurytype);
 
     }
 
     @And("User should be able to select radio {string}, Body Part {string}")
     public void userShouldBeAbleToSelectRadioBodyPart(String PhysicalInj, String Bodypart) {
-        PhysicalInj = Hooks.currentRow.get().get("PhysicalInjury");
-        Bodypart = Hooks.currentRow.get().get("BodyPart");
+        PhysicalInj = Hooks.currentRow.get().get("PhyInjury");
+        Bodypart = Hooks.currentRow.get().get("DescribeInjury");
         Assert.assertTrue(eform6.selectBodyPart(PhysicalInj, Bodypart));
     }
 
@@ -85,40 +93,34 @@ public class EForm6 {
 
     }
 
-    @And("Enter Additional details like {string}, {string}, {string}, {string},{string}, {string}")
-    public void enterAdditionalDetailsLike(String gender, String Day, String Month, String Year, String PreferredLang, String SIN) throws InterruptedException {
-        gender= Hooks.currentRow.get().get("Gender");
-        Day= Hooks.currentRow.get().get("DateofBirthDay");
-        Month= Hooks.currentRow.get().get("DateofBirthMonth");
-        Year= Hooks.currentRow.get().get("DateofBirthYear");
-        PreferredLang= Hooks.currentRow.get().get("PreferredLanguage");
-        SIN= Hooks.currentRow.get().get("sinNumber");
+    @And("Enter Additional personal details")
+    public void enterAdditionalDetailsLike() throws InterruptedException {
+       String gender= Hooks.currentRow.get().get("Gender");
+        String Day= Hooks.currentRow.get().get("DateofBirthDay");
+        String Month= Hooks.currentRow.get().get("DateofBirthMonth");
+        String Year= Hooks.currentRow.get().get("DateofBirthYear");
+        String  PreferredLang= Hooks.currentRow.get().get("PreferredLanguage");
+        String  SIN= Hooks.currentRow.get().get("sinNumber");
         Assert.assertTrue(eform6.enterAdditionalDetails(gender, Day, Month, Year, PreferredLang, SIN));
 
     }
 
-    @And("Enter {string}, {string}, {string}, {string}, {string}")
-    public void enter(String Address1, String City, String Province, String postalcode, String country) throws InterruptedException {
-        Address1= Hooks.currentRow.get().get("Address");
-        City= Hooks.currentRow.get().get("City");
-        Province= Hooks.currentRow.get().get("Province");
-        postalcode= Hooks.currentRow.get().get("PostalCode");
-        country= Hooks.currentRow.get().get("Country");
-        Assert.assertTrue(eform6.enterMailingAddress(Address1, City, Province, postalcode, country));
+    @And("Enter Worker Address Details")
+    public void enterWorkerAddressDetails() throws InterruptedException {
+        String Address= Hooks.currentRow.get().get("Address");
+        Assert.assertTrue(eform6.enterMailingAddress(Address));
     }
 
-    @And("Enter {string}, {string}, {string}, {string}, {string}, {string}, {string}")
-    public void enter(String Employername, String EmpPhone, String EmpAddress1, String EmpCity, String EmpProvince, String EmpPostalcode, String EmpCountry) throws InterruptedException {
-        Employername= Hooks.currentRow.get().get("EmployerName");
-        EmpPhone= Hooks.currentRow.get().get("EmployerPhone");
-        EmpAddress1= Hooks.currentRow.get().get("EmployerAddress");
-        EmpCity= Hooks.currentRow.get().get("EmployerCity");
-        EmpProvince= Hooks.currentRow.get().get("EmployerProvince");
-        EmpPostalcode= Hooks.currentRow.get().get("EmployerPostalCode");
-        EmpCountry= Hooks.currentRow.get().get("EmployerCountry");
+    @And("Enter Employers Details")
+    public void enterEmployerDetails() throws InterruptedException {
+       String Employername= Hooks.currentRow.get().get("EmployerName");
+        String EmpPhone= Hooks.currentRow.get().get("EmployerPhone");
+        String EmpAddress1= Hooks.currentRow.get().get("EmployerAddress");
+        String  EmpCity= Hooks.currentRow.get().get("EmployerCity");
+        String EmpProvince= Hooks.currentRow.get().get("EmployerProvince");
+        String  EmpPostalcode= Hooks.currentRow.get().get("EmployerPostalCode");
+        String  EmpCountry= Hooks.currentRow.get().get("EmployerCountry");
         eform6.enterEmployerDetails(Employername, EmpPhone, EmpAddress1, EmpCity, EmpProvince, EmpPostalcode, EmpCountry);
-
-
     }
 
     @Then("Verify the reference number is generated and displayed")
@@ -126,7 +128,221 @@ public class EForm6 {
        String referenceClaimNumber = eform6.verifyReferenceNumber();
        System.out.println("Reference Claim Number is: "+referenceClaimNumber);
          Assert.assertTrue(referenceClaimNumber.length()>0);
-        ExcelUtils.updateExcelData("eForm6", "ReferenceNumber", referenceClaimNumber);
+        String sheetName = Hooks.sheetName;
+        ExcelUtils.updateExcelData(sheetName, "ReferenceNumber", referenceClaimNumber);
 
+    }
+
+    @And("Enter the Job Details of the Worker")
+    public void enterTheJobDetailsOfTheWorker() {
+        String JobTitle= Hooks.currentRow.get().get("JobTitle");
+        String StartDateDay= Hooks.currentRow.get().get("JobStartDateDay");
+        String StartDateMonth= Hooks.currentRow.get().get("JobStartDateMonth");
+        String StartDateYear= Hooks.currentRow.get().get("JobStartDateYear");
+        String EmpDurationYears= Hooks.currentRow.get().get("EmpDurationYears");
+        String EmpDurationMonths= Hooks.currentRow.get().get("EmpDurationMonths");
+        String SupervisorFirstName= Hooks.currentRow.get().get("SupervisorFirstName");
+        String SupervisorLastName= Hooks.currentRow.get().get("SupervisorLastName");
+        String SupervisorPhoneNumber= Hooks.currentRow.get().get("SupervisorPhoneNumber");
+        String CompanySize= Hooks.currentRow.get().get("CompanySize");
+        String ThirdPartyUnion= Hooks.currentRow.get().get("ThirdPartyUnion");
+        String NameOfTheUnion= Hooks.currentRow.get().get("NameOfTheUnion");
+        Assert.assertTrue(eform6WorkHistory.enterJobDetails(JobTitle, StartDateDay, StartDateMonth, StartDateYear, EmpDurationYears,
+                EmpDurationMonths, SupervisorFirstName, SupervisorLastName, SupervisorPhoneNumber, CompanySize, ThirdPartyUnion, NameOfTheUnion));
+    }
+
+    @And("Enter Tell us about your work details")
+    public void enterTellUsAboutYourWorkDetails() {
+        String Relative= Hooks.currentRow.get().get("Relative");
+        String TypesofEmployment= Hooks.currentRow.get().get("TypesofEmployment");
+        eform6WorkHistory.enterWorkDetails(Relative, TypesofEmployment);
+    }
+
+    @And("Enter the Physical injury or illness details")
+    public void enterThePhysicalInjuryOrIllnessDetails() {
+        String whathappened = Hooks.currentRow.get().get("WhatHappened");
+        eform6InjuryDetails.PhysicalInjuryDetails(whathappened);
+    }
+
+    @And("Enter Injury date and time")
+    public void enterInjuryDateAndTime() {
+        String injuryOneTimeDateDay= Hooks.currentRow.get().get("InjuryDateDay");
+        String injuryOneTimeDateMonth= Hooks.currentRow.get().get("InjuryDateMonth");
+        String injuryOneTimeDateYear= Hooks.currentRow.get().get("InjuryDateYear");
+        eform6InjuryDetails.enterInjuryDateAndTime(injuryOneTimeDateDay, injuryOneTimeDateMonth, injuryOneTimeDateYear);
+    }
+
+    @And("Enter Areas of Injury")
+    public void enterAreasOfInjury() {
+        String PhysicalInj= Hooks.currentRow.get().get("PhysicalInjury");
+        String Bodypart= Hooks.currentRow.get().get("BodyPart");
+        eform6InjuryDetails.selectBodyPart(PhysicalInj, Bodypart);
+    }
+
+    @And("Enter Witnesses contact information")
+    public void enterWitnessesContactInformation() {
+        String WitnessInvolved= Hooks.currentRow.get().get("WitnessInvolved");
+        String WitnessFirstName= Hooks.currentRow.get().get("WitnessFirstName");
+        String WitnessLastName= Hooks.currentRow.get().get("WitnessLastName");
+        String WitnessPosition= Hooks.currentRow.get().get("WitnessPosition");
+        String WitnessPhoneNumber= Hooks.currentRow.get().get("WitnessPhoneNumber");
+        eform6InjuryDetails.enterWitnessDetails(WitnessInvolved, WitnessFirstName, WitnessLastName, WitnessPosition, WitnessPhoneNumber);
+    }
+
+    @And("Enter Injury, illness or exposure incident address")
+    public void enterInjuryIllnessOrExposureIncidentAddress() {
+        eform6InjuryDetails.enterIncidentAddress();
+    }
+
+    @And("Enter Similar or related previous injury or illness details")
+    public void enterSimilarOrRelatedPreviousInjuryOrIllnessDetails() {
+        String SimilarInjury= Hooks.currentRow.get().get("SimilarInjury");
+        String previousClaim= Hooks.currentRow.get().get("PreviousClaim");
+        String previousClaimNumber = Hooks.currentRow.get().get("PreviousClaimNumber");
+        String sameAreaofInjury= Hooks.currentRow.get().get("SameAreaofInjury");
+        String TellUsAboutPreviousInjury= Hooks.currentRow.get().get("TellUsAboutPreviousInjury");
+        eform6InjuryDetails.enterSimilarInjuryDetails(SimilarInjury, previousClaim, previousClaimNumber, sameAreaofInjury, TellUsAboutPreviousInjury);
+
+    }
+
+    @And("Enter Health care for injury or illness details")
+    public void enterHealthCareForInjuryOrIllnessDetails() throws InterruptedException {
+
+      String HealthCareReceived= Hooks.currentRow.get().get("HealthCareReceived");
+      String Whendoyouexpect = Hooks.currentRow.get().get("Whendoyouexpect");
+      String whereHealthCareReceived= Hooks.currentRow.get().get("WhereHealthCareReceived");
+      String HealthCareReceivedDate= Hooks.currentRow.get().get("HealthCareReceivedDate");
+      String emplReportedDate= Hooks.currentRow.get().get("EmplReportedDate");
+      String reporter= Hooks.currentRow.get().get("Reporter");
+      String Provider= Hooks.currentRow.get().get("Provider");
+      String providerOrg= Hooks.currentRow.get().get("ProviderOrg");
+      String providerOrgAddress= Hooks.currentRow.get().get("ProviderOrgAddress");
+        eform6HealthCare.enterHealthCareDetails(HealthCareReceived, whereHealthCareReceived, HealthCareReceivedDate, emplReportedDate,
+                reporter, Provider, providerOrg, providerOrgAddress, Whendoyouexpect);
+
+
+       }
+
+    @And("Enter Missed time from work details")
+    public void enterMissedTimeFromWorkDetails() {
+        String MissedTimeFromWork= Hooks.currentRow.get().get("MissedTimeFromWork");
+        String MissedTimeFromWorkStartDate= Hooks.currentRow.get().get("MissedTimeStartDate");
+        eform6LostTimeandEarnings.enterMissedTimeFromWorkDetails(MissedTimeFromWork, MissedTimeFromWorkStartDate);
+
+
+    }
+
+    @And("Enter Modified Work Details")
+    public void enterModifiedWorkDetails() {
+        String OfferedTo= Hooks.currentRow.get().get("OfferedTo");
+        String ModifiedDate= Hooks.currentRow.get().get("ModifiedDate");
+        String ModifiedWork= Hooks.currentRow.get().get("ModifiedWork");
+        String DeclineReason= Hooks.currentRow.get().get("DeclineReason");
+        eform6LostTimeandEarnings.enterModifiedWorkDetails(OfferedTo, ModifiedDate, ModifiedWork, DeclineReason);
+    }
+
+    @And("Enter Return to work details")
+    public void enterReturnToWorkDetails() throws InterruptedException {
+        String ReturningToWork= Hooks.currentRow.get().get("ReturningToWork");
+        String ReturningDate= Hooks.currentRow.get().get("ReturningDate");
+        String ReturnedDate= Hooks.currentRow.get().get("ReturnedDate");
+        String TypeOfReturn= Hooks.currentRow.get().get("TypeOfReturn");
+        String modifiedDate= Hooks.currentRow.get().get("ExpecttoReturn");
+        String WageLoss= Hooks.currentRow.get().get("WageLoss");
+        String RTWContact= Hooks.currentRow.get().get("RTWContact");
+        eform6LostTimeandEarnings.enterReturnToWorkDetails(ReturningToWork, ReturningDate, TypeOfReturn, modifiedDate, WageLoss, RTWContact, ReturnedDate);
+    }
+
+    @And("Enter Additional earnings and benefits information")
+    public void enterAdditionalEarningsAndBenefitsInformation() {
+        String AdditionalEarnings= Hooks.currentRow.get().get("AdditionalEarnings?");
+        String AdditionalBenefits= Hooks.currentRow.get().get("AdditionalBenefits?");
+        eform6LostTimeandEarnings.enterAdditionalEarningsAndBenefits(AdditionalEarnings, AdditionalBenefits);
+    }
+
+    @And("Enter Authorized representative details")
+    public void enterAuthorizedRepresentativeDetails() throws InterruptedException {
+        eform6LostTimeandEarnings.enterAuthorizedRepDetails();
+    }
+
+    @And("Enter Submit supporting documents details")
+    public void enterSubmitSupportingDocumentsDetails() throws InterruptedException {
+        eform6SupportingDocuments.enterSupportingDocuments();
+    }
+
+    @And("Enter Additional Comments details")
+    public void enterAdditionalCommentsDetails() {
+        String AdditionalComments= Hooks.currentRow.get().get("AdditionalComments");
+        eform6SupportingDocuments.enterAdditionalComments(AdditionalComments);
+    }
+
+    @And("Verify Review and submit report and Select Declaration checkbox")
+    public void verifyReviewAndSubmitReportAndSelectDeclarationCheckbox() {
+        Assert.assertTrue(eform6ReviewandSubmit.verifyReviewAndSubmitReport());
+    }
+
+    @And("Select decision to Add claim to your account and Submit Report")
+    public void selectDecisionToAddClaimToYourAccount() {
+        String AddClaimtoProfile= Hooks.currentRow.get().get("AddClaimtoProfile");
+        Assert.assertTrue(eform6ReviewandSubmit.selectAddClaimtoProfile(AddClaimtoProfile));
+    }
+
+    @And("Enter the injury or illness details")
+    public void enterTheInjuryOrIllnessDetails() {
+        String conditionInput= Hooks.currentRow.get().get("ConditionInput");
+        String relatedToWorkInput= Hooks.currentRow.get().get("RelatedToWorkInput");
+        String symptomsInput= Hooks.currentRow.get().get("SymptomsInput");
+        eform6InjuryDetails.enterInjuryDetails(conditionInput, relatedToWorkInput, symptomsInput);
+    }
+
+    @And("Enter Illness or medical condition details")
+    public void enterIllnessOrMedicalConditionDetails() {
+        String IllnessStartDate= Hooks.currentRow.get().get("IllnessStartDate");
+        eform6InjuryDetails.enterIllnessDetails(IllnessStartDate);
+    }
+
+    @And("User should be able to Describe your Injury")
+    public void userShouldBeAbleToDescribeYourInjury() {
+        String DescribeInjury= Hooks.currentRow.get().get("DescribeInjury");
+        eform6InjuryDetails.DescribeInjury(DescribeInjury);
+
+    }
+
+    @And("Enter the Mental stress psychological injury details")
+    public void enterTheMentalStressPsychologicalInjuryDetails() {
+        String InjuryDetailsInput= Hooks.currentRow.get().get("InjuryDetailsInput");
+        eform6InjuryDetails.enterMentalInjuryDetails(InjuryDetailsInput);
+    }
+
+    @And("Enter Mental stress psychological injury date details")
+    public void enterMentalStressPsychologicalInjuryDateDetails() {
+
+        String InjuryStartDate= Hooks.currentRow.get().get("InjuryStartDate");
+        String InjuryEndDate= Hooks.currentRow.get().get("InjuryEndDate");
+        eform6InjuryDetails.enterMentalInjuryDateDetails(InjuryStartDate, InjuryEndDate);
+
+    }
+
+    @And("Enter Areas of Injury for Mental")
+    public void enterAreasOfInjuryForMental() {
+        String PhysicalInjury= Hooks.currentRow.get().get("PhysicalInjury?");
+        eform6InjuryDetails.InjuredQuestion(PhysicalInjury);
+        enterAreasOfInjury();
+    }
+
+    @And("User should be able to select {string} report type")
+    public void userShouldBeAbleToSelectReportType(String reporttype) {
+        Assert.assertTrue(eform6.selectReportType(reporttype));
+
+    }
+
+    @And("User should be able to select {string} Injury Type")
+    public void userShouldBeAbleToSelectInjuryTypeNIHL(String Injurytype) {
+        eform6.selectInjuryType(Injurytype);
+    }
+
+    @And("User should be able to land on Continue to different online service to make a claim for noise-induced hearing loss screen")
+    public void userShouldBeAbleToLandOnContinueToDifferentOnlineServiceToMakeAClaimForNoiseInducedHearingLossScreen() {
+        Assert.assertTrue(eform6.verifyNIHLPage());
     }
 }

@@ -185,12 +185,20 @@ public class ExcelUtils {
     }
 
     private static int findRowIndex(Sheet sheet, Map<String, String> rowData) {
-        for (Row row : sheet) {
+        // Start from the second row (index 1) to skip the header row
+        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            Row row = sheet.getRow(i);
+            if (row == null) continue; // Skip empty rows
             boolean match = true;
             for (Map.Entry<String, String> entry : rowData.entrySet()) {
                 int columnIndex = getColumnIndex(sheet, entry.getKey());
+                if (columnIndex == -1) {
+                    match = false;
+                    break;
+                }
                 Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
-                if (columnIndex == -1 || cell == null || !cell.getStringCellValue().equals(entry.getKey())) {
+                String cellValue = (cell == null) ? "" : cell.getStringCellValue();
+                if (!cellValue.equals(entry.getValue())) {
                     match = false;
                     break;
                 }

@@ -34,7 +34,7 @@ public class Hooks {
     //private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
     public static ThreadLocal<Map<String, String>> currentRow = ThreadLocal.withInitial(() -> null);
     private static ThreadLocal<WebDriver> driver = ThreadLocal.withInitial(() -> null);
-
+    public static String sheetName;
     @Before(order = 0)
     public void setup(Scenario scenario)
     {
@@ -42,6 +42,13 @@ public class Hooks {
                 [scenario.getUri().getPath().split("/").length-1].replace(".feature", "");
         String propertyFilePath= "src/test/resources/config/"+ featureName+ ".properties";
         configReader = new ConfigReader(propertyFilePath);
+        sheetName = scenario.getSourceTagNames()
+                .stream()
+                .filter(tag -> tag.startsWith("@SheetName_"))
+                .map(tag -> tag.replace("@SheetName_", ""))
+                .findFirst()
+                .orElse(null);
+
     }
 
     @Before(order = 1)
@@ -75,7 +82,7 @@ public class Hooks {
         }
     }
 
-    private String getSheetName(Scenario scenario) {
+    public static String getSheetName(Scenario scenario) {
 
         return scenario.getSourceTagNames()
                 .stream()
