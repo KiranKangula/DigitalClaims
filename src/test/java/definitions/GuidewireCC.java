@@ -8,10 +8,9 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.GuidewirePage;
-import pages.HomePage;
-import pages.LoginPage;
-import pages.OSPCClaimOverview;
+import pages.GuidewireClaimCenter.GuidewirePage;
+import pages.OSPC.HomePage;
+import pages.OSPC.LoginPage;
 import utils.ConfigReader;
 import utils.ExcelUtils;
 

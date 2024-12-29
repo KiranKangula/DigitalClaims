@@ -8,9 +8,12 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ExcelUtils {
     private static String BASE_PATH = "src/test/resources/data/";
+    private static final Lock fileLock = new ReentrantLock();
     static ConfigReader prop = Hooks.getConfigReader();
 
     public static void backupExcelFile(String sheetName) throws IOException {
@@ -18,7 +21,13 @@ public class ExcelUtils {
         String backupFilePath = BASE_PATH + prop.getProperty("env") + "/backup_testData.xlsx";
         File sourceFile = new File(filePath);
         File backupFile = new File(backupFilePath);
-        Files.copy(sourceFile.toPath(), backupFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+        fileLock.lock();
+        try {
+            Files.copy(sourceFile.toPath(), backupFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } finally {
+            fileLock.unlock();
+        }
     }
     /**
      * Reads data from Excel and returns it as a list of maps.
@@ -32,32 +41,32 @@ public class ExcelUtils {
         backupExcelFile(sheetName);
         String filePath = BASE_PATH + prop.getProperty("env") + "/testData.xlsx";
         List<Map<String, String>> data = new ArrayList<>();
+
+        fileLock.lock();
         try (FileInputStream fis = new FileInputStream(new File(filePath));
              Workbook workbook = WorkbookFactory.create(fis)) {
 
             Sheet sheet = workbook.getSheet(sheetName);
             Iterator<Row> rowIterator = sheet.iterator();
 
-            // Read header row to get column names
             Row headerRow = rowIterator.next();
             List<String> headers = new ArrayList<>();
             for (Cell cell : headerRow) {
                 headers.add(cell.getStringCellValue());
             }
 
-            // Read the rest of the rows and map values to headers
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                Map<String, String> rowData = new LinkedHashMap<>(); // Corrected to use Map
+                Map<String, String> rowData = new LinkedHashMap<>();
                 for (int i = 0; i < headers.size(); i++) {
                     Cell cell = row.getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     String cellValue = getCellValueAsString(cell);
-                    rowData.put(headers.get(i), cellValue); // Use put method to map header to value
+                    rowData.put(headers.get(i), cellValue);
                 }
                 data.add(rowData);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            fileLock.unlock();
         }
         return data;
     }
@@ -96,60 +105,60 @@ public class ExcelUtils {
         Workbook workbook;
         Sheet sheet;
 
-        // Check if the file exists; if not, create a new workbook and sheet
-        File file = new File(filePath);
-        if (file.exists()) {
-            FileInputStream fis = new FileInputStream(filePath);
-            workbook = new XSSFWorkbook(fis);
-            sheet = workbook.getSheet(sheetName);
-            if (sheet == null) {
-                sheet = workbook.createSheet(sheetName); // Create sheet if missing
+        fileLock.lock();
+        try {
+            File file = new File(filePath);
+            if (file.exists()) {
+                try (FileInputStream fis = new FileInputStream(filePath)) {
+                    workbook = new XSSFWorkbook(fis);
+                    sheet = workbook.getSheet(sheetName);
+                    if (sheet == null) {
+                        sheet = workbook.createSheet(sheetName);
+                    }
+                }
+            } else {
+                workbook = new XSSFWorkbook();
+                sheet = workbook.createSheet(sheetName);
             }
-        } else {
-            workbook = new XSSFWorkbook();
-            sheet = workbook.createSheet(sheetName);
-        }
 
-        // Initialize headers
-        Row headerRow = sheet.getRow(0);
-        if (headerRow == null) {
-            headerRow = sheet.createRow(0); // Create header row
-            int headerIndex = 0;
+            Row headerRow = sheet.getRow(0);
+            if (headerRow == null) {
+                headerRow = sheet.createRow(0);
+                int headerIndex = 0;
+                for (String key : rowData.keySet()) {
+                    Cell headerCell = headerRow.createCell(headerIndex++);
+                    headerCell.setCellValue(key);
+                }
+            }
+
+            List<String> headers = new ArrayList<>();
+            for (Cell cell : headerRow) {
+                headers.add(cell.getStringCellValue());
+            }
             for (String key : rowData.keySet()) {
-                Cell headerCell = headerRow.createCell(headerIndex++);
-                headerCell.setCellValue(key); // Add headers
+                if (!headers.contains(key)) {
+                    Cell newHeaderCell = headerRow.createCell(headers.size());
+                    newHeaderCell.setCellValue(key);
+                    headers.add(key);
+                }
             }
-        }
 
-        // Ensure headers match rowData keys
-        List<String> headers = new ArrayList<>();
-        for (Cell cell : headerRow) {
-            headers.add(cell.getStringCellValue());
-        }
-        for (String key : rowData.keySet()) {
-            if (!headers.contains(key)) {
-                Cell newHeaderCell = headerRow.createCell(headers.size());
-                newHeaderCell.setCellValue(key);
-                headers.add(key);
+            int lastRowNum = sheet.getLastRowNum() + 1;
+            Row newRow = sheet.createRow(lastRowNum);
+
+            for (int i = 0; i < headers.size(); i++) {
+                String header = headers.get(i);
+                String value = rowData.getOrDefault(header, "");
+                Cell cell = newRow.createCell(i);
+                cell.setCellValue(value);
             }
+
+            try (FileOutputStream fos = new FileOutputStream(filePath)) {
+                workbook.write(fos);
+            }
+        } finally {
+            fileLock.unlock();
         }
-
-        // Add new row at the end
-        int lastRowNum = sheet.getLastRowNum() + 1;
-        Row newRow = sheet.createRow(lastRowNum);
-
-        // Write data into cells based on headers
-        for (int i = 0; i < headers.size(); i++) {
-            String header = headers.get(i);
-            String value = rowData.getOrDefault(header, "");
-            Cell cell = newRow.createCell(i);
-            cell.setCellValue(value);
-        }
-
-        // Save changes
-        FileOutputStream fos = new FileOutputStream(filePath);
-        workbook.write(fos);
-        workbook.close();
     }
 
 

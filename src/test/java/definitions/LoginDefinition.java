@@ -7,8 +7,8 @@ import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import pages.HomePage;
-import pages.LoginPage;
+import pages.OSPC.HomePage;
+import pages.OSPC.LoginPage;
 import utils.ConfigReader;
 
 import java.time.Duration;

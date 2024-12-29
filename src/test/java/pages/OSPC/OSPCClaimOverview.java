@@ -1,12 +1,12 @@
-package pages;
+package pages.OSPC;
 
 import definitions.Hooks;
 import org.junit.Assert;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import pages.GuidewireClaimCenter.GuidewirePage;
 import utils.BaseDriverClass;
 import utils.ConfigReader;
 

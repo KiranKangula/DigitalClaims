@@ -29,9 +29,7 @@ import utils.ExcelUtils;
 public class Hooks {
     private static ConfigReader configReader;
     public static List<Map<String, String>> data;
-    //public static ThreadLocal<Map<String, String>> currentRow = ThreadLocal.withInitial(()-> null);
-    public static int currentIndex=0;
-    //private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+     public static int currentIndex=0;
     public static ThreadLocal<Map<String, String>> currentRow = ThreadLocal.withInitial(() -> null);
     private static ThreadLocal<WebDriver> driver = ThreadLocal.withInitial(() -> null);
     public static String sheetName;
@@ -61,6 +59,7 @@ public class Hooks {
         }
         data = ExcelUtils.readExcelData(sheetname);
         data.forEach(row-> System.out.println(row));
+        currentIndex = 0; // Reset currentIndex before each test run
     }
 
     @Before(order = 2)

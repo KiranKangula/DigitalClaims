@@ -6,16 +6,14 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.*;
-import utils.BaseDriverClass;
+import pages.DirectDeposit.OSPCDirectDeposit;
+import pages.GuidewireClaimCenter.GuidewirePage;
+import pages.OSPC.HomePage;
+import pages.OSPC.LoginPage;
+import pages.OSPC.OSPCClaimOverview;
 import utils.ConfigReader;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import static java.sql.DriverManager.getDriver;
 
 public class DirectDeposit {
 	private WebDriver driver;
@@ -23,8 +21,8 @@ public class DirectDeposit {
 	private LoginPage loginPage;
 	private HomePage homePage;
 	private GuidewirePage guidewirecc;
-	private OSPCClaimOverview OSPCClaimOverview;
-	private OSPCDirectDeposit OSPCDirectDeposit;
+	private pages.OSPC.OSPCClaimOverview OSPCClaimOverview;
+	private pages.DirectDeposit.OSPCDirectDeposit OSPCDirectDeposit;
 	ConfigReader prop= Hooks.getConfigReader();
 	public static String Claimnumber;
 	public DirectDeposit() throws Exception {

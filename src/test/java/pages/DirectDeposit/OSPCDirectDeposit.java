@@ -1,7 +1,6 @@
-package pages;
+package pages.DirectDeposit;
 
 import definitions.Hooks;
-import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;

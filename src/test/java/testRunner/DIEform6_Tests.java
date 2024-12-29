@@ -9,7 +9,7 @@ import org.testng.annotations.DataProvider;
 
 @CucumberOptions(
         features = "src/test/resources/features/OSPC.feature",
-        tags = "@eForm6_PI or @eForm6_illness or @eForm6_Mental or @eForm6_NIHL",
+        tags = "@eForm6",
         glue = "definitions",
         monochrome = true,
         plugin = {"pretty", "html:target/TestResults/eForm6_Results.html"},

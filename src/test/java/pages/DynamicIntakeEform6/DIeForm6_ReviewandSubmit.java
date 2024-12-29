@@ -1,4 +1,4 @@
-package pages;
+package pages.DynamicIntakeEform6;
 
 import definitions.Hooks;
 import org.openqa.selenium.WebDriver;
@@ -34,6 +34,15 @@ public class DIeForm6_ReviewandSubmit extends BaseDriverClass {
 		nextButton.click();
 		waitUntilElementVisible(this.AddClaimtoProfile);
 		return AddClaimtoProfile.isDisplayed();
+	}
+
+	public boolean verifyReviewAndSubmitExposure() {
+
+		waitUntilElementVisible(this.DeclarationCheckbox);
+		this.DeclarationCheckbox.click();
+		submitReportButton.click();
+		waitUntilElementVisible(this.confirmationMessage);
+		return confirmationMessage.isDisplayed();
 	}
 
 	public boolean selectAddClaimtoProfile(String addClaimtoProfile) {

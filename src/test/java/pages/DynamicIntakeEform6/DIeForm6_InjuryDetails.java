@@ -1,4 +1,4 @@
-package pages;
+package pages.DynamicIntakeEform6;
 
 import definitions.Hooks;
 import org.openqa.selenium.By;

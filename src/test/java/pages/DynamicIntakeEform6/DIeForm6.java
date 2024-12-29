@@ -1,4 +1,4 @@
-package pages;
+package pages.DynamicIntakeEform6;
 
 import definitions.Hooks;
 import org.openqa.selenium.*;
@@ -24,6 +24,8 @@ public class DIeForm6 extends BaseDriverClass {
 	@FindBy(xpath = "//*[@id=\"radiobuttoncard\"]/div[2]/div/div[4]") private WebElement IllnessRadio;
 	@FindBy(xpath = "//*[@id=\"radiobuttoncard\"]/div[3]/div/div[4]") private WebElement MentalHealthRadio;
 	@FindBy(xpath = "//*[@id=\"radiobuttoncard\"]/div[4]/div/div[4]") private WebElement NoiseInducedHearingLossRadio;
+	@FindBy(xpath = "//*[@id=\"radiobuttoncard\"]/div[1]/div/div[4]") private WebElement ConstructionIncidentRadio;
+	@FindBy(xpath = "//*[@id=\"radiobuttoncard\"]/div[2]/div/div[4]") private WebElement OtherIncidentRadio;
 	@FindBy(xpath = "//*[@id=\"radiobuttonOccurance\"]/div[1]/label") private WebElement InjuryTypeOccuranceYes;
 	@FindBy(xpath = "//*[@id=\"radiobuttonOccurance\"]/div[2]/label") private WebElement InjuryTypeOccuranceNo;
 	@FindBy(id = "inputAcn") private WebElement ExistingClaimNumber;
@@ -54,6 +56,9 @@ public class DIeForm6 extends BaseDriverClass {
 	@FindBy(xpath = "//*[@id=\"claimsNumberBody\"]/p") private WebElement ReferenceNumber;
 	@FindBy(xpath = "//*[@id=\"onBoardContinueId\"]/span") private WebElement ContinueButton;
 	@FindBy(xpath = "//*[@id=\"privacyPolicyH3\"]") private WebElement NIHLPageHeader;
+	@FindBy(xpath = "//*[@id=\"radiobuttonCompanySize\"]/div[2]/label/span") private WebElement SubmissionReqNo;
+	@FindBy(xpath = "//*[@id=\"radiobuttonCompanySize\"]/div[1]/label/span") private WebElement SubmissionReqYes;
+
 
 
 
@@ -84,7 +89,7 @@ public class DIeForm6 extends BaseDriverClass {
 
 	}
 
-	public boolean selectReportType(String reporttype) {
+	public void selectReportType(String reporttype) {
 		if(reporttype.contains("Injury")) {
 			InjuryorIllnessRadio.click();
 		}
@@ -92,8 +97,6 @@ public class DIeForm6 extends BaseDriverClass {
 			ExposureIncidentRadio.click();
 		}
 		NextButton.click();
-		waitUntilElementVisible(PhysicalInjuryRadio);
-		return PhysicalInjuryRadio.isDisplayed();
 	}
 
 	public void selectInjuryType(String injurytype) {
@@ -108,6 +111,12 @@ public class DIeForm6 extends BaseDriverClass {
 		}
 		else if(injurytype.contains("Noise")) {
 			NoiseInducedHearingLossRadio.click();
+		}
+		else if(injurytype.contains("Construction")) {
+			ConstructionIncidentRadio.click();
+		}
+		else if(injurytype.contains("Other")) {
+			OtherIncidentRadio.click();
 		}
 		NextButton.click();
 	}
@@ -156,7 +165,7 @@ public class DIeForm6 extends BaseDriverClass {
 
 	}
 
-	public boolean enterAdditionalDetails(String gender, String day, String month, String year, String preferredLang, String sin) throws InterruptedException {
+	public boolean enterAdditionalDetails(String gender, String DateofBirth,  String preferredLang, String sin) throws InterruptedException {
 		if(gender.contains("Male")) {
 			GenderMale.click();
 		}
@@ -166,13 +175,13 @@ public class DIeForm6 extends BaseDriverClass {
 
 		DateOfBirthDate.click();
 		Actions actions = new Actions(getDriver());
-		actions.sendKeys(day).build().perform();
+		actions.sendKeys(DateofBirth.split("\\|")[0]).build().perform();
 		actions.sendKeys(Keys.ENTER).build().perform();
 		DateOfBirthMonth.click();
-		actions.sendKeys(month).build().perform();
+		actions.sendKeys(DateofBirth.split("\\|")[1]).build().perform();
 		actions.sendKeys(Keys.ENTER).build().perform();
 		DateOfBirthYear.click();
-		actions.sendKeys(year).build().perform();
+		actions.sendKeys(DateofBirth.split("\\|")[2]).build().perform();
 		actions.sendKeys(Keys.ENTER).build().perform();
 		LanguageDropdown.click();
 		DynamicTextClick(preferredLang);
@@ -181,6 +190,30 @@ public class DIeForm6 extends BaseDriverClass {
 		else {
 			NoSINCheckbox.click();
 		}
+		NextButton.click();
+		waitUntilElementVisible(AddressLine1);
+		return AddressLine1.isDisplayed();
+	}
+
+	public boolean enterAdditionalDetails(String gender, String DateofBirth) throws InterruptedException {
+		if(gender.contains("Male")) {
+			GenderMale.click();
+		}
+		else{
+			GenderFemale.click();
+		}
+
+		DateOfBirthDate.click();
+		Actions actions = new Actions(getDriver());
+		actions.sendKeys(DateofBirth.split("\\|")[0]).build().perform();
+		actions.sendKeys(Keys.ENTER).build().perform();
+		DateOfBirthMonth.click();
+		actions.sendKeys(DateofBirth.split("\\|")[1]).build().perform();
+		actions.sendKeys(Keys.ENTER).build().perform();
+		DateOfBirthYear.click();
+		actions.sendKeys(DateofBirth.split("\\|")[2]).build().perform();
+		actions.sendKeys(Keys.ENTER).build().perform();
+
 		NextButton.click();
 		waitUntilElementVisible(AddressLine1);
 		return AddressLine1.isDisplayed();
@@ -210,20 +243,20 @@ public class DIeForm6 extends BaseDriverClass {
 		return EmployerName.isDisplayed();
 	}
 
-	public Boolean enterEmployerDetails(String employername, String empPhone, String empAddress1, String empCity, String empProvince, String empPostalcode, String empCountry) throws InterruptedException {
+	public Boolean enterEmployerDetails(String employername, String empPhone, String EmployerAddress) throws InterruptedException {
 		EmployerName.clear();
 		EmployerName.sendKeys(employername);
 		jsMoveSendKeys(EmployerPhoneNumber, empPhone);
 		EmployerAddressLine1.clear();
-		EmployerAddressLine1.sendKeys(empAddress1);
+		EmployerAddressLine1.sendKeys(EmployerAddress.split("\\|")[0]);
 		EmployerCity.clear();
-		EmployerCity.sendKeys(empCity);
+		EmployerCity.sendKeys(EmployerAddress.split("\\|")[1]);
 		EmployerProvinceDropdown.click();
-		DynamicTextClick(empProvince);
+		DynamicTextClick(EmployerAddress.split("\\|")[2]);
 		EmployerPostalCode.clear();
-		EmployerPostalCode.sendKeys(empPostalcode);
+		EmployerPostalCode.sendKeys(EmployerAddress.split("\\|")[3]);
 		EmployerCountryDropdown.click();
-		DynamicTextClick(empCountry);
+		DynamicTextClick(EmployerAddress.split("\\|")[4]);
 		NextButton.click();
 		waitUntilElementVisible(ReferenceNumber);
 		return ReferenceNumber.isDisplayed();
@@ -238,5 +271,14 @@ public class DIeForm6 extends BaseDriverClass {
 	public boolean verifyNIHLPage() {
 		waitUntilElementVisible(NIHLPageHeader);
 		return NIHLPageHeader.getText().contains("Continue to different online service to make a claim for noise-induced hearing loss");
+	}
+
+	public void selectSubmissionRequirement(String submissionRequirement) {
+		if (submissionRequirement.equalsIgnoreCase("yes")) {
+			SubmissionReqYes.click();
+		} else {
+			SubmissionReqNo.click();
+		}
+		NextButton.click();
 	}
 }

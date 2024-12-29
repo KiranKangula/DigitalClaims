@@ -1,4 +1,4 @@
-package pages;
+package pages.GuidewireClaimCenter;
 
 import definitions.Hooks;
 import io.cucumber.datatable.DataTable;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static pages.OSPCClaimOverview.randommessage;
+import static pages.OSPC.OSPCClaimOverview.randommessage;
 
 public class GuidewirePage extends BaseDriverClass {
 	ConfigReader prop= Hooks.getConfigReader();

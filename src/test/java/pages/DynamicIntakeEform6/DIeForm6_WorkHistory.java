@@ -1,11 +1,9 @@
-package pages;
+package pages.DynamicIntakeEform6;
 
 import definitions.Hooks;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -37,6 +35,18 @@ public class DIeForm6_WorkHistory extends BaseDriverClass {
 	@FindBy(xpath = "//*[@id=\"intakeBodySection\"]/div[2]/div[1]/span[2]/a/span") private WebElement nextButton;
 	@FindBy(xpath = "//*[@id=\"radiobuttonRelative\"]/div[1]/label") private WebElement relativeYes;
 	@FindBy(xpath = "//*[@id=\"radiobuttonRelative\"]/div[2]/label") private WebElement relativeNo;
+	@FindBy(id = "businessNature") private WebElement businessNature;
+	@FindBy(xpath = "//*[@id=\"radiobuttonCommitte\"]/div[1]/label") private WebElement safetyCommitteeYes;
+	@FindBy(xpath = "//*[@id=\"radiobuttonCommitte\"]/div[2]/label") private WebElement safetyCommitteeNo;
+	@FindBy(xpath = "//*[@id=\"radiobuttonRepresentative\"]/div[1]/label") private WebElement safetyRepresentativeYes;
+	@FindBy(xpath = "//*[@id=\"radiobuttonRepresentative\"]/div[2]/label") private WebElement safetyRepresentativeNo;
+	@FindBy(xpath = "\t//*[@id=\"attachReportButton\"]/span/span") private WebElement attachReportButton;
+	@FindBy(id = "dropdownExposureStartDate-wrapper") private WebElement exposureStartDateDay;
+	@FindBy(id = "dropdownExposureStartMonth-wrapper") private WebElement exposureStartDateMonth;
+	@FindBy(id = "dropdownExposureStartYear-wrapper") private WebElement exposureStartDateYear;
+
+
+
 
 
 	public DIeForm6_WorkHistory(WebDriver driver, WebDriverWait wait) {
@@ -81,6 +91,27 @@ public class DIeForm6_WorkHistory extends BaseDriverClass {
 		return this.relativeYes.isDisplayed();
 	}
 
+	public void enterJobDetails(String jobTitle, String startDate, String WhatTypeofWork, String companySize) {
+
+		waitUntilElementVisible(this.jobTitle);
+		this.jobTitle.sendKeys(jobTitle);
+		exposureStartDateDay.click();
+		ClickusingActions(startDate.split("\\|")[0]);
+		exposureStartDateMonth.click();
+		ClickusingActions(startDate.split("\\|")[1]);
+		exposureStartDateYear.click();
+		ClickusingActions(startDate.split("\\|")[2]);
+		businessNature.sendKeys(WhatTypeofWork);
+
+		if(companySize.equalsIgnoreCase("yes")) {
+			this.companySizeYes.click();
+		} else {
+			this.companySizeNo.click();
+		}
+
+		this.nextButton.click();
+	}
+
 	public void enterWorkDetails(String relative, String typesofEmployment) {
 		if(relative.equalsIgnoreCase("yes")) {
 			this.relativeYes.click();
@@ -91,5 +122,23 @@ public class DIeForm6_WorkHistory extends BaseDriverClass {
 		WebElement typeofemp = new WebDriverWait(getDriver(), Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(dynamicXPath)));
 		typeofemp.click();
 		this.nextButton.click();
+	}
+
+	public void enterJointHealthAndSafetyCommittee(String safetyCommittee, String safetyRepresentative, String nameOfTheUnion) {
+		waitUntilElementVisible(safetyCommitteeYes);
+		if(safetyCommittee.equalsIgnoreCase("yes")) {
+			safetyCommitteeYes.click();
+		} else {
+			safetyCommitteeNo.click();
+		}
+
+		if(safetyRepresentative.equalsIgnoreCase("yes")) {
+			safetyRepresentativeYes.click();
+		} else {
+			safetyRepresentativeNo.click();
+		}
+
+		this.nameOfTheUnion.sendKeys(nameOfTheUnion);
+		nextButton.click();
 	}
 }
