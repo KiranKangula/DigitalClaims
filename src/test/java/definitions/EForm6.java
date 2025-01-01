@@ -14,6 +14,7 @@ import utils.ExcelUtils;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.Map;
 
 public class EForm6 {
 
@@ -131,8 +132,13 @@ public class EForm6 {
        String referenceClaimNumber = eform6.verifyReferenceNumber();
        System.out.println("Reference Claim Number is: "+referenceClaimNumber);
          Assert.assertTrue(referenceClaimNumber.length()>0);
+        // Update the current row data with the new values
+        Map<String, String> currentRowData = Hooks.currentRow.get();
+        currentRowData.put("ReferenceNumber", referenceClaimNumber);
+
         String sheetName = Hooks.sheetName;
-        ExcelUtils.updateExcelData(sheetName, "ReferenceNumber", referenceClaimNumber);
+        ExcelUtils.updateExcelData(sheetName, currentRowData);
+        Hooks.currentRow.set(currentRowData);
 
     }
 
@@ -186,7 +192,7 @@ public class EForm6 {
     }
 
     @And("Enter Areas of Injury")
-    public void enterAreasOfInjury() {
+    public void enterAreasOfInjury() throws InterruptedException {
         String PhysicalInj= Hooks.currentRow.get().get("PhysicalInjury");
         String Bodypart= Hooks.currentRow.get().get("BodyPart");
         eform6InjuryDetails.selectBodyPart(PhysicalInj, Bodypart);
@@ -297,12 +303,14 @@ public class EForm6 {
     @And("Verify Review and submit report and Select Declaration checkbox and Submit Exposure")
     public void verifyReviewAndSubmitReportAndSelectDeclarationCheckboxSubmitExposure() {
         Assert.assertTrue(eform6ReviewandSubmit.verifyReviewAndSubmitExposure());
+        eform6ReviewandSubmit.verifyReturnToDashBoard();
     }
 
     @And("Select decision to Add claim to your account and Submit Report")
-    public void selectDecisionToAddClaimToYourAccount() {
+    public void selectDecisionToAddClaimToYourAccount() throws InterruptedException {
         String AddClaimtoProfile= Hooks.currentRow.get().get("AddClaimtoProfile");
         Assert.assertTrue(eform6ReviewandSubmit.selectAddClaimtoProfile(AddClaimtoProfile));
+        eform6ReviewandSubmit.verifyReturnToDashBoard();
     }
 
     @And("Enter the injury or illness details")
@@ -342,7 +350,7 @@ public class EForm6 {
     }
 
     @And("Enter Areas of Injury for Mental")
-    public void enterAreasOfInjuryForMental() {
+    public void enterAreasOfInjuryForMental() throws InterruptedException {
         String PhysicalInjury= Hooks.currentRow.get().get("PhysicalInjury?");
         eform6InjuryDetails.InjuredQuestion(PhysicalInjury);
         enterAreasOfInjury();

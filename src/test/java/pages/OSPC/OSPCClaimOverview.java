@@ -290,4 +290,51 @@ public class OSPCClaimOverview extends BaseDriverClass {
 		return false;
 	}
 
+	public boolean claimAdditionalConfirmationOSPC(String claimnumber) throws InterruptedException {
+		List<String> tabs = new ArrayList<>(getDriver().getWindowHandles());
+		getDriver().close();
+		getDriver().switchTo().window(tabs.get(0));
+		getDriver().navigate().refresh();
+		Thread.sleep(5000);
+		waitUntilElementVisible(tableBody);
+
+		for (WebElement row : tableBody.findElements(By.cssSelector("div.rt-tr"))) {
+			String cNumber = row.findElement(By.cssSelector("div.rt-td a.bluelink")).getText();
+			if (cNumber.equals(claimnumber)) {
+				System.out.println("Claim number " + claimnumber + " found.");
+				return true;
+			}
+		}
+		System.out.println("Claim number " + claimnumber + " not found.");
+		return false;
+	}
+
+
+	public boolean claimAdditionConfirmationOSPC(String claimnumber) throws InterruptedException {
+
+		//Thread.sleep(5000);
+		waitUntilElementVisible(tableBody);
+
+		// Locate all rows in the table
+		List<WebElement> rows = tableBody.findElements(By.cssSelector("div.rt-tr"));
+
+		// Iterate through each row to search for the claim number
+		for (WebElement row : rows) {
+			// Locate the Claim Number cell (assuming it's the first column)
+			WebElement claimCell = row.findElement(By.cssSelector("div.rt-td a.bluelink"));
+			String cNumber = claimCell.getText();
+
+			// Check if the claim number matches the desired value
+			if (cNumber.equals(claimnumber)) {
+				System.out.println("Claim number " + claimnumber + " found.");
+				return true;
+			}
+			else {
+				System.out.println("Claim number " + claimnumber + " not found.");
+				return false;
+			}
+		}
+		return false;
+	}
+
 }

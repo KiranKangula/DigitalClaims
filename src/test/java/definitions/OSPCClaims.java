@@ -141,4 +141,20 @@ public class OSPCClaims {
 			claimnumber = Hooks.currentRow.get().get("Claim Number");
 		Assert.assertTrue(OSPCClaimOverview.claimRemovalConfirmationOSPC(claimnumber));
 	}
+
+	@And("Switch back to OSPC and verify if the {string} is added")
+	public void switchBackToOSPCAndVerifyIfTheIsAdded(String claimnumber) throws InterruptedException {
+		claimnumber = Hooks.currentRow.get().get("Claim Number");
+		Assert.assertTrue(OSPCClaimOverview.claimAdditionalConfirmationOSPC(claimnumber));
+	}
+
+	@And("Switch to New Tab and Login to OSPC and verify if the {string} is added")
+	public void logIntoOSPCAndVerifyIfTheClaimIsAdded(String claimnumber) throws InterruptedException {
+		claimnumber = Hooks.currentRow.get().get("Claim Number");
+		guidewirecc.switchtab();
+		loginPage.navigateToURL(prop.getProperty("OSPC_URL"));
+		loginPage.loginToSite(prop.getProperty("OSPC_Username"), prop.getProperty("OSPC_Password"));
+		Assert.assertTrue(OSPCClaimOverview.claimAdditionConfirmationOSPC(claimnumber));
+	}
+
 }

@@ -27,7 +27,7 @@ Background: Login to OSPC
 
     Examples:
       | claimnumber |
-      | 32649808    |
+      | 32650720    |
 
   @OSPC
   Scenario Outline: Send a message from OSPC
@@ -44,7 +44,7 @@ Background: Login to OSPC
 
     Examples:
       | claimnumber | subject | message   |
-      | 32649808    | Payments| <dynamic> |
+      | 32650720    | Payments| <dynamic> |
 
   @OSPC
   Scenario Outline: Upload WSIB form Document and Verify Submitted Document Screen
@@ -61,7 +61,7 @@ Background: Login to OSPC
     And Verify the document is landed in GWCC with "<Author>", "<Description>"
     Examples:
       | claimnumber | wsibform              | filename                                                | Author      |  Description      |
-      | 32649808    | Dental report (0278A) | 0717B_202410_LongTermRateEarningsQuestionnaire_ACES.pdf | OSPC        |  Dental report    |
+      | 32650720    | Dental report (0278A) | 0717B_202410_LongTermRateEarningsQuestionnaire_ACES.pdf | OSPC        |  Dental report    |
 
   @DirectDeposit  @PrerequisiteTest
   Scenario Outline: Add Direct Deposit Information in OSPC
@@ -120,6 +120,30 @@ Background: Login to OSPC
     And Enter Additional Comments details
     And Verify Review and submit report and Select Declaration checkbox
     And Select decision to Add claim to your account and Submit Report
+    And Switch to New tab and Login to ClaimCenter
+    And Search for Reference Number
+    And Verify intake and Worker Information and Validate worker Address
+    And User searches for "1169879" with bussiness activity
+    And User enters Accident Details as below:
+      | Date of Accident  |   17/12/2024 |
+      | Date Reported     |   17/12/2024 |
+    And User Enters Body part details as below:
+      | Area of Body      |   Head     |
+      | Area of Injury    |   Head    |
+      | Accident Type     |   Serious Injury     |
+      | Detailed Accident Type    |  Burn    |
+      | Nature of Injury      |   Major Burns      |
+    And Select Third Party accident as "No"
+    And Select Accident Location from the dropdown
+    And Select Health Care Received as "No"
+    And Select Claim Type as "Lost Time"
+    And Click on Register Claim button and verify that Claim has been registered Successfully
+    And Switch back to OSPC and verify if the "<ClaimNumber>" is added
+    Then Switch to New tab and Login to ClaimCenter
+    And Navigate to Portal Authorization screen
+    And Remove the "<ClaimNumber>" from profile
+    And Switch back to OSPC and verify if the "<ClaimNumber>" is removed
+
 
   @SheetName_eForm6_Illness @eForm6_illness @eForm6
   Scenario: Login and Submit a Report for Illness, disease or medical condition
@@ -151,6 +175,29 @@ Background: Login to OSPC
     And Enter Additional Comments details
     And Verify Review and submit report and Select Declaration checkbox
     And Select decision to Add claim to your account and Submit Report
+    And Switch to New tab and Login to ClaimCenter
+    And Search for Reference Number
+    And Verify intake and Worker Information and Validate worker Address
+    And User searches for "1169879" with bussiness activity
+    And User enters Accident Details as below:
+      | Date of Accident  |   17/12/2024 |
+      | Date Reported     |   17/12/2024 |
+    And User Enters Body part details as below:
+      | Area of Body      |   Head     |
+      | Area of Injury    |   Head    |
+      | Accident Type     |   Serious Injury     |
+      | Detailed Accident Type    |  Burn    |
+      | Nature of Injury      |   Major Burns      |
+    And Select Third Party accident as "No"
+    And Select Accident Location from the dropdown
+    And Select Health Care Received as "No"
+    And Select Claim Type as "Lost Time"
+    And Click on Register Claim button and verify that Claim has been registered Successfully
+    And Switch back to OSPC and verify if the "<ClaimNumber>" is added
+    Then Switch to New tab and Login to ClaimCenter
+    And Navigate to Portal Authorization screen
+    And Remove the "<ClaimNumber>" from profile
+    And Switch back to OSPC and verify if the "<ClaimNumber>" is removed
 
 
   @SheetName_eForm6_Mental @eForm6_Mental @eForm6
@@ -185,6 +232,29 @@ Background: Login to OSPC
     And Enter Additional Comments details
     And Verify Review and submit report and Select Declaration checkbox
     And Select decision to Add claim to your account and Submit Report
+    And Switch to New tab and Login to ClaimCenter
+    And Search for Reference Number
+    And Verify intake and Worker Information and Validate worker Address
+    And User searches for "1169879" with bussiness activity
+    And User enters Accident Details as below:
+      | Date of Accident  |   17/12/2024 |
+      | Date Reported     |   17/12/2024 |
+    And User Enters Body part details as below:
+      | Area of Body      |   Head     |
+      | Area of Injury    |   Head    |
+      | Accident Type     |   Serious Injury     |
+      | Detailed Accident Type    |  Burn    |
+      | Nature of Injury      |   Major Burns      |
+    And Select Third Party accident as "No"
+    And Select Accident Location from the dropdown
+    And Select Health Care Received as "No"
+    And Select Claim Type as "Lost Time"
+    And Click on Register Claim button and verify that Claim has been registered Successfully
+    And Switch back to OSPC and verify if the "<ClaimNumber>" is added
+    Then Switch to New tab and Login to ClaimCenter
+    And Navigate to Portal Authorization screen
+    And Remove the "<ClaimNumber>" from profile
+    And Switch back to OSPC and verify if the "<ClaimNumber>" is removed
 
   @eForm6_NIHL @eForm6
   Scenario: Login and Submit a Report for NIHL
@@ -216,6 +286,24 @@ Background: Login to OSPC
     And Enter Submit supporting documents details
     And Enter Additional Comments details
     And Verify Review and submit report and Select Declaration checkbox and Submit Exposure
+    And Switch to New tab and Login to ClaimCenter
+    And Search for Reference Number
+    And Verify intake and Worker Information and Validate worker Address
+    And User searches for "1169879" with bussiness activity
+    And User enters Accident Details as below:
+      | Date of Accident  |   17/12/2024 |
+      | Date Reported     |   17/12/2024 |
+    And User Enters Body part details as below:
+      | Area of Body      |   Head     |
+      | Area of Injury    |   Head    |
+      | Accident Type     |   Serious Injury     |
+      | Detailed Accident Type    |  Burn    |
+      | Nature of Injury      |   Major Burns      |
+    And Select Third Party accident as "No"
+    And Select Accident Location from the dropdown
+    And Select Health Care Received as "No"
+    And Select Claim Type as "Lost Time"
+    And Click on Register Claim button and verify that Claim has been registered Successfully
 
   @SheetName_eForm6_Other @eForm6_Other @eForm6
   Scenario: Login and Submit a Report for Exposure Incident - Other
@@ -237,4 +325,21 @@ Background: Login to OSPC
     And Enter Submit supporting documents details
     And Enter Additional Comments details
     And Verify Review and submit report and Select Declaration checkbox and Submit Exposure
-
+    And Switch to New tab and Login to ClaimCenter
+    And Search for Reference Number
+    And Verify intake and Worker Information and Validate worker Address
+    And User searches for "1169879" with bussiness activity
+    And User enters Accident Details as below:
+      | Date of Accident  |   17/12/2024 |
+      | Date Reported     |   17/12/2024 |
+    And User Enters Body part details as below:
+      | Area of Body      |   Head     |
+      | Area of Injury    |   Head    |
+      | Accident Type     |   Serious Injury     |
+      | Detailed Accident Type    |  Burn    |
+      | Nature of Injury      |   Major Burns      |
+    And Select Third Party accident as "No"
+    And Select Accident Location from the dropdown
+    And Select Health Care Received as "No"
+    And Select Claim Type as "Lost Time"
+    And Click on Register Claim button and verify that Claim has been registered Successfully

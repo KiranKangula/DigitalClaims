@@ -2,10 +2,8 @@ package pages.GuidewireClaimCenter;
 
 import definitions.Hooks;
 import io.cucumber.datatable.DataTable;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.junit.Assert;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
@@ -33,6 +31,7 @@ public class GuidewirePage extends BaseDriverClass {
 	@FindBy(id = "Claim:MenuLinks:Claim_WSIB_MessagingGroup") private WebElement MessagingLink;
 	@FindBy(id = "WSIB_ClaimCustomerMessages:WSIB_MessagingScreen:WSIB_MessagePanelSet:0:MessageBody") private WebElement MessagingBody;
 	@FindBy(id = "ClaimSummary:ClaimSummaryScreen:ttlBar") private WebElement SummaryTitlebar;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ttlBar") private WebElement ClaimRegistrationTitlebar;
 	@FindBy(id = "TabBar:AdminTab") private WebElement AdminTab;
 	@FindBy(id = "Admin:MenuLinks:Admin_PortalAuthorizationAdminPage") private WebElement PortalAuthorizationLink;
 	@FindBy(id = "PortalAuthorizationAdminPage:PortalAuthAdminScreen:PortalUserSearchFieldsDV:SearchClaimNumberUserInput") private WebElement SearchClaimNumberUserInput;
@@ -57,6 +56,8 @@ public class GuidewirePage extends BaseDriverClass {
 	@FindBy(id = "TabBar:ClaimTab:QuickClaimRegistrarion") private WebElement ManualRegistrationlink;
 	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ttlBar") private WebElement ttlBar;
 	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:IntakeIdDV:WSIB_IntakeForm") private WebElement SourceofInformation;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:IntakeIdDV:WSIB_IntakeChannel") private WebElement IntakeChannel;
+
 	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Claimant:ClaimantMenuIcon") private WebElement ClaimantMenuIcon;
 	@FindBy(xpath = "//*[contains(@id,'ClaimNewWorkerOnlyPickerMenuItemSet_NewWorkerMenuItem')]") private WebElement NewWorkerMenuItem;
 	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:PersonNameInputSet:FirstName')]") private WebElement FirstName;
@@ -97,6 +98,15 @@ public class GuidewirePage extends BaseDriverClass {
 	@FindBy(xpath = "//*[@id=\"NewClaimSaved:NewClaimSavedScreen:NewClaimSavedDV:GoToClaim\"]/span") private WebElement GoToClaim;
 	@FindBy(xpath = "//*[contains(@id,'Claim:ClaimInfoBar:WSIB_WorkerSelfEnrollmentPIN_link')]") private WebElement PIN;
 	@FindBy(xpath = "//*[contains(@id,'Claim:ClaimInfoBar:DOB_link')]") private WebElement DOB;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimantFirstName") private WebElement ClaimantFName;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimantLastName") private WebElement ClaimantLName;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimantGender") private WebElement GenderClaimant;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimantPronoun") private WebElement ClaimantPronouns;
+	@FindBy(xpath = "//*[@id='WebMessageWorksheet:WebMessageWorksheetScreen:grpMsgs_msgs']/div[1]") private WebElement WarningMessage;
+	@FindBy(xpath = "//*[@id=\"WebMessageWorksheet:WebMessageWorksheetScreen:WebMessageWorksheet_ClearButton\"]/span[2]") private WebElement ClearButton;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:PriorClaimsTabTab") private WebElement PriorClaimsTab;
+	@FindBy(xpath = "//*[@id=\"WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:EditableBodyPartDetailsLV_tb:Add\"]/span[2]") private WebElement AddBodyPart;
+
 
 	public GuidewirePage(WebDriver driver, WebDriverWait wait) {
 		super(driver, wait);
@@ -129,6 +139,14 @@ public class GuidewirePage extends BaseDriverClass {
 			SearchButton.click();
 			SelectClaimfromSearch.click();
 		return SummaryTitlebar.isDisplayed();
+	}
+
+	public boolean searchReference(String referenceNumber) {
+		SearchTab.click();
+		ClaimSearchField.sendKeys(referenceNumber);
+		SearchButton.click();
+		SelectClaimfromSearch.click();
+		return ClaimRegistrationTitlebar.isDisplayed();
 	}
 
 	public boolean verifySentMessage() {
@@ -326,10 +344,12 @@ public class GuidewirePage extends BaseDriverClass {
 			switch (field) {
 				case "Date of Accident":
 					Thread.sleep(2000);
-					DateofAccident.sendKeys(value);
+					jsMoveSendKeys(DateofAccident, value);
 					break;
 				case "Date Reported":
-					DateReportedToEmployer.sendKeys(value);
+					DateReportedToEmployer.click();
+					Thread.sleep(2000);
+					jsMoveSendKeys(DateReportedToEmployer, value);
 					break;
 				default:
 					throw new IllegalArgumentException("Unknown field: " + field);
@@ -342,6 +362,14 @@ public class GuidewirePage extends BaseDriverClass {
 
 		// Convert the DataTable to a Map to access fields and values
 		Map<String, String> workerDetails = dataTable.asMap(String.class, String.class);
+		try {
+			if (AreaofBody.isDisplayed()) {
+				System.out.println("Area of Body is displayed");
+			}
+		} catch (Exception e) {
+			System.out.println("Area of Body is not displayed");
+			AddBodyPart.click();
+		}
 
 		// Fill in the worker information dynamically based on the map
 		for (Map.Entry<String, String> entry : workerDetails.entrySet()) {
@@ -400,11 +428,41 @@ public class GuidewirePage extends BaseDriverClass {
 	public String[] registerClaim() throws InterruptedException {
 		Thread.sleep(2000);
 		RegisterClaim.click();
+		try{
+			if(WarningMessage.isDisplayed()){
+				if(WarningMessage.getText().contains("This worker has recent prior claims. Please review")){
+				PriorClaimsTab.click();
+				Thread.sleep(2000);
+				RegisterClaim.click();
+				}
+			}
+		}
+		catch(Exception e){
+			System.out.println("Warning Message: "+ WarningMessage.getText());
+		}
 		waitUntilElementVisible(NewClaimHeader);
 		String claimnumber = NewClaimHeader.getText().split(" ")[1];
 		GoToClaim.click();
 		String claimdetails[] = {claimnumber, DOB.getText().split(" ")[1], PIN.getText().split(" ")[1]};
+		GWCCLogout.click();
+		try {
+			// Switch to the alert
+			Alert alert = getDriver().switchTo().alert();
+			alert.accept();
+		} catch (NoAlertPresentException e) {
+			System.out.println("No alert present");
+		}
 		return	claimdetails;
 
+	}
+
+	public void verifyIntakeWorkerInformation(String fname, String lname, String gender, String pronouns) {
+		Assert.assertTrue(IntakeChannel.getText().equalsIgnoreCase("Online services for people with claims"));
+		Assert.assertTrue(ClaimantFName.getAttribute("value").equalsIgnoreCase(fname));
+		Assert.assertTrue(ClaimantLName.getAttribute("value").equalsIgnoreCase(lname));
+		Assert.assertTrue(GenderClaimant.getText().equalsIgnoreCase(gender));
+		Assert.assertTrue(ClaimantPronouns.getText().equalsIgnoreCase(pronouns));
+		ValidateAddressButton.click();
+		CreateNewWorkerCM.click();
 	}
 }

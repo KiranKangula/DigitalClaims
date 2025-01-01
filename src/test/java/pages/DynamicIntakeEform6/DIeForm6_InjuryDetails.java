@@ -88,7 +88,7 @@ public class DIeForm6_InjuryDetails extends BaseDriverClass {
 
 	}
 
-	public void selectBodyPart(String physicalInj, String bodypart) {
+	public void selectBodyPart(String physicalInj, String bodypart) throws InterruptedException {
 		waitUntilElementVisible(this.addBodyPartsButton);
 		this.addBodyPartsButton.click();
 
@@ -101,6 +101,7 @@ public class DIeForm6_InjuryDetails extends BaseDriverClass {
 		BodyParts.click();
 		waitUntilElementVisible(this.saveButton);
 		this.saveButton.click();
+		Thread.sleep(2000);
 		nextButton.click();
 	}
 

@@ -145,13 +145,34 @@ public class GuidewireCC {
 
     @And("Click on Register Claim button and verify that Claim has been registered Successfully")
     public void clickOnRegisterClaimButtonAndVerifyThatClaimHasBeenRegisteredSuccessfully() throws InterruptedException, IOException {
-            String claimdata[] = guidewirecc.registerClaim();
-            System.out.println("ClaimData  "+ claimdata[0]+ "-"+ claimdata[1]+ "-"+ claimdata[2]);
-            Map<String, String> newData = new HashMap<>();
-            newData.put("Claim Number", claimdata[0]);
-            newData.put("DOB", claimdata[1]);
-            newData.put("PIN", claimdata[2]);
-            ExcelUtils.saveExcelData( "GWCC", newData);
+        String claimdata[] = guidewirecc.registerClaim();
+        System.out.println("ClaimData  " + claimdata[0] + "-" + claimdata[1] + "-" + claimdata[2]);
 
+
+        // Update the current row data with the new values
+        Map<String, String> currentRowData = Hooks.currentRow.get();
+        currentRowData.put("Claim Number", claimdata[0]);
+        currentRowData.put("DOB", claimdata[1]);
+        currentRowData.put("PIN", claimdata[2]);
+
+        // Save the updated row data back to the Excel file
+        String sheetName = Hooks.sheetName;
+        ExcelUtils.updateExcelData(sheetName, currentRowData);
+
+    }
+
+    @And("Search for Reference Number")
+    public void searchForReferenceNumber() {
+    String referenceNumber = Hooks.currentRow.get().get("ReferenceNumber");
+        Assert.assertTrue(guidewirecc.searchReference(referenceNumber));
+    }
+
+    @And("Verify intake and Worker Information and Validate worker Address")
+    public void verifyIntakeAndWorkerInformationAndValidateWorkerAddress() {
+        String Fname = Hooks.currentRow.get().get("FirstName");
+        String Lname = Hooks.currentRow.get().get("LastName");
+        String Gender = Hooks.currentRow.get().get("Gender");
+        String Pronouns = Hooks.currentRow.get().get("Pronouns");
+        guidewirecc.verifyIntakeWorkerInformation(Fname, Lname, Gender, Pronouns);
     }
 }

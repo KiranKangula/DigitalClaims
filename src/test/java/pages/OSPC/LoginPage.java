@@ -19,6 +19,10 @@ public class LoginPage extends BaseDriverClass {
 		PageFactory.initElements(driver, this);
 	}
 
+	public void navigateToURL(String url) {
+		getDriver().get(url);
+	}
+
 	public void loginToSite(String username, String password) {
 		waitUntilElementVisible(usernameTextField);
 		usernameTextField.sendKeys(username);

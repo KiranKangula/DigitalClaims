@@ -8,7 +8,7 @@ import org.testng.annotations.DataProvider;
 
 
 @CucumberOptions(
-        features = "src/test/resources/features/OSPC.feature",
+        features = "src/test/resources/features",
         tags = "@eForm6",
         glue = "definitions",
         monochrome = true,

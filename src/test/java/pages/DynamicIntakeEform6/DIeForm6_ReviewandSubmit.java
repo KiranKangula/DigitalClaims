@@ -36,6 +36,12 @@ public class DIeForm6_ReviewandSubmit extends BaseDriverClass {
 		return AddClaimtoProfile.isDisplayed();
 	}
 
+	public void verifyReturnToDashBoard() {
+
+		waitUntilElementVisible(this.returnToDashboardButton);
+		returnToDashboardButton.click();
+	}
+
 	public boolean verifyReviewAndSubmitExposure() {
 
 		waitUntilElementVisible(this.DeclarationCheckbox);
@@ -45,7 +51,7 @@ public class DIeForm6_ReviewandSubmit extends BaseDriverClass {
 		return confirmationMessage.isDisplayed();
 	}
 
-	public boolean selectAddClaimtoProfile(String addClaimtoProfile) {
+	public boolean selectAddClaimtoProfile(String addClaimtoProfile) throws InterruptedException {
 
 		if (addClaimtoProfile.equalsIgnoreCase("Yes")) {
 			AddClaimtoProfile.click();
@@ -53,6 +59,7 @@ public class DIeForm6_ReviewandSubmit extends BaseDriverClass {
 			AddClaimtoProfileNo.click();
 		}
 		submitReportButton.click();
+		Thread.sleep(5000);
 		waitUntilElementVisible(this.confirmationMessage);
 		return confirmationMessage.isDisplayed();
 	}

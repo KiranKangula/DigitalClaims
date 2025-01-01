@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+
 public class ExcelUtils {
     private static String BASE_PATH = "src/test/resources/data/";
     private static final Lock fileLock = new ReentrantLock();
@@ -29,6 +30,7 @@ public class ExcelUtils {
             fileLock.unlock();
         }
     }
+
     /**
      * Reads data from Excel and returns it as a list of maps.
      *
@@ -79,17 +81,27 @@ public class ExcelUtils {
                 if (DateUtil.isCellDateFormatted(cell)) {
                     return cell.getDateCellValue().toString();
                 } else {
-                    return String.valueOf(cell.getNumericCellValue());
+                    return String.format("%.0f", cell.getNumericCellValue());
                 }
             case BOOLEAN:
                 return String.valueOf(cell.getBooleanCellValue());
+            case FORMULA:
+                switch (cell.getCachedFormulaResultType()) {
+                    case STRING:
+                        return cell.getRichStringCellValue().getString();
+                    case NUMERIC:
+                        return String.format("%.0f", cell.getNumericCellValue());
+                    case BOOLEAN:
+                        return String.valueOf(cell.getBooleanCellValue());
+                    default:
+                        return "";
+                }
             case BLANK:
                 return "";
             default:
                 return cell.toString();
         }
     }
-
 
     /**
      * Saves data into Excel by appending a row with dynamic fields and values.
@@ -104,7 +116,6 @@ public class ExcelUtils {
         String filePath = BASE_PATH + prop.getProperty("env") + "/testData.xlsx";
         Workbook workbook;
         Sheet sheet;
-
         fileLock.lock();
         try {
             File file = new File(filePath);
@@ -143,13 +154,21 @@ public class ExcelUtils {
                 }
             }
 
-            int lastRowNum = sheet.getLastRowNum() + 1;
-            Row newRow = sheet.createRow(lastRowNum);
+            // Find the row index of the current row
+            int currentRowIndex = findRowIndex(sheet, Hooks.currentRow.get());
+
+            Row row;
+            if (currentRowIndex != -1) {
+                row = sheet.getRow(currentRowIndex);
+            } else {
+                int lastRowNum = sheet.getLastRowNum() + 1;
+                row = sheet.createRow(lastRowNum);
+            }
 
             for (int i = 0; i < headers.size(); i++) {
                 String header = headers.get(i);
                 String value = rowData.getOrDefault(header, "");
-                Cell cell = newRow.createCell(i);
+                Cell cell = row.createCell(i);
                 cell.setCellValue(value);
             }
 
@@ -162,27 +181,28 @@ public class ExcelUtils {
     }
 
 
-    public static void updateExcelData(String sheetName, String Columnname, String referenceClaimNumber) throws IOException {
+    public static void updateExcelData(String sheetName, Map<String, String> updatedRowData) throws IOException {
         String filePath = BASE_PATH + prop.getProperty("env") + "/testData.xlsx";
         FileInputStream fis = new FileInputStream(filePath);
         Workbook workbook = new XSSFWorkbook(fis);
         Sheet sheet = workbook.getSheet(sheetName);
 
-        // Assuming Hooks.currentRow.get() returns the current row being executed
-        Map<String, String> currentRowData = Hooks.currentRow.get();
-        int currentRowIndex = findRowIndex(sheet, currentRowData);
+        // Find the row index of the current row
+        int currentRowIndex = findRowIndex(sheet, Hooks.currentRow.get());
 
         if (currentRowIndex != -1) {
             Row row = sheet.getRow(currentRowIndex);
-            int referenceColumnIndex = getColumnIndex(sheet, Columnname);
-            if (referenceColumnIndex == -1) {
-                Row headerRow = sheet.getRow(0);
-                referenceColumnIndex = headerRow.getLastCellNum();
-                headerRow.createCell(referenceColumnIndex).setCellValue(Columnname);
+            for (Map.Entry<String, String> entry : updatedRowData.entrySet()) {
+                int columnIndex = getColumnIndex(sheet, entry.getKey());
+                if (columnIndex == -1) {
+                    // Add new column if it doesn't exist
+                    Row headerRow = sheet.getRow(0);
+                    columnIndex = headerRow.getLastCellNum();
+                    headerRow.createCell(columnIndex).setCellValue(entry.getKey());
+                }
+                Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                cell.setCellValue(entry.getValue());
             }
-            //Cell referenceCell = row.createCell(referenceColumnIndex);
-            Cell referenceCell = row.getCell(referenceColumnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
-            referenceCell.setCellValue(referenceClaimNumber);
         }
 
         fis.close();
@@ -194,7 +214,6 @@ public class ExcelUtils {
     }
 
     private static int findRowIndex(Sheet sheet, Map<String, String> rowData) {
-        // Start from the second row (index 1) to skip the header row
         for (int i = 1; i <= sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
             if (row == null) continue; // Skip empty rows
@@ -206,11 +225,12 @@ public class ExcelUtils {
                     break;
                 }
                 Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
-                String cellValue = (cell == null) ? "" : cell.getStringCellValue();
-                if (!cellValue.equals(entry.getValue())) {
-                    match = false;
-                    break;
-                }
+                String cellValue = (cell == null) ? "" : getCellValueAsString(cell);
+                //System.out.println("Comparing cell value: " + cellValue + " with expected value: " + entry.getValue());
+//                if (!cellValue.equals(entry.getValue())) {
+//                    match = false;
+//                    break;
+//                }
             }
             if (match) {
                 return row.getRowNum();
@@ -221,15 +241,16 @@ public class ExcelUtils {
 
     private static int getColumnIndex(Sheet sheet, String columnName) {
         Row headerRow = sheet.getRow(0);
-        for (Cell cell : headerRow) {
-            if (cell.getStringCellValue().equals(columnName)) {
-                return cell.getColumnIndex();
+        if (headerRow != null) {
+            for (Cell cell : headerRow) {
+                if (cell.getStringCellValue().equals(columnName)) {
+                    return cell.getColumnIndex();
+                }
             }
         }
         return -1; // Column not found
     }
 }
-
 /// Reading data Example
 
 //String env = "QA";
