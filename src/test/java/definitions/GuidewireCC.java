@@ -20,6 +20,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static definitions.Hooks.getDriver;
+import static pages.UNCD.AddClaimantInfo.firstname;
+import static pages.UNCD.AddClaimantInfo.lastname;
+
 public class GuidewireCC {
     private WebDriver driver;
     private WebDriverWait wait;
@@ -29,7 +33,7 @@ public class GuidewireCC {
     ConfigReader prop= Hooks.getConfigReader();
     List<Map<String, String>> data = Hooks.data;
     public GuidewireCC() throws Exception {
-        driver = Hooks.getDriver();
+        driver = getDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
         loginPage = new LoginPage(driver, wait);
         homePage = new HomePage(driver, wait);
@@ -39,7 +43,13 @@ public class GuidewireCC {
     @Then("Switch to New tab and Login to ClaimCenter")
     public void switchToNewTabAndLoginToClaimCenter() {
         guidewirecc.switchtab();
-        guidewirecc.loginToGWCC(prop.getProperty("GWCC_Username"), prop.getProperty("GWCC_Password") );
+        if(prop.getProperty("env").equalsIgnoreCase("BAT")) {
+            guidewirecc.loginToGWCC(prop.getProperty("GWCC_Username"), prop.getProperty("GWCC_Password"));
+        }
+        else {
+            getDriver().switchTo().defaultContent();
+            getDriver().switchTo().frame("top_frame");
+        }
     }
 
     @And("Search for {string}")
@@ -80,7 +90,9 @@ public class GuidewireCC {
 
     @When("User submit username and password")
     public void userSubmitUsernameAndPassword() {
-        guidewirecc.loginToGWCC(prop.getProperty("GWCC_Username"), prop.getProperty("GWCC_Password") );
+        if(!prop.getProperty("env").equalsIgnoreCase("PPD")) {
+            guidewirecc.loginToGWCC(prop.getProperty("GWCC_Username"), prop.getProperty("GWCC_Password"));
+        }
     }
 
     @Then("User should be able to login successfully into GWCC")
@@ -174,5 +186,16 @@ public class GuidewireCC {
         String Gender = Hooks.currentRow.get().get("Gender");
         String Pronouns = Hooks.currentRow.get().get("Pronouns");
         guidewirecc.verifyIntakeWorkerInformation(Fname, Lname, Gender, Pronouns);
+    }
+
+    @And("Search with firstname and lastname & dateofbirth {string}")
+    public void searchWithFirstnameAndLastnameDateofbirth(String dateofbirth) throws InterruptedException {
+        Assert.assertTrue(guidewirecc.searchClaimant(firstname, lastname, dateofbirth));
+
+    }
+
+    @And("Verify the UNCD document is landed in GWCC with {string}, {string}")
+    public void verifyTheUNCDDocumentIsLandedInGWCCWith(String Author, String Description) throws InterruptedException {
+        Assert.assertTrue(guidewirecc.verifyLandedUNCDDocument(Author,Description));
     }
 }

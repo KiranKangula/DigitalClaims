@@ -15,11 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static definitions.Hooks.getDriver;
 import static pages.OSPC.OSPCClaimOverview.randommessage;
 
 public class GuidewirePage extends BaseDriverClass {
 	ConfigReader prop= Hooks.getConfigReader();
-
 	@FindBy(id = "Login:LoginScreen:LoginDV:username") private WebElement usernameTextField;
 	@FindBy(id = "Login:LoginScreen:LoginDV:password") private WebElement passwordTextField;
 	@FindBy(id = "Login:LoginScreen:LoginDV:submit") private WebElement loginButton;
@@ -47,11 +47,12 @@ public class GuidewirePage extends BaseDriverClass {
 	@FindBy(id = "ClaimContacts:ClaimContactsScreen:PeopleInvolvedDetailedListDetail:PeopleInvolvedDetailedLV") private WebElement ClaimParticipantsTable;
 	@FindBy(id = "ClaimContacts:ClaimContactsScreen:PeopleInvolvedDetailedListDetail:ContactBasicsDV_tb:ContactDetailToolbarButtonSet:LinkContactToolbarButtonSet:LinkContactToolbarButtons_SyncFromAddressBookButton") private WebElement CopyfromContactManagerButton;
 	@FindBy(id = "Claim:MenuLinks:Claim_ClaimDocumentsGroup") private WebElement ClaimDocumentsLink;
-	@FindBy(id = "ClaimDocuments:DocumentsMemosScreen:ClaimDocumentSearchDV:Hidden") private WebElement HiddenDropdown;
-	@FindBy(id = "ClaimDocuments:DocumentsMemosScreen:ClaimDocumentSearchDV:RedactionRequired") private WebElement RedactionRequiredDropdown;
-	@FindBy(id = "ClaimDocuments:DocumentsMemosScreen:ClaimDocumentSearchDV:NoAccess") private WebElement NoAccessDropdown;
-	@FindBy(id = "ClaimDocuments:DocumentsMemosScreen:ClaimDocumentSearchDV:SearchAndResetInputSet:SearchLinksInputSet:Search_link") private WebElement Search_link;
-	@FindBy(xpath = "//*[@id='ClaimDocuments:DocumentsMemosScreen:DocumentsLV']") private WebElement DocumentsTable;
+	@FindBy(xpath = "//*[contains(@id, 'DocumentsMemosScreen:ClaimDocumentSearchDV:Hidden')]") private WebElement HiddenDropdown;
+	@FindBy(xpath = "//*[contains(@id, 'DocumentsMemosScreen:ClaimDocumentSearchDV:RedactionRequired')]") private WebElement RedactionRequiredDropdown;
+	@FindBy(xpath = "//*[contains(@id, 'DocumentsMemosScreen:ClaimDocumentSearchDV:NoAccess')]") private WebElement NoAccessDropdown;
+	@FindBy(xpath = "//*[contains(@id, 'DocumentsMemosScreen:ClaimDocumentSearchDV:SearchAndResetInputSet:SearchLinksInputSet:Search_link')]") private WebElement Search_link;
+	@FindBy(id = "ClaimDocuments:DocumentsMemosScreen:DocumentsLV") private WebElement DocumentsTable;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:IndependentWizardStepSet:DocumentsMemosScreen:DocumentsLV") private WebElement UNCDDocumentsTable;
 	@FindBy(xpath = "//*[@id=\"TabBar:ClaimTab_arrow\"]/span") private WebElement ClaimTab_arrow;
 	@FindBy(id = "TabBar:ClaimTab:QuickClaimRegistrarion") private WebElement ManualRegistrationlink;
 	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ttlBar") private WebElement ttlBar;
@@ -106,6 +107,11 @@ public class GuidewirePage extends BaseDriverClass {
 	@FindBy(xpath = "//*[@id=\"WebMessageWorksheet:WebMessageWorksheetScreen:WebMessageWorksheet_ClearButton\"]/span[2]") private WebElement ClearButton;
 	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:PriorClaimsTabTab") private WebElement PriorClaimsTab;
 	@FindBy(xpath = "//*[@id=\"WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:EditableBodyPartDetailsLV_tb:Add\"]/span[2]") private WebElement AddBodyPart;
+
+	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchDV:ClaimSearchOptionalInputSet:FirstName") private WebElement SearchFirstName;
+	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchDV:ClaimSearchOptionalInputSet:LastName") private WebElement SearchLastName;
+	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchDV:ClaimSearchOptionalInputSet:DateOfBirth") private WebElement SearchDOB;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:Documents") private WebElement UnnumberedDocLink;
 
 
 	public GuidewirePage(WebDriver driver, WebDriverWait wait) {
@@ -248,9 +254,56 @@ public class GuidewirePage extends BaseDriverClass {
 
 	}
 
+	public boolean verifyLandedUNCDDocument(String author, String description) throws InterruptedException {
+		UnnumberedDocLink.click();
+		Select hidden = new Select(HiddenDropdown);
+		hidden.selectByValue("Yes");
+		Select Redaction = new Select(RedactionRequiredDropdown);
+		Redaction.selectByValue("Yes");
+		Select NoAccess = new Select(NoAccessDropdown);
+		NoAccess.selectByValue("Yes");
+		Search_link.click();
+
+		boolean recordFound = false;
+
+		for (int i = 0; i < 50; i++) {
+			waitUntilElementVisible(UNCDDocumentsTable);
+			List<WebElement> rows = UNCDDocumentsTable.findElements(By.tagName("tr"));
+			for (WebElement row : rows) {
+
+				String Author = row.findElement(By.xpath("./td[12]")).getText().toLowerCase();
+				String Description = row.findElement(By.xpath("./td[5]")).getText().toLowerCase();
+				String FinalDate = row.findElement(By.xpath("./td[18]")).getText().toLowerCase();
+
+				if (Description.contains(description.toLowerCase()) && Author.contains(author.toLowerCase()) && FinalDate.contentEquals(getCurrentDate("dd/MMM/yyyy").toLowerCase())) {
+					recordFound = true;
+					break;
+				}
+			}
+			if (recordFound) {
+				break;
+			} else {
+				Thread.sleep(5000);
+				System.out.println("Retrying for "+ i+ " times");
+				Search_link.click();
+			}
+		}
+
+		return recordFound;
+
+	}
+
 	public boolean verifyonGWCC() {
-		getDriver().switchTo().frame("top_frame");
-		return usernameTextField.isDisplayed();
+		if(prop.getProperty("env").equalsIgnoreCase("BAT")) {
+			getDriver().switchTo().frame("top_frame");
+			return usernameTextField.isDisplayed();
+		}
+		else
+		{
+			getDriver().switchTo().defaultContent();
+			getDriver().switchTo().frame("top_frame");
+			return true;
+		}
 	}
 
 	public boolean GWCCLoginsuccess() {
@@ -464,5 +517,30 @@ public class GuidewirePage extends BaseDriverClass {
 		Assert.assertTrue(ClaimantPronouns.getText().equalsIgnoreCase(pronouns));
 		ValidateAddressButton.click();
 		CreateNewWorkerCM.click();
+	}
+
+	public boolean searchClaimant(String firstname, String lastname, String dateofbirth) throws InterruptedException {
+		SearchTab.click();
+		SearchFirstName.sendKeys(firstname);
+		SearchLastName.sendKeys(lastname);
+		jsSendKeys(SearchDOB, dateofbirth);
+		SearchButton.click();
+		for (int loop = 0; loop < 50; loop++) {
+			try {
+				if (SelectClaimfromSearch.isDisplayed()) {
+					SelectClaimfromSearch.click();
+					break;
+				}
+			}catch(Exception e){
+					System.out.println("Search Results not available Yet, trying again..." + loop);
+					Thread.sleep(5000);
+					SearchTab.click();
+				}
+
+		}
+		waitUntilElementVisible(ClaimRegistrationTitlebar);
+		return ClaimRegistrationTitlebar.isDisplayed();
+
+
 	}
 }

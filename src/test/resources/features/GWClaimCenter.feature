@@ -35,10 +35,11 @@ Scenario Outline: Create a Claim in GW ClaimCenter
     | firstname | lastname | phonenumber  | postalcode | gender | dateofbirth | Account# | dateofaccident | datereported | areaofbody | areaofinjury | accidentType | detailedaccidentType | natureofinjury |
     | Kiran     | Kangulaa | 647-800-0000 | M4P 1Z2    | Male   | 01/01/2000  | 1169879  | 17/12/2024     | 17/12/2024   | Head       | Head         | Serious Injury | Burn               | Major Burns    |
 
-Scenario Outline: Verify Document Landed Test
+@GWCCValidation
+  Scenario Outline: Verify Document Landed Test
     Given User Logged into ClaimCenter
-    When Search for "<claimnumber>"
-    And Verify the document is landed in GWCC with "<Author>", "<Description>"
+  When Search with firstname "<firstname>" and lastname "<lastname>" & dateofbirth "<dateofbirth>"
+  Then Verify the UNCD document is landed in GWCC with "<Author>", "<Description>"
     Examples:
-              | claimnumber | Author      |  Description      |
-              |  32649808    | OSPC        |  Dental report    |
+      | firstname |   lastname   |  dateofbirth  | Author     | Description        |
+      | Kiran    |  PAULNMVFQ   |  01/01/2000     | UNCD      |  Worker's Report of Injury|

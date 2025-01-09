@@ -29,7 +29,7 @@ Background: Login to OSPC
       | claimnumber |
       | 32650720    |
 
-  @OSPC
+  @OSPC @SendMessage
   Scenario Outline: Send a message from OSPC
     Given User is on my Claim screen
     When User clicks on "<claimnumber>"
@@ -46,7 +46,7 @@ Background: Login to OSPC
       | claimnumber | subject | message   |
       | 32650720    | Payments| <dynamic> |
 
-  @OSPC
+  @OSPC @OSPCDocUpload
   Scenario Outline: Upload WSIB form Document and Verify Submitted Document Screen
     Given User is on my Claim screen
     When User clicks on "<claimnumber>"
