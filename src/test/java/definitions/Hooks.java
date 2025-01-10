@@ -110,6 +110,7 @@ public class Hooks {
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.setExperimentalOption("useAutomationExtension", false);
+                chromeOptions.setAcceptInsecureCerts(true);
                 chromeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
                 chromeOptions.addArguments("--remote-allow-origins=*");
                 chromeOptions.addArguments("--disable-dev-shm-usage", "--no-sandbox");
@@ -122,6 +123,7 @@ public class Hooks {
                 WebDriverManager.edgedriver().setup();
                 EdgeOptions edgeOptions = new EdgeOptions();
                 edgeOptions.setExperimentalOption("useAutomationExtension", false);
+                edgeOptions.setAcceptInsecureCerts(true);
                 edgeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
                 edgeOptions.addArguments("--remote-allow-origins=*");
                 edgeOptions.addArguments("--disable-dev-shm-usage", "--no-sandbox");

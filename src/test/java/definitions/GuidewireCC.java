@@ -54,7 +54,8 @@ public class GuidewireCC {
 
     @And("Search for {string}")
     public void searchForClaimnumber(String claimnumber) {
-        Assert.assertTrue(guidewirecc.searchClaim(claimnumber));
+        String claim = Hooks.currentRow.get().get("claimnumber");
+        Assert.assertTrue(guidewirecc.searchClaim(claim));
     }
 
     @Then("User should be able to see the message displayed from OSPC")
@@ -80,6 +81,8 @@ public class GuidewireCC {
 
     @And("Verify the document is landed in GWCC with {string}, {string}")
     public void verifyTheDocumentIsDisplayedIsLandedInGWCCWith(String Author, String Description) throws InterruptedException {
+         Author=Hooks.currentRow.get().get("Author");
+         Description=Hooks.currentRow.get().get("Description");
         Assert.assertTrue(guidewirecc.verifyLandedDocument(Author,Description));
     }
 

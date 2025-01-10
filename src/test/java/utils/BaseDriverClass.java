@@ -62,6 +62,13 @@ public class BaseDriverClass {
         new Actions(getDriver()).moveToElement(element).click().sendKeys(value).perform();
     }
 
+    // Utility to send keys using Actions and JavascriptExecutor
+    protected void jsMoveClick(WebElement element) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].value='';", element);
+        new Actions(getDriver()).moveToElement(element).click().perform();
+    }
+
     // Utility to scroll to an element
     protected void scrollToElement(WebElement element) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
