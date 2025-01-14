@@ -33,7 +33,7 @@ public class Hooks {
     public static ThreadLocal<Map<String, String>> currentRow = ThreadLocal.withInitial(() -> null);
     private static ThreadLocal<WebDriver> driver = ThreadLocal.withInitial(() -> null);
     public static String sheetName;
-    private static String scenarioName;
+    private static ThreadLocal<String> scenarioName = new ThreadLocal<>();
     @Before(order = 0)
     public void setup(Scenario scenario)
     {
@@ -50,16 +50,15 @@ public class Hooks {
         //scenarioName.set(scenario.getName());
     }
 
-    @Before
+    @Before(order = 1)
     public void beforeScenario(Scenario scenario) {
-        scenarioName = scenario.getName();
+        scenarioName.set(scenario.getName());
     }
 
     public static String getScenarioName() {
-        return scenarioName;
+        return scenarioName.get();
     }
-
-    @Before(order = 1)
+    @Before(order = 2)
     public void loadData(Scenario scenario) throws IOException {
         String excelfilepath = "src/test/resources/data/"+ configReader.getProperty("env") + "/testData.xlsx";
         String sheetname = getSheetName(scenario);
@@ -72,7 +71,7 @@ public class Hooks {
         currentIndex = 0; // Reset currentIndex before each test run
     }
 
-    @Before(order = 2)
+    @Before(order = 3)
     public void setScenarioData(Scenario scenario) {
         if (data != null && !data.isEmpty()) {
             if (currentRow == null) {
