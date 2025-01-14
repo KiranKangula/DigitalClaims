@@ -15,8 +15,8 @@ Background: Login to Document Upload Portal
     And Select delaration and Email consent checkbox and Click on Submit button
     And Verify the confirmation screen is displayed
     Then Switch to New tab and Login to ClaimCenter
-    And Search for "<claimnumber>"
-    And Verify the document is landed in GWCC with "<Author>", "<Description>"
+    And Search for UNCD "<claimnumber>"
+    And Verify the EDOB document is landed in GWCC with "<Author>", "<Description>"
     Examples:
       | claimnumber |   lastname   |  dateofbirth  |  wsibform             | filename                                                | Author      |  Description      |
       | 32710725    |  PAULNMVFQ   |  01/01/2000  | Dental report (0278A) | 0717B_202410_LongTermRateEarningsQuestionnaire_ACES.pdf | UNCD        |  Dental report    |
@@ -31,8 +31,8 @@ Background: Login to Document Upload Portal
     And Select delaration and Email consent checkbox and Click on Submit button
     And Verify the confirmation screen is displayed
     Then Switch to New tab and Login to ClaimCenter
-    And Search for "<claimnumber>"
-    And Verify the document is landed in GWCC with "<Author>", "<Description>"
+    And Search for UNCD "<claimnumber>"
+    And Verify the EDOB document is landed in GWCC with "<Author>", "<Description>"
     Examples:
       | claimnumber |   lastname   |  dateofbirth  |  nonwsibformcategory | subform                  |  filename                                              | Author      |  Description      |
       | 32710725    |  PAULNMVFQ   |  01/01/2000  | Expense receipt       | General expense receipt  |0717B_202410_LongTermRateEarningsQuestionnaire_ACES.pdf | UNCD        |  GENERAL WORKER EXPENSE FORM    |

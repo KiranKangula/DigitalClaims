@@ -33,6 +33,7 @@ public class Hooks {
     public static ThreadLocal<Map<String, String>> currentRow = ThreadLocal.withInitial(() -> null);
     private static ThreadLocal<WebDriver> driver = ThreadLocal.withInitial(() -> null);
     public static String sheetName;
+    private static String scenarioName;
     @Before(order = 0)
     public void setup(Scenario scenario)
     {
@@ -46,7 +47,16 @@ public class Hooks {
                 .map(tag -> tag.replace("@SheetName_", ""))
                 .findFirst()
                 .orElse(null);
+        //scenarioName.set(scenario.getName());
+    }
 
+    @Before
+    public void beforeScenario(Scenario scenario) {
+        scenarioName = scenario.getName();
+    }
+
+    public static String getScenarioName() {
+        return scenarioName;
     }
 
     @Before(order = 1)

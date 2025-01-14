@@ -58,6 +58,11 @@ public class GuidewireCC {
         Assert.assertTrue(guidewirecc.searchClaim(claim));
     }
 
+    @And("Search for UNCD {string}")
+    public void searchForUNCDClaimnumber(String claimnumber) {
+        Assert.assertTrue(guidewirecc.searchClaim(claimnumber));
+    }
+
     @Then("User should be able to see the message displayed from OSPC")
     public void userShouldBeAbleToSeeTheMessageDisplayedFromOSPC() {
         Assert.assertTrue(guidewirecc.verifySentMessage());
@@ -83,6 +88,11 @@ public class GuidewireCC {
     public void verifyTheDocumentIsDisplayedIsLandedInGWCCWith(String Author, String Description) throws InterruptedException {
          Author=Hooks.currentRow.get().get("Author");
          Description=Hooks.currentRow.get().get("Description");
+        Assert.assertTrue(guidewirecc.verifyLandedDocument(Author,Description));
+    }
+
+    @And("Verify the EDOB document is landed in GWCC with {string}, {string}")
+    public void verifyTheEDOBDocumentIsDisplayedIsLandedInGWCCWith(String Author, String Description) throws InterruptedException {
         Assert.assertTrue(guidewirecc.verifyLandedDocument(Author,Description));
     }
 

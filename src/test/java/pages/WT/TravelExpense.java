@@ -102,7 +102,6 @@ public class TravelExpense extends BaseDriverClass {
 			System.out.println("DistributionPopUpNo not displayed");
 		}
 
-
 		ConfirmationHeader.isDisplayed();
 		return ConfirmationHeader.isDisplayed();
 	}
