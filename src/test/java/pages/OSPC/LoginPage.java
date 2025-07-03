@@ -10,7 +10,7 @@ import utils.BaseDriverClass;
 
 public class LoginPage extends BaseDriverClass {
 
-	@FindBy(xpath = "//input[@id='email']") private WebElement usernameTextField;
+	@FindBy(xpath = "//input[@id='email' or @id='signInName']") private WebElement usernameTextField;
 	@FindBy(xpath = "//input[@id='password']") private WebElement passwordTextField;
 	@FindBy(xpath = "//button[@id='next']") private WebElement loginButton;
 

@@ -60,8 +60,8 @@ public class AddClaimantInfo extends BaseDriverClass {
 		waitUntilElementVisible(this.firstName);
 		if(firstname.contentEquals("<dynamicFN>") && lastname.contentEquals("<dynamicLN>"))
 		{
-			this.firstname = generateRandomText();
-			this.lastname = generateRandomText();
+			this.firstname = generateRandomText(5);
+			this.lastname = generateRandomText(5);
 			firstname = this.firstname;
 			lastname= this.lastname;
 		}

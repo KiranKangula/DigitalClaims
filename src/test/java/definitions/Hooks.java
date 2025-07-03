@@ -1,16 +1,16 @@
 package definitions;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import org.openqa.selenium.remote.CapabilityType;
 
-
-import io.cucumber.java.After;
-import io.cucumber.java.AfterStep;
-import io.cucumber.java.Before;
-import io.cucumber.java.Scenario;
+import com.aventstack.extentreports.ExtentTest;
+import io.cucumber.java.*;
 import io.cucumber.java.an.E;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -22,8 +22,12 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import utils.ConfigReader;
 import utils.ExcelUtils;
+import utils.ExtentReportListener;
 
 
 public class Hooks {
@@ -34,6 +38,7 @@ public class Hooks {
     private static ThreadLocal<WebDriver> driver = ThreadLocal.withInitial(() -> null);
     public static String sheetName;
     private static ThreadLocal<String> scenarioName = new ThreadLocal<>();
+    public static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<>();
     @Before(order = 0)
     public void setup(Scenario scenario)
     {
@@ -50,15 +55,10 @@ public class Hooks {
         //scenarioName.set(scenario.getName());
     }
 
-    @Before(order = 1)
-    public void beforeScenario(Scenario scenario) {
-        scenarioName.set(scenario.getName());
-    }
-
     public static String getScenarioName() {
         return scenarioName.get();
     }
-    @Before(order = 2)
+    @Before(order = 1)
     public void loadData(Scenario scenario) throws IOException {
         String excelfilepath = "src/test/resources/data/"+ configReader.getProperty("env") + "/testData.xlsx";
         String sheetname = getSheetName(scenario);
@@ -71,7 +71,7 @@ public class Hooks {
         currentIndex = 0; // Reset currentIndex before each test run
     }
 
-    @Before(order = 3)
+    @Before(order = 2)
     public void setScenarioData(Scenario scenario) {
         if (data != null && !data.isEmpty()) {
             if (currentRow == null) {
@@ -87,6 +87,7 @@ public class Hooks {
             }
         } else {
             scenario.log("Test data is not loaded or is empty.");
+           // currentRow.set(data.get(currentIndex));
         }
     }
 
@@ -109,50 +110,61 @@ public class Hooks {
     }
 
     @Before
-    public void openBrowser() throws Exception {
-        WebDriver webDriver;
-        String browser = configReader.getProperty("browser");
-        boolean isHeadless = configReader.getProperty("headless").contentEquals("true");
+    public void openBrowser(Scenario scenario) throws Exception {
 
-        switch (browser) {
-            case "chrome":
-                WebDriverManager.chromedriver().setup();
-                ChromeOptions chromeOptions = new ChromeOptions();
-                chromeOptions.setExperimentalOption("useAutomationExtension", false);
-                chromeOptions.setAcceptInsecureCerts(true);
-                chromeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
-                chromeOptions.addArguments("--remote-allow-origins=*");
-                chromeOptions.addArguments("--disable-dev-shm-usage", "--no-sandbox");
-                if (isHeadless) {
-                    chromeOptions.addArguments("--headless", "--window-size=1440,768", "--disable-gpu");
-                }
-                webDriver = new ChromeDriver(chromeOptions);
-                break;
-            case "edge":
-                WebDriverManager.edgedriver().setup();
-                EdgeOptions edgeOptions = new EdgeOptions();
-                edgeOptions.setExperimentalOption("useAutomationExtension", false);
-                edgeOptions.setAcceptInsecureCerts(true);
-                edgeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
-                edgeOptions.addArguments("--remote-allow-origins=*");
-                edgeOptions.addArguments("--disable-dev-shm-usage", "--no-sandbox");
-                if (isHeadless) {
-                    edgeOptions.addArguments("--headless", "--window-size=1440,768", "--disable-gpu");
-                }
-                webDriver = new EdgeDriver(edgeOptions);
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported browser: " + browser);
+        // Skip browser setup for scenarios tagged with @API
+        if (scenario.getSourceTagNames().contains("@API")) {
+            scenario.log("Skipping browser setup for @API tests.");
+            return;
         }
+            WebDriver webDriver;
+            String browser = configReader.getProperty("browser");
+            boolean isHeadless = configReader.getProperty("headless").contentEquals("true");
 
-        webDriver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-        webDriver.manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
-        webDriver.manage().deleteAllCookies();
-        if (!isHeadless) {
-            webDriver.manage().window().maximize();
-        }
-        webDriver.get(configReader.getProperty("baseUrl"));
-        driver.set(webDriver);
+            switch (browser) {
+                case "chrome":
+                    WebDriverManager.chromedriver().setup();
+                    LoggingPreferences logPrefs = new LoggingPreferences();
+                    logPrefs.enable(LogType.BROWSER, Level.ALL);
+                    ChromeOptions chromeOptions = new ChromeOptions();
+                    chromeOptions.setCapability("goog:loggingPrefs", logPrefs);
+                    chromeOptions.setExperimentalOption("useAutomationExtension", false);
+                    chromeOptions.setAcceptInsecureCerts(true);
+                    chromeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+                    chromeOptions.addArguments("--remote-allow-origins=*");
+                    chromeOptions.addArguments("--disable-dev-shm-usage", "--no-sandbox");
+                    if (isHeadless) {
+                        chromeOptions.addArguments("--headless"); //, "--disable-gpu", "--window-size=1440,768"
+                    }
+                    webDriver = new ChromeDriver(chromeOptions);
+                    break;
+                case "edge":
+                    WebDriverManager.edgedriver().setup();
+                    EdgeOptions edgeOptions = new EdgeOptions();
+                    edgeOptions.setExperimentalOption("useAutomationExtension", false);
+                    edgeOptions.setAcceptInsecureCerts(true);
+                    edgeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+                    edgeOptions.addArguments("--remote-allow-origins=*");
+                    edgeOptions.addArguments("--disable-dev-shm-usage", "--no-sandbox");
+                    if (isHeadless) {
+                        edgeOptions.addArguments("--headless", "--window-size=1440,768", "--disable-gpu");
+                    }
+                    webDriver = new EdgeDriver(edgeOptions);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unsupported browser: " + browser);
+            }
+
+            webDriver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+            webDriver.manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
+            webDriver.manage().deleteAllCookies();
+            if (!isHeadless) {
+                webDriver.manage().window().maximize();
+            }
+            webDriver.get(configReader.getProperty("baseUrl"));
+            driver.set(webDriver);
+
+
     }
 
     @After

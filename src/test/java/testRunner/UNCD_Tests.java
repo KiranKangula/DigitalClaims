@@ -4,6 +4,9 @@ import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 //import org.testng.annotations.DataProvider;
 
 
@@ -12,14 +15,18 @@ import org.testng.annotations.DataProvider;
         tags = "@UNCD",
         glue = "definitions",
         monochrome = true,
-        plugin = {"pretty", "html:target/TestResults/UNCD_Results.html"},
+        plugin = {"pretty"},
         publish = true
 )
 public class UNCD_Tests extends AbstractTestNGCucumberTests {
+    public UNCD_Tests() {
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        System.setProperty("cucumber.plugin", "html:target/TestResults/UNCD/UNCDResults_" + timestamp + ".html");
+    }
+
     @Override
     @DataProvider(parallel = false)
     public Object[][] scenarios() {
         return super.scenarios();
     }
-
 }

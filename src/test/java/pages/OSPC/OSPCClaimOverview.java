@@ -181,7 +181,7 @@ public class OSPCClaimOverview extends BaseDriverClass {
 
 	public boolean sendusamessage(String subject, String message) {
 		if (message.equals("<dynamic>")) {
-			randommessage = generateRandomText(); // Replace "<dynamic>" with random text
+			randommessage = generateRandomText(5); // Replace "<dynamic>" with random text
 		}
 		SubjectDropdown.click();
 		String dynamicXPath = "//*[contains(text(),'" + subject + "')]";

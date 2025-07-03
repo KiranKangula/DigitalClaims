@@ -54,6 +54,7 @@ public class GuidewirePage extends BaseDriverClass {
 	@FindBy(id = "ClaimDocuments:DocumentsMemosScreen:DocumentsLV") private WebElement DocumentsTable;
 	@FindBy(id = "WSIB_Form8_FNOLWizard:IndependentWizardStepSet:DocumentsMemosScreen:DocumentsLV") private WebElement UNCDDocumentsTable;
 	@FindBy(xpath = "//*[@id=\"TabBar:ClaimTab_arrow\"]/span") private WebElement ClaimTab_arrow;
+	@FindBy(id = "TabBar:DesktopTab") private WebElement DesktopTab;
 	@FindBy(id = "TabBar:ClaimTab:QuickClaimRegistrarion") private WebElement ManualRegistrationlink;
 	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ttlBar") private WebElement ttlBar;
 	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:IntakeIdDV:WSIB_IntakeForm") private WebElement SourceofInformation;
@@ -180,6 +181,7 @@ public class GuidewirePage extends BaseDriverClass {
 			{
 				if(cell.getText().equals(claimnumber)){
 					WebElement checkbox=row.findElement(By.xpath(".//input[@type='checkbox']"));
+
 					checkbox.click();
 					break;
 				}
@@ -224,7 +226,7 @@ public class GuidewirePage extends BaseDriverClass {
 		Select NoAccess = new Select(NoAccessDropdown);
 		NoAccess.selectByValue("Yes");
 		Search_link.click();
-
+		Thread.sleep(5000);
 		boolean recordFound = false;
 
 		for (int i = 0; i < 50; i++) {
@@ -247,6 +249,7 @@ public class GuidewirePage extends BaseDriverClass {
 				Thread.sleep(5000);
 				System.out.println("Retrying for "+ i+ " times");
 				Search_link.click();
+				Thread.sleep(5000);
 			}
 		}
 
@@ -263,6 +266,7 @@ public class GuidewirePage extends BaseDriverClass {
 		Select NoAccess = new Select(NoAccessDropdown);
 		NoAccess.selectByValue("Yes");
 		Search_link.click();
+		Thread.sleep(5000);
 
 		boolean recordFound = false;
 
@@ -286,6 +290,7 @@ public class GuidewirePage extends BaseDriverClass {
 				Thread.sleep(5000);
 				System.out.println("Retrying for "+ i+ " times");
 				Search_link.click();
+				Thread.sleep(5000);
 			}
 		}
 
@@ -312,6 +317,7 @@ public class GuidewirePage extends BaseDriverClass {
 	}
 
 	public boolean KickManualRegistration() {
+		DesktopTab.click();
 		ClaimTab_arrow.click();
 		ManualRegistrationlink.click();
 		return ttlBar.isDisplayed();
@@ -491,7 +497,7 @@ public class GuidewirePage extends BaseDriverClass {
 			}
 		}
 		catch(Exception e){
-			System.out.println("Warning Message: "+ WarningMessage.getText());
+			System.out.println("Warning Message: "+e);
 		}
 		waitUntilElementVisible(NewClaimHeader);
 		String claimnumber = NewClaimHeader.getText().split(" ")[1];

@@ -1,0 +1,156 @@
+package definitions;
+
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
+import org.junit.Assert;
+import pages.OSPC.OSPCClaimOverview;
+import utils.ConfigReader;
+
+import java.io.File;
+import java.util.List;
+import java.util.Map;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
+public class UNCDAPI {
+
+
+	private OSPCClaimOverview OSPCClaimOverview;
+	private String endpoint;
+	private String requestBody;
+	private Response response;
+	private String Filepath = "src/test/resources/config/UNCD_API.properties"; // Path to your properties file
+
+	ConfigReader prop= Hooks.getConfigReader();
+	List<Map<String, String>> data = Hooks.data;
+	public UNCDAPI() throws Exception {
+
+	}
+
+	@Given("the UNCD API endpoint is configured with {string}")
+	public void theUNCDAPIEndpointIsConfiguredWith(String Endpoint) {
+		endpoint = prop.getProperty("baseUrl")+ Endpoint;
+	}
+
+	@When("a UNCD POST request is sent")
+	public void aUNCDPOSTRequestIsSent() {
+		// Disable SSL validation
+		RestAssured.useRelaxedHTTPSValidation();
+		String bearerToken = prop.getProperty("BearerToken");
+		response = RestAssured
+				.given()
+				.log().all() // Logs the request details
+				.header("Authorization", "Bearer " + bearerToken)
+				.header("Content-Type", "application/json")
+				.body(requestBody)
+				.post(endpoint);
+	}
+
+	@Then("the UNCD response status code should be {int}")
+	public void theUNCDResponseStatusCodeShouldBe(int statusCode) {
+		// Log the response details for debugging
+		//response.then().log().all(); // Logs the response details
+		response.prettyPrint(); // Prints the response body
+		assertThat(response.getStatusCode(), is(statusCode));
+	}
+
+	@Then("Extract the file id from the response for UNCD")
+	public void extractTheFileIdFromTheResponseforUNCD() throws Exception {
+
+		String fileId = response.jsonPath().getString("name");
+		Assert.assertNotNull("File ID should not be null", fileId);
+		prop.setProperty("FileId", fileId, Filepath); // Store the fileId in config.properties
+		System.out.println("Extracted File ID: " + fileId);
+	}
+
+	@And("the UNCD request body is:")
+	public void theUNCDRequestBodyIs(String body) {
+		String claimNumber = prop.getProperty("ClaimNumber");
+		String FileId = prop.getProperty("FileId");
+		String LoginId = prop.getProperty("userLoginID");
+		String LastName = prop.getProperty("LastName");
+		String dateOfBirth = prop.getProperty("dateOfBirth");
+		// Fetch ClaimNumber from config.properties
+		requestBody = body.replace("{{ClaimNumber}}", claimNumber).replace("{{FileId}}", FileId).replace("{{userLoginID}}", LoginId)
+				.replace( "{{LastName}}", LastName).replace("{{dateOfBirth}}", dateOfBirth); // Replace placeholder with actual value
+	}
+
+
+	@When("a POST request is sent with form data for UNCD")
+	public void aPOSTRequestIsSentWithFormDataForUNCD() {
+		String bearerToken = prop.getProperty("BearerToken");
+		File file = new File(prop.getProperty("Filepath")); // Path to the file
+		response = RestAssured
+				.given()
+				.log().all() // Logs the request details
+				.header("Authorization", "Bearer " + bearerToken)
+				.header("Content-Type", "multipart/form-data")
+				.multiPart("file", file) // Attach the file
+				.formParam("claimId", prop.getProperty("ClaimNumber")) // Add claimId as form data
+				.formParam("lastName", prop.getProperty("LastName")) // Add lastName as form data
+				.formParam("dateOfBirth", prop.getProperty("dateOfBirth")) // Add dateOfBirth as form data
+				.post(endpoint);
+
+	}
+
+
+	@When("a POST request is sent with form data for UNCD Unnumbered")
+	public void aPOSTRequestIsSentWithFormDataForUNCDD() {
+		String bearerToken = prop.getProperty("BearerToken");
+		File file = new File(prop.getProperty("Filepath")); // Path to the file
+		response = RestAssured
+				.given()
+				.log().all() // Logs the request details
+				.header("Authorization", "Bearer " + bearerToken)
+				.header("Content-Type", "multipart/form-data")
+				.multiPart("file", file) // Attach the file
+				.post(endpoint);
+
+	}
+
+	@Given("the UNCD Token endpoint is configured with {string}")
+	public void theUNCDTokenEndpointIsConfiguredWith(String arg0) {
+
+		endpoint = prop.getProperty("tokenBaseUrl") + arg0;
+
+	}
+
+	@When("the token request body has set up")
+	public void theTokenRequestBodyHasSetUp() {
+
+		requestBody =
+				"""
+						client_id=05feb79d-a0b7-4096-9f58-5e8ce03ba7b3&redirect_uri=https%3A%2F%2Fppd.documentupload.wsib.ca%2Fauth-callback&scope=openid%20offline_access%20openid%20offline_access%20https%3A%2F%2Fwsibb2cppd.onmicrosoft.com%2Fuduapi%2FUDU_API_ACCESS%20profile&code=eyJraWQiOiJjcGltY29yZV8wOTI1MjAxNSIsInZlciI6IjEuMCIsInppcCI6IkRlZmxhdGUiLCJzZXIiOiIxLjAifQ..xeEdg_isV276KsnX.hBvVLpoHhwozBV4Ti4x2n5Xqpq4qZDEcnCHu3AJnukeYWyFfGGR1ITvnbhFKjJiUw_L9WxIt317AY4plRvC2BLCTe0a1uadeBeTMXPaUF0NE3iiW3yTw9U9278qEzXudBtUWdX9PUvxTy2umZDclyUBh3LEaKvm_4dBM2xTiGh-K7NsLELkugOA-20i3YFkVWckEWmGdUSfqUjkOCI_16YdTFuLxCZTxJcn1XAL2ANa-sBzRzcXX8SXRkoRPRUpaPYQW6MGsmocNnpQH_h6iytfJevf_nkRhZCHWssccV4kVGgEOUKpHDdgGMWROn-fGygo_BSQQTURACVfdZLz2VxvMoLw-oD2Tv2pCv8g-EXujEtH--lwisIn9D9UKIQ9K5XGv4EXPqafUKSO7IdQwxLsD_vFq6ZpW1CAEC4DD8mfN40lc1pXOxckTNPXFSi2Yn8jezc2dwMnDChNe-MaRszzq0pohgLo3GbdbbHlXlqHd1UoxKVjzr8EhtdD5WAlTo6sUtUyvx0htpBUS_aks0s2IoMDFS_uBE07_5shzNCkxJDnpPIt57f9uq9oUXgq1KtrPHukdAH2l4PhZscYCGUZ4K4JzefEkQpoKU85XO3XQnST4j0pVRBhHvDPDyI5G7OLo_5KmxxjFBtpk9_VJLipCk0ZRROvzQxr6nGq4gqXbL2n5XqUce8evItAIQViF-x7BhvXb7sEqwtSUaPLduv4xkYR74g7AHNlAat0jvfGt7vM45_6wY0DxerciQKvtNFSB5XiUs0sazB1VcHAmtMuFPH1e46Yfq-_d9Q-lwEjRxZw1j4xk2CaI_6Kdo1hsVX0ZNplNZ3rIERtOwQmWz_R889mEJBnsNJEqsnuUUvoWE69h.KBNapTg03rDMxGXOP614Wg&x-client-SKU=msal.js.browser&x-client-VER=2.39.0&x-ms-lib-capability=retry-after, h429&x-client-current-telemetry=5|865,0,,,|@azure/msal-react,1.5.13&x-client-last-telemetry=5|0|||0,0&code_verifier=a4sRepVhMZr-iJS3idNKg6hl-1agCXKOKJX3as4sJQY&grant_type=authorization_code&client_info=1&client-request-id=f119d936-e46d-4689-b46c-27ddc73a82ef&X-AnchorMailbox=Oid%3A1185294c-3a89-4ef5-978a-dc36ca4688a2-b2c_1_udu_signinup%4073ffa90f-3528-4be6-bbd7-e35b29788a57
+						 """;
+
+
+	}
+
+	@Then("Capture the token value from response")
+	public void captureTheTokenValueFromResponse() throws Exception {
+
+		String BearerToken = response.jsonPath().getString("access_token");
+		Assert.assertNotNull("BearerToken should not be null", BearerToken);
+		prop.setProperty("BearerToken", BearerToken, Filepath); // Store the fileId in config.properties
+		System.out.println("BearerToken : " + BearerToken);
+
+	}
+
+	@And("a UNCD Token POST request is sent")
+	public void aUNCDTokenPOSTRequestIsSent() {
+		RestAssured.useRelaxedHTTPSValidation();
+		String bearerToken = prop.getProperty("BearerToken");
+		response = RestAssured
+				.given()
+				.log().all() // Logs the request details
+				.header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
+				.body(requestBody)
+				.post(endpoint);
+
+	}
+}

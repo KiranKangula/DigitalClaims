@@ -35,7 +35,7 @@
 <a href="#"><span class="badge badge-primary">Test Report</span></a>
 </li>
 <li class="m-r-10">
-<a href="#"><span class="badge badge-primary">Jan 14, 2025 01:48:35 PM</span></a>
+<a href="#"><span class="badge badge-primary">Jan 15, 2025 09:35:42 AM</span></a>
 </li>
 </ul>
 </div>
@@ -80,14 +80,40 @@
 </ul>
 </div>    <div class="test-list-wrapper scrollable">
       <ul class="test-list-item">
-        <li class="test-item"  status="fail" test-id="1"
+        <li class="test-item"  status="pass" test-id="1"
+          author=""
+          tag=""
+          device="">
+          <div class="test-detail">
+            <p class="name">runScenario</p>
+            <p class="text-sm">
+              <span>9:35:44 AM</span> / <span>00:00:00:000</span>
+              <span class="badge pass-bg log float-right">Pass</span>
+            </p>
+          </div>
+          <div class="test-contents d-none">
+<div class="detail-head">
+<div class="p-v-10">
+<div class="info">
+<h5 class="test-status text-pass">runScenario</h5>
+<span class='badge badge-success'>01.15.2025 9:35:44 AM</span>
+<span class='badge badge-danger'>01.15.2025 9:35:44 AM</span>
+<span class='badge badge-default'>00:00:00:000</span>
+&middot; <span class='uri-anchor badge badge-default'>#test-id=1</span>
+<span class='badge badge-default pointer float-right ml-1 et'><i class="fa fa-chevron-down"></i></span>
+<span class='badge badge-default pointer float-right ct'><i class="fa fa-chevron-up"></i></span>
+</div>
+</div>
+</div>          </div>
+        </li>
+        <li class="test-item"  status="fail" test-id="2"
           author=""
           tag=""
           device="">
           <div class="test-detail">
             <p class="name">Add Direct Deposit Information in OSPC</p>
             <p class="text-sm">
-              <span>1:48:37 PM</span> / <span>00:00:37:100</span>
+              <span>9:35:45 AM</span> / <span>00:00:29:570</span>
               <span class="badge fail-bg log float-right">Fail</span>
             </p>
           </div>
@@ -96,10 +122,10 @@
 <div class="p-v-10">
 <div class="info">
 <h5 class="test-status text-fail">Add Direct Deposit Information in OSPC</h5>
-<span class='badge badge-success'>01.14.2025 1:48:37 PM</span>
-<span class='badge badge-danger'>01.14.2025 1:49:14 PM</span>
-<span class='badge badge-default'>00:00:37:100</span>
-&middot; <span class='uri-anchor badge badge-default'>#test-id=1</span>
+<span class='badge badge-success'>01.15.2025 9:35:45 AM</span>
+<span class='badge badge-danger'>01.15.2025 9:36:14 AM</span>
+<span class='badge badge-default'>00:00:29:570</span>
+&middot; <span class='uri-anchor badge badge-default'>#test-id=2</span>
 <span class='badge badge-default pointer float-right ml-1 et'><i class="fa fa-chevron-down"></i></span>
 <span class='badge badge-default pointer float-right ct'><i class="fa fa-chevron-up"></i></span>
 </div>
@@ -110,19 +136,53 @@
   <thead><tr><th class="status-col">Status</th><th class="timestamp-col">Timestamp</th><th class="details-col">Details</th></tr></thead>
   <tbody>
       <tr class="event-row">
-        <td><span class="badge log fail-bg">Fail</span></td>
-        <td>1:49:14 PM</td>
+        <td><span class="badge log pass-bg">Pass</span></td>
+        <td>9:35:56 AM</td>
         <td>
-          <textarea readonly class="code-block">org.openqa.selenium.StaleElementReferenceException: stale element reference: stale element not found in the current frame
-  (Session info: chrome=131.0.6778.205)
-For documentation on this error, please visit: https://selenium.dev/exceptions/#stale_element_reference
+          Step Passed: Add Direct Deposit Information in OSPC
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log pass-bg">Pass</span></td>
+        <td>9:35:56 AM</td>
+        <td>
+          Step Passed: Add Direct Deposit Information in OSPC
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log pass-bg">Pass</span></td>
+        <td>9:36:05 AM</td>
+        <td>
+          Step Passed: Add Direct Deposit Information in OSPC
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log pass-bg">Pass</span></td>
+        <td>9:36:05 AM</td>
+        <td>
+          Step Passed: Add Direct Deposit Information in OSPC
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log pass-bg">Pass</span></td>
+        <td>9:36:12 AM</td>
+        <td>
+          Step Passed: Add Direct Deposit Information in OSPC
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log fail-bg">Fail</span></td>
+        <td>9:36:14 AM</td>
+        <td>
+          <textarea readonly class="code-block">org.openqa.selenium.ElementClickInterceptedException: element click intercepted: Element <span class="btnLink">...</span> is not clickable at point (285, 386). Other element would receive the click: <div id="loaderMainContainer" class="loader_loaderMainContainer__3syhf">...</div>
+  (Session info: chrome=131.0.6778.265)
 Build info: version: '4.8.1', revision: '8ebccac989'
 System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.5'
 Driver info: org.openqa.selenium.chrome.ChromeDriver
-Command: [23a50fbfa64abc04a3284e11cce3316c, clickElement {id=f.131D4084DDB93514C66E91FA05F1B9AD.d.96E87E796297CE685D378D71566532FA.e.66}]
-Capabilities {acceptInsecureCerts: true, browserName: chrome, browserVersion: 131.0.6778.205, chrome: {chromedriverVersion: 131.0.6778.264 (2d05e315153..., userDataDir: C:\Users\kangulak\AppData\L...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:61293}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: WINDOWS, proxy: Proxy(), se:cdp: ws://localhost:61293/devtoo..., se:cdpVersion: 131.0.6778.205, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Element: [[ChromeDriver: chrome on WINDOWS (23a50fbfa64abc04a3284e11cce3316c)] -> xpath: //*[@id="diBodySection"]/div/div/div[2]/div[1]/button/span/span/span]
-Session ID: 23a50fbfa64abc04a3284e11cce3316c
+Command: [e6ea97917a828e46a4a84d639f258e05, clickElement {id=f.702592833075E91AD32E39456552D6B7.d.DD40B418A8A3033EC3CCBE10D4BFB798.e.53}]
+Capabilities {acceptInsecureCerts: true, browserName: chrome, browserVersion: 131.0.6778.265, chrome: {chromedriverVersion: 131.0.6778.264 (2d05e315153..., userDataDir: C:\Users\kangulak\AppData\L...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:53822}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: WINDOWS, proxy: Proxy(), se:cdp: ws://localhost:53822/devtoo..., se:cdpVersion: 131.0.6778.265, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Element: [[ChromeDriver: chrome on WINDOWS (e6ea97917a828e46a4a84d639f258e05)] -> xpath: //*[@id="diBodySection"]/div/div/div[2]/div[1]/button/span/span/span]
+Session ID: e6ea97917a828e46a4a84d639f258e05
 	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
 	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
 	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
@@ -151,14 +211,14 @@ Session ID: 23a50fbfa64abc04a3284e11cce3316c
 </div>
           </div>
         </li>
-        <li class="test-item"  status="pass" test-id="2"
+        <li class="test-item"  status="pass" test-id="3"
           author=""
           tag=""
           device="">
           <div class="test-detail">
-            <p class="name">Edit Direct Deposit Information in OSPC</p>
+            <p class="name">Add Direct Deposit Information in OSPC</p>
             <p class="text-sm">
-              <span>1:49:14 PM</span> / <span>00:00:41:323</span>
+              <span>9:36:14 AM</span> / <span>00:00:00:000</span>
               <span class="badge pass-bg log float-right">Pass</span>
             </p>
           </div>
@@ -166,11 +226,38 @@ Session ID: 23a50fbfa64abc04a3284e11cce3316c
 <div class="detail-head">
 <div class="p-v-10">
 <div class="info">
-<h5 class="test-status text-pass">Edit Direct Deposit Information in OSPC</h5>
-<span class='badge badge-success'>01.14.2025 1:49:14 PM</span>
-<span class='badge badge-danger'>01.14.2025 1:49:56 PM</span>
-<span class='badge badge-default'>00:00:41:323</span>
-&middot; <span class='uri-anchor badge badge-default'>#test-id=2</span>
+<h5 class="test-status text-pass">Add Direct Deposit Information in OSPC</h5>
+<span class='badge badge-success'>01.15.2025 9:36:14 AM</span>
+<span class='badge badge-danger'>01.15.2025 9:36:14 AM</span>
+<span class='badge badge-default'>00:00:00:000</span>
+&middot; <span class='uri-anchor badge badge-default'>#test-id=3</span>
+<span class='badge badge-default pointer float-right ml-1 et'><i class="fa fa-chevron-down"></i></span>
+<span class='badge badge-default pointer float-right ct'><i class="fa fa-chevron-up"></i></span>
+</div>
+<div class="m-t-10 m-l-5">Scenario: Add Direct Deposit Information in OSPC</div>
+</div>
+</div>          </div>
+        </li>
+        <li class="test-item"  status="fail" test-id="4"
+          author=""
+          tag=""
+          device="">
+          <div class="test-detail">
+            <p class="name">Edit Direct Deposit Information in OSPC</p>
+            <p class="text-sm">
+              <span>9:36:14 AM</span> / <span>00:00:20:981</span>
+              <span class="badge fail-bg log float-right">Fail</span>
+            </p>
+          </div>
+          <div class="test-contents d-none">
+<div class="detail-head">
+<div class="p-v-10">
+<div class="info">
+<h5 class="test-status text-fail">Edit Direct Deposit Information in OSPC</h5>
+<span class='badge badge-success'>01.15.2025 9:36:14 AM</span>
+<span class='badge badge-danger'>01.15.2025 9:36:35 AM</span>
+<span class='badge badge-default'>00:00:20:981</span>
+&middot; <span class='uri-anchor badge badge-default'>#test-id=4</span>
 <span class='badge badge-default pointer float-right ml-1 et'><i class="fa fa-chevron-down"></i></span>
 <span class='badge badge-default pointer float-right ct'><i class="fa fa-chevron-up"></i></span>
 </div>
@@ -182,9 +269,73 @@ Session ID: 23a50fbfa64abc04a3284e11cce3316c
   <tbody>
       <tr class="event-row">
         <td><span class="badge log pass-bg">Pass</span></td>
-        <td>1:49:56 PM</td>
+        <td>9:36:21 AM</td>
         <td>
-          Test passed
+          Step Passed: Edit Direct Deposit Information in OSPC
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log pass-bg">Pass</span></td>
+        <td>9:36:22 AM</td>
+        <td>
+          Step Passed: Edit Direct Deposit Information in OSPC
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log pass-bg">Pass</span></td>
+        <td>9:36:28 AM</td>
+        <td>
+          Step Passed: Edit Direct Deposit Information in OSPC
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log pass-bg">Pass</span></td>
+        <td>9:36:28 AM</td>
+        <td>
+          Step Passed: Edit Direct Deposit Information in OSPC
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log pass-bg">Pass</span></td>
+        <td>9:36:29 AM</td>
+        <td>
+          Step Passed: Edit Direct Deposit Information in OSPC
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log fail-bg">Fail</span></td>
+        <td>9:36:35 AM</td>
+        <td>
+          <textarea readonly class="code-block">org.openqa.selenium.ElementClickInterceptedException: element click intercepted: Element <div class="jut__GenericSelectControl__genericSelect jut__TypeaheadMultiSelectField__typeaheadMultiSelectField half-width css-2b097c-container" id="monthDropdown-wrapper">...</div> is not clickable at point (255, 653). Other element would receive the click: <div id="loaderMainContainer" class="loader_loaderMainContainer__3syhf">...</div>
+  (Session info: chrome=131.0.6778.265)
+Build info: version: '4.8.1', revision: '8ebccac989'
+System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.5'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Command: [6129ae2ce90baa62070cacdf913f3506, clickElement {id=f.8BA74BA6FE162AA48EA1C9582FAE2639.d.68A7E0255A9EA2699CB418F28A395318.e.58}]
+Capabilities {acceptInsecureCerts: true, browserName: chrome, browserVersion: 131.0.6778.265, chrome: {chromedriverVersion: 131.0.6778.264 (2d05e315153..., userDataDir: C:\Users\kangulak\AppData\L...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:54004}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: WINDOWS, proxy: Proxy(), se:cdp: ws://localhost:54004/devtoo..., se:cdpVersion: 131.0.6778.265, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Element: [[ChromeDriver: chrome on WINDOWS (6129ae2ce90baa62070cacdf913f3506)] -> id: monthDropdown-wrapper]
+Session ID: 6129ae2ce90baa62070cacdf913f3506
+	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+	at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.createException(W3CHttpResponseCodec.java:200)
+	at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:133)
+	at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:53)
+	at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:184)
+	at org.openqa.selenium.remote.service.DriverCommandExecutor.invokeExecute(DriverCommandExecutor.java:167)
+	at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:142)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:543)
+	at org.openqa.selenium.remote.RemoteWebElement.execute(RemoteWebElement.java:257)
+	at org.openqa.selenium.remote.RemoteWebElement.click(RemoteWebElement.java:78)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.openqa.selenium.support.pagefactory.internal.LocatingElementHandler.invoke(LocatingElementHandler.java:52)
+	at jdk.proxy2/jdk.proxy2.$Proxy31.click(Unknown Source)
+	at pages.DirectDeposit.OSPCDirectDeposit.editDirectDepositInformation(OSPCDirectDeposit.java:69)
+	at definitions.DirectDeposit.clickEditDirectDepositInformationAndSelectAnd(DirectDeposit.java:66)
+	at ✽.Click Edit direct Deposit information and Select "1" and "2000"(file:///C:/Users/kangulak/OneDrive%20-%20WSIB/Documents/Automation/DigitalClaims/src/test/resources/features/OSPC.feature:81)
+</textarea>
+          
         </td>
       </tr>
   </tbody>
@@ -212,15 +363,15 @@ Session ID: 23a50fbfa64abc04a3284e11cce3316c
 <li class="test-item">
 <div class="test-detail">
 <span class="meta">
-<span class='badge log badge-danger'>1</span>
+<span class='badge log badge-danger'>2</span>
 </span>
-<p class="name">org.openqa.selenium.StaleElementReferenceException</p>
-<p class="duration text-sm">1 tests</p>
+<p class="name">org.openqa.selenium.ElementClickInterceptedException</p>
+<p class="duration text-sm">2 tests</p>
 </div>
 <div class="test-contents d-none">
 <div class="info">
-<h4>org.openqa.selenium.StaleElementReferenceException</h4>
-<span status="fail" class='badge log badge-danger'>1 failed</span>
+<h4>org.openqa.selenium.ElementClickInterceptedException</h4>
+<span status="fail" class='badge log badge-danger'>2 failed</span>
 </div>
 <table class='table table-sm mt-4'>
 <thead>
@@ -233,9 +384,16 @@ Session ID: 23a50fbfa64abc04a3284e11cce3316c
 <tbody>
 <tr class="tag-test-status" status="fail">
 <td><span class="badge log fail-bg">Fail</span></td>
-<td>13:48:37 PM</td>
+<td>09:35:45 AM</td>
 <td>
-<a href="#" class="linked" test-id='1' id='1'>Add Direct Deposit Information in OSPC</a>
+<a href="#" class="linked" test-id='2' id='2'>Add Direct Deposit Information in OSPC</a>
+</td>
+</tr>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>09:36:14 AM</td>
+<td>
+<a href="#" class="linked" test-id='4' id='4'>Edit Direct Deposit Information in OSPC</a>
 </td>
 </tr>
 </tbody>
@@ -255,25 +413,25 @@ Session ID: 23a50fbfa64abc04a3284e11cce3316c
 <div class="col-md-3">
 <div class="card"><div class="card-body">
 <p class="m-b-0">Started</p>
-<h3>Jan 14, 2025 01:48:35 PM</h3>
+<h3>Jan 15, 2025 09:35:42 AM</h3>
 </div></div>
 </div>
 <div class="col-md-3">
 <div class="card"><div class="card-body">
 <p class="m-b-0">Ended</p>
-<h3>Jan 14, 2025 01:49:58 PM</h3>
+<h3>Jan 15, 2025 09:36:39 AM</h3>
 </div></div>
 </div>
 <div class="col-md-3">
 <div class="card"><div class="card-body">
 <p class="m-b-0 text-pass">Tests Passed</p>
-<h3>1</h3>
+<h3>2</h3>
 </div></div>
 </div>
 <div class="col-md-3">
 <div class="card"><div class="card-body">
 <p class="m-b-0 text-fail">Tests Failed</p>
-<h3>1</h3>
+<h3>2</h3>
 </div></div>
 </div>
 </div>
@@ -290,11 +448,11 @@ Session ID: 23a50fbfa64abc04a3284e11cce3316c
 </div>
 <div class="card-footer">
 <div><small data-tooltip='50%'>
-<b>1</b> tests passed
+<b>2</b> tests passed
 </small>
 </div>
 <div>
-<small data-tooltip='50%'><b>1</b> tests failed,
+<small data-tooltip='50%'><b>2</b> tests failed,
 <b>0</b> skipped, <b data-tooltip='0%'>0</b> others
 </small>
 </div>
@@ -312,9 +470,9 @@ Session ID: 23a50fbfa64abc04a3284e11cce3316c
 </div>
 </div>
 <div class="card-footer">
-<div><small data-tooltip='50%'><b>1</b> events passed</small></div>
+<div><small data-tooltip='83%'><b>10</b> events passed</small></div>
 <div>
-<small data-tooltip='50%'><b>1</b> events failed,
+<small data-tooltip='16%'><b>2</b> events failed,
 <b data-tooltip='%'>0</b> others
 </small>
 </div>
@@ -331,7 +489,7 @@ Session ID: 23a50fbfa64abc04a3284e11cce3316c
 </div></div>
 <script>
 var timeline = {
-"Add Direct Deposit Information in OSPC":37.1,"Edit Direct Deposit Information in OSPC":41.323
+"runScenario":0,"Add Direct Deposit Information in OSPC":29.57,"Add Direct Deposit Information in OSPC":0,"Edit Direct Deposit Information in OSPC":20.981
 };
 </script>
 <div class="row">
@@ -340,8 +498,8 @@ var timeline = {
 <script>
 var statusGroup = {
 parentCount: 5,
-passParent: 1,
-failParent: 1,
+passParent: 2,
+failParent: 2,
 warningParent: 0,
 skipParent: 0,
 childCount: 5,
@@ -357,8 +515,8 @@ warningGrandChild: 0,
 skipGrandChild: 0,
 infoGrandChild: 0,
 eventsCount: 5,
-passEvents: 1,
-failEvents: 1,
+passEvents: 10,
+failEvents: 2,
 warningEvents: 0,
 skipEvents: 0,
 infoEvents: 0

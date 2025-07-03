@@ -4,6 +4,9 @@ import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 //import org.testng.annotations.DataProvider;
 
 
@@ -12,10 +15,15 @@ import org.testng.annotations.DataProvider;
         tags = "@WT",
         glue = "definitions",
         monochrome = true,
-        plugin = {"pretty", "html:target/TestResults/WT_Results.html"},
+        plugin = {"pretty"},
         publish = true
 )
 public class WT_Tests extends AbstractTestNGCucumberTests {
+    public WT_Tests() {
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        System.setProperty("cucumber.plugin", "html:target/TestResults/WorkTravel/WTResults_" + timestamp + ".html");
+    }
+
     @Override
     @DataProvider(parallel = false)
     public Object[][] scenarios() {

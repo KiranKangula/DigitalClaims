@@ -5,9 +5,12 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Random;
 
 public class BaseDriverClass {
@@ -30,10 +33,25 @@ public class BaseDriverClass {
         return currentDate.format(formatter);
     }
 
-    protected String generateRandomText() {
+    public static String getDateFormat(String inputDate)
+    {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("d/MMMM/yyyy");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String formattedDate = "";
+        try {
+            Date date = inputFormat.parse(inputDate);
+            formattedDate = outputFormat.format(date);
+            System.out.println("Formatted Date: " + formattedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return formattedDate;
+    }
+
+    public static String generateRandomText(int length) {
         int leftLimit = 97; // 'a'
         int rightLimit = 122; // 'z'
-        int length = 15;
         Random random = new Random();
         StringBuilder builder = new StringBuilder(length);
         for (int i = 0; i < length; i++) {

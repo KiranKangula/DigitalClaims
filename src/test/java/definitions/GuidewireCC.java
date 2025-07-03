@@ -11,11 +11,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.GuidewireClaimCenter.GuidewirePage;
 import pages.OSPC.HomePage;
 import pages.OSPC.LoginPage;
+import utils.BaseDriverClass;
 import utils.ConfigReader;
 import utils.ExcelUtils;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,7 @@ import java.util.Map;
 import static definitions.Hooks.getDriver;
 import static pages.UNCD.AddClaimantInfo.firstname;
 import static pages.UNCD.AddClaimantInfo.lastname;
+import static utils.BaseDriverClass.getDateFormat;
 
 public class GuidewireCC {
     private WebDriver driver;
@@ -54,8 +57,13 @@ public class GuidewireCC {
 
     @And("Search for {string}")
     public void searchForClaimnumber(String claimnumber) {
-        String claim = Hooks.currentRow.get().get("claimnumber");
-        Assert.assertTrue(guidewirecc.searchClaim(claim));
+        Assert.assertTrue(guidewirecc.searchClaim(claimnumber));
+    }
+
+    @And("Search for claim number")
+    public void searchForClaimnumber2() {
+        String claimnumber = Hooks.currentRow.get().get("claimnumber");
+        Assert.assertTrue(guidewirecc.searchClaim(claimnumber));
     }
 
     @And("Search for UNCD {string}")
@@ -86,10 +94,23 @@ public class GuidewireCC {
 
     @And("Verify the document is landed in GWCC with {string}, {string}")
     public void verifyTheDocumentIsDisplayedIsLandedInGWCCWith(String Author, String Description) throws InterruptedException {
-         Author=Hooks.currentRow.get().get("Author");
-         Description=Hooks.currentRow.get().get("Description");
         Assert.assertTrue(guidewirecc.verifyLandedDocument(Author,Description));
     }
+
+    @And("Verify the document is landed in GWCC with valid Author and Description")
+    public void verifyTheDocumentIsDisplayedIsLandedInGWCCWith() throws InterruptedException {
+        String Author = Hooks.currentRow.get().get("Author");
+        String Description = Hooks.currentRow.get().get("Description");
+        Assert.assertTrue(guidewirecc.verifyLandedDocument(Author,Description));
+    }
+
+    @And("Verify the document is landed in GWCC")
+    public void verifyTheDocumentIsDisplayedIsLandedInGWCC() throws InterruptedException {
+        String Author = Hooks.currentRow.get().get("Author");
+        String Description = Hooks.currentRow.get().get("Description");
+        Assert.assertTrue(guidewirecc.verifyLandedUNCDDocument(Author,Description));
+    }
+
 
     @And("Verify the EDOB document is landed in GWCC with {string}, {string}")
     public void verifyTheEDOBDocumentIsDisplayedIsLandedInGWCCWith(String Author, String Description) throws InterruptedException {
@@ -170,7 +191,7 @@ public class GuidewireCC {
 
     @And("Click on Register Claim button and verify that Claim has been registered Successfully")
     public void clickOnRegisterClaimButtonAndVerifyThatClaimHasBeenRegisteredSuccessfully() throws InterruptedException, IOException {
-        String claimdata[] = guidewirecc.registerClaim();
+        String[] claimdata = guidewirecc.registerClaim();
         System.out.println("ClaimData  " + claimdata[0] + "-" + claimdata[1] + "-" + claimdata[2]);
 
 
@@ -210,5 +231,14 @@ public class GuidewireCC {
     @And("Verify the UNCD document is landed in GWCC with {string}, {string}")
     public void verifyTheUNCDDocumentIsLandedInGWCCWith(String Author, String Description) throws InterruptedException {
         Assert.assertTrue(guidewirecc.verifyLandedUNCDDocument(Author,Description));
+    }
+
+    @And("Search with firstname and lastname & dateofbirth")
+    public void searchWithFirstnameAndLastnameDateofbirth() throws InterruptedException {
+        String Firstname = Hooks.currentRow.get().get("First Name");
+        String Lastname = Hooks.currentRow.get().get("Last Name");
+        String dateofbirth = Hooks.currentRow.get().get("DateofBirth");
+        dateofbirth  = getDateFormat(dateofbirth);
+        Assert.assertTrue(guidewirecc.searchClaimant(Firstname, Lastname, dateofbirth));
     }
 }

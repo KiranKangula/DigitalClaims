@@ -52,6 +52,17 @@ public class SubmitDocuments extends BaseDriverClass {
 		edobformselection0Select.sendKeys(wsibform);
 		Thread.sleep(2000);
 		NextButton.click();
+		try{
+			if(alertdialogtitle.isDisplayed()){
+				System.out.println("Alert dialog displayed");
+				alertCloseButton.click();
+				Thread.sleep(5000);
+				NextButton.click();
+			}
+		}
+		catch(Exception e){
+			System.out.println("Alert dialog not displayed");
+		}
 	}
 
 	public void selectNonWSIBForm(String category, String subform) throws InterruptedException {
@@ -65,6 +76,17 @@ public class SubmitDocuments extends BaseDriverClass {
 		Thread.sleep(2000);
 		subformselection0Select.click();
 		NextButton.click();
+		try{
+			if(alertdialogtitle.isDisplayed()){
+				System.out.println("Alert dialog displayed");
+				alertCloseButton.click();
+				Thread.sleep(5000);
+				NextButton.click();
+			}
+		}
+		catch(Exception e){
+			System.out.println("Alert dialog not displayed");
+		}
 
 	}
 
@@ -77,6 +99,7 @@ public class SubmitDocuments extends BaseDriverClass {
 			if(alertdialogtitle.isDisplayed()){
 				System.out.println("Alert dialog displayed");
 				alertCloseButton.click();
+				Thread.sleep(5000);
 				NextButton.click();
 			}
 		}

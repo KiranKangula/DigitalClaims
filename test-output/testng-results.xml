@@ -1,12 +1,316 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="0" passed="0" failed="0" skipped="0">
+<testng-results ignored="0" total="12" passed="10" failed="2" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-01-14T11:29:16 EST" name="Suite" finished-at="2025-01-14T11:29:16 EST" duration-ms="0">
+  <suite started-at="2025-01-21T16:17:08 EST" name="Suite" finished-at="2025-01-21T16:39:49 EST" duration-ms="1360793">
     <groups>
       <group name="cucumber">
-        <method signature="AbstractTestNGCucumberTests.runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DirectDepositTest@3e92efc3]" name="runScenario" class="io.cucumber.testng.AbstractTestNGCucumberTests"/>
+        <method signature="AbstractTestNGCucumberTests.runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DIEform6_Tests@6ca8564a]" name="runScenario" class="io.cucumber.testng.AbstractTestNGCucumberTests"/>
+        <method signature="AbstractTestNGCucumberTests.runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DirectDepositTest@1817d444]" name="runScenario" class="io.cucumber.testng.AbstractTestNGCucumberTests"/>
+        <method signature="AbstractTestNGCucumberTests.runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.OSPCTests@635eaaf1]" name="runScenario" class="io.cucumber.testng.AbstractTestNGCucumberTests"/>
       </group> <!-- cucumber -->
     </groups>
+    <test started-at="2025-01-21T16:17:08 EST" name="PPD Sanity Test" finished-at="2025-01-21T16:39:49 EST" duration-ms="1360793">
+      <class name="testRunner.OSPCTests">
+        <test-method is-config="true" signature="setUpClass(org.testng.ITestContext)[pri:0, instance:testRunner.OSPCTests@635eaaf1]" started-at="2025-01-21T16:17:09 EST" name="setUpClass" finished-at="2025-01-21T16:17:10 EST" duration-ms="1470" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[org.testng.TestRunner@36bc55de]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpClass -->
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.OSPCTests@635eaaf1]" started-at="2025-01-21T16:17:10 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:18:31 EST" duration-ms="81113" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA["Login and Add a Claim"]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA["Online Service for People with Claims(OSPC)"]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- runScenario -->
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.OSPCTests@635eaaf1]" started-at="2025-01-21T16:18:31 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:19:06 EST" duration-ms="34818" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA["Login and Click on Claim and Verify each page is landed"]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA["Online Service for People with Claims(OSPC)"]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- runScenario -->
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.OSPCTests@635eaaf1]" started-at="2025-01-21T16:19:06 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:19:44 EST" duration-ms="38258" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA["Send a message from OSPC"]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA["Online Service for People with Claims(OSPC)"]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- runScenario -->
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.OSPCTests@635eaaf1]" started-at="2025-01-21T16:19:44 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:20:48 EST" duration-ms="63331" status="FAIL">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA["Upload WSIB form Document and Verify Submitted Document Screen"]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA["Online Service for People with Claims(OSPC)"]]>
+              </value>
+            </param>
+          </params>
+          <exception class="java.lang.NullPointerException">
+            <message>
+              <![CDATA[Cannot invoke "String.toLowerCase()" because "description" is null]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.NullPointerException: Cannot invoke "String.toLowerCase()" because "description" is null
+at pages.GuidewireClaimCenter.GuidewirePage.verifyLandedDocument(GuidewirePage.java:240)
+at definitions.GuidewireCC.verifyTheDocumentIsDisplayedIsLandedInGWCCWith(GuidewireCC.java:109)
+at ✽.Verify the document is landed in GWCC with "OSPC", "Dental report"(file:///C:/Users/kangulak/OneDrive%20-%20WSIB/Documents/Automation/DigitalClaims/src/test/resources/features/OSPC.feature:61)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.NullPointerException -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- runScenario -->
+        <test-method is-config="true" signature="tearDownClass()[pri:0, instance:testRunner.OSPCTests@635eaaf1]" started-at="2025-01-21T16:20:48 EST" name="tearDownClass" finished-at="2025-01-21T16:20:53 EST" duration-ms="5450" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDownClass -->
+      </class> <!-- testRunner.OSPCTests -->
+      <class name="testRunner.DIEform6_Tests">
+        <test-method is-config="true" signature="setUpClass(org.testng.ITestContext)[pri:0, instance:testRunner.DIEform6_Tests@6ca8564a]" started-at="2025-01-21T16:22:18 EST" name="setUpClass" finished-at="2025-01-21T16:22:18 EST" duration-ms="55" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[org.testng.TestRunner@36bc55de]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpClass -->
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DIEform6_Tests@6ca8564a]" started-at="2025-01-21T16:22:18 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:26:04 EST" duration-ms="225993" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA["Login and Submit a Report for Physical Injury"]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA["Online Service for People with Claims(OSPC)"]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- runScenario -->
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DIEform6_Tests@6ca8564a]" started-at="2025-01-21T16:26:04 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:29:40 EST" duration-ms="216176" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA["Login and Submit a Report for Illness, disease or medical condition"]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA["Online Service for People with Claims(OSPC)"]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- runScenario -->
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DIEform6_Tests@6ca8564a]" started-at="2025-01-21T16:29:40 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:33:24 EST" duration-ms="223695" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA["Login and Submit a Report for mental health"]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA["Online Service for People with Claims(OSPC)"]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- runScenario -->
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DIEform6_Tests@6ca8564a]" started-at="2025-01-21T16:33:24 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:33:51 EST" duration-ms="27617" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA["Login and Submit a Report for NIHL"]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA["Online Service for People with Claims(OSPC)"]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- runScenario -->
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DIEform6_Tests@6ca8564a]" started-at="2025-01-21T16:33:51 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:36:38 EST" duration-ms="167075" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA["Login and Submit a Report for Exposure Incident - Construction"]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA["Online Service for People with Claims(OSPC)"]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- runScenario -->
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DIEform6_Tests@6ca8564a]" started-at="2025-01-21T16:36:38 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:39:38 EST" duration-ms="179862" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA["Login and Submit a Report for Exposure Incident - Other"]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA["Online Service for People with Claims(OSPC)"]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- runScenario -->
+        <test-method is-config="true" signature="tearDownClass()[pri:0, instance:testRunner.DIEform6_Tests@6ca8564a]" started-at="2025-01-21T16:39:38 EST" name="tearDownClass" finished-at="2025-01-21T16:39:49 EST" duration-ms="10923" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDownClass -->
+      </class> <!-- testRunner.DIEform6_Tests -->
+      <class name="testRunner.DirectDepositTest">
+        <test-method is-config="true" signature="setUpClass(org.testng.ITestContext)[pri:0, instance:testRunner.DirectDepositTest@1817d444]" started-at="2025-01-21T16:20:53 EST" name="setUpClass" finished-at="2025-01-21T16:20:53 EST" duration-ms="61" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[org.testng.TestRunner@36bc55de]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpClass -->
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DirectDepositTest@1817d444]" started-at="2025-01-21T16:20:53 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:21:33 EST" duration-ms="39475" status="FAIL">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA["Add Direct Deposit Information in OSPC"]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA["Online Service for People with Claims(OSPC)"]]>
+              </value>
+            </param>
+          </params>
+          <exception class="org.openqa.selenium.NoSuchElementException">
+            <message>
+              <![CDATA[no such element: Unable to locate element: {"method":"xpath","selector":"//*[@id="diBodySection"]/div/div/div[2]/div[1]/button/span/span/span"}
+  (Session info: MicrosoftEdge=131.0.2903.146)
+For documentation on this error, please visit: https://selenium.dev/exceptions/#no_such_element
+Build info: version: '4.8.1', revision: '8ebccac989'
+System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.5'
+Driver info: org.openqa.selenium.edge.EdgeDriver
+Command: [4649a9e5c9f0d4e8ca88ff7cb0a13ecf, findElement {using=xpath, value=//*[@id="diBodySection"]/div/div/div[2]/div[1]/button/span/span/span}]
+Capabilities {acceptInsecureCerts: true, browserName: MicrosoftEdge, browserVersion: 131.0.2903.146, fedcm:accounts: true, ms:edgeOptions: {debuggerAddress: localhost:49755}, msedge: {msedgedriverVersion: 131.0.2903.146 (99fcb90c1ee..., userDataDir: C:\Users\kangulak\AppData\L...}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: WINDOWS, proxy: Proxy(), se:cdp: ws://localhost:49755/devtoo..., se:cdpVersion: 131.0.2903.146, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: 4649a9e5c9f0d4e8ca88ff7cb0a13ecf]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"//*[@id="diBodySection"]/div/div/div[2]/div[1]/button/span/span/span"}
+  (Session info: MicrosoftEdge=131.0.2903.146)
+For documentation on this error, please visit: https://selenium.dev/exceptions/#no_such_element
+Build info: version: '4.8.1', revision: '8ebccac989'
+System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.5'
+Driver info: org.openqa.selenium.edge.EdgeDriver
+Command: [4649a9e5c9f0d4e8ca88ff7cb0a13ecf, findElement {using=xpath, value=//*[@id="diBodySection"]/div/div/div[2]/div[1]/button/span/span/span}]
+Capabilities {acceptInsecureCerts: true, browserName: MicrosoftEdge, browserVersion: 131.0.2903.146, fedcm:accounts: true, ms:edgeOptions: {debuggerAddress: localhost:49755}, msedge: {msedgedriverVersion: 131.0.2903.146 (99fcb90c1ee..., userDataDir: C:\Users\kangulak\AppData\L...}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: WINDOWS, proxy: Proxy(), se:cdp: ws://localhost:49755/devtoo..., se:cdpVersion: 131.0.2903.146, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: 4649a9e5c9f0d4e8ca88ff7cb0a13ecf
+at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
+at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
+at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.createException(W3CHttpResponseCodec.java:200)
+at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:133)
+at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:53)
+at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:184)
+at org.openqa.selenium.remote.service.DriverCommandExecutor.invokeExecute(DriverCommandExecutor.java:167)
+at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:142)
+at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:543)
+at org.openqa.selenium.remote.ElementLocation$ElementFinder$2.findElement(ElementLocation.java:162)
+at org.openqa.selenium.remote.ElementLocation.findElement(ElementLocation.java:60)
+at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:352)
+at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:344)
+at org.openqa.selenium.support.pagefactory.DefaultElementLocator.findElement(DefaultElementLocator.java:70)
+at org.openqa.selenium.support.pagefactory.internal.LocatingElementHandler.invoke(LocatingElementHandler.java:39)
+at jdk.proxy2/jdk.proxy2.$Proxy30.click(Unknown Source)
+at pages.DirectDeposit.OSPCDirectDeposit.AddDirectDepositInformation(OSPCDirectDeposit.java:50)
+at definitions.DirectDeposit.clickAddDirectDepositInformationAndSelectAnd(DirectDeposit.java:45)
+at ✽.Click Add direct Deposit information and Select "1" and "2000"(file:///C:/Users/kangulak/OneDrive%20-%20WSIB/Documents/Automation/DigitalClaims/src/test/resources/features/OSPC.feature:70)
+]]>
+            </full-stacktrace>
+          </exception> <!-- org.openqa.selenium.NoSuchElementException -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- runScenario -->
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DirectDepositTest@1817d444]" started-at="2025-01-21T16:21:33 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:22:15 EST" duration-ms="42631" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA["Edit Direct Deposit Information in OSPC"]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA["Online Service for People with Claims(OSPC)"]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- runScenario -->
+        <test-method is-config="true" signature="tearDownClass()[pri:0, instance:testRunner.DirectDepositTest@1817d444]" started-at="2025-01-21T16:22:15 EST" name="tearDownClass" finished-at="2025-01-21T16:22:18 EST" duration-ms="2697" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDownClass -->
+      </class> <!-- testRunner.DirectDepositTest -->
+    </test> <!-- PPD Sanity Test -->
   </suite> <!-- Suite -->
 </testng-results>

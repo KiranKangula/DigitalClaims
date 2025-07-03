@@ -157,4 +157,5 @@ public class OSPCClaims {
 		Assert.assertTrue(OSPCClaimOverview.claimAdditionConfirmationOSPC(claimnumber));
 	}
 
+
 }
