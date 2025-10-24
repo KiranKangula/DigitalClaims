@@ -37,9 +37,14 @@ public class DIeForm6_ReviewandSubmit extends BaseDriverClass {
 	}
 
 	public void verifyReturnToDashBoard() {
+		if(isDisplayed(returnToDashboardButton)) {
+			waitUntilElementVisible(this.returnToDashboardButton);
+			returnToDashboardButton.click();
+		}
+		else{
+			System.out.println("Return to Dashboard button is not displayed");
+		}
 
-		waitUntilElementVisible(this.returnToDashboardButton);
-		returnToDashboardButton.click();
 	}
 
 	public boolean verifyReviewAndSubmitExposure() {

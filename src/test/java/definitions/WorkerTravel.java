@@ -44,7 +44,7 @@ public class WorkerTravel {
 
 	@When("User enters claimant information such as {string}, {string}, {string}")
 	public void userEntersClaimantInformationSuchAs(String claimnumber, String lastname, String dateOfbirth) {
-		claimnumber = Hooks.currentRow.get().get("claimnumber");
+		claimnumber = Hooks.currentRow.get().get("Claim Number");
 		lastname = Hooks.currentRow.get().get("lastname");
 		dateOfbirth = Hooks.currentRow.get().get("dateofbirth");
 		WTlandingpage.ValidateClaimantInformation(claimnumber, lastname, dateOfbirth);

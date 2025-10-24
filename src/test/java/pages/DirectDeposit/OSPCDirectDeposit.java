@@ -40,10 +40,17 @@ public class OSPCDirectDeposit extends BaseDriverClass {
 		PageFactory.initElements(driver, this);
 	}
 
-	public boolean LandOnDirectDeposit() {
+	public boolean LandOnDirectDeposit() throws InterruptedException {
 		directDepositButton.click();
-		waitUntilElementVisible(AddDirectdepositLink);
-		return AddDirectdepositLink.isDisplayed();
+		Thread.sleep(2000);
+		if(isDisplayed(AddDirectdepositLink)) {
+			waitUntilElementVisible(AddDirectdepositLink);
+			return AddDirectdepositLink.isDisplayed();
+		}else if(isDisplayed(editDirectdepositLink)) {
+			waitUntilElementVisible(editDirectdepositLink);
+			return editDirectdepositLink.isDisplayed();
+		}
+		return false;
 	}
 
 	public boolean AddDirectDepositInformation(String Month, String Year) {

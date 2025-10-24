@@ -33,10 +33,10 @@ public class BaseDriverClass {
         return currentDate.format(formatter);
     }
 
-    public static String getDateFormat(String inputDate)
+    public static String getDateFormat(String inputDate, String inFormat, String outFormat)
     {
-        SimpleDateFormat inputFormat = new SimpleDateFormat("d/MMMM/yyyy");
-        SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat inputFormat = new SimpleDateFormat(inFormat);
+        SimpleDateFormat outputFormat = new SimpleDateFormat(outFormat);
         String formattedDate = "";
         try {
             Date date = inputFormat.parse(inputDate);
@@ -104,6 +104,17 @@ public class BaseDriverClass {
         Actions actions = new Actions(getDriver());
         actions.sendKeys(element).build().perform();
         actions.sendKeys(Keys.ENTER).build().perform();
+    }
+    // Utility to verify if the element is displayed
+    protected boolean isDisplayed(WebElement element) {
+      try {
+          element.isDisplayed();
+          return true;
+      }
+        catch (NoSuchElementException e) {
+            System.out.println("Element is not displayed: " + e.getMessage());
+          return false;
+        }
     }
 
 

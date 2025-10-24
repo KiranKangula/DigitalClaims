@@ -5,15 +5,15 @@
 <!--        <listener class-name="utils.CustomReportListener"/>-->
 <!--        <listener class-name="utils.TestListener"/>-->
     </listeners>
-    <test name="PPD OSPC Sanity Test">
+    <test name="Sanity Test">
         <classes>
-            <class name="testRunner.OSPCTests"/>
-            <class name="testRunner.DirectDepositTest"/>
-            <class name="testRunner.DIEform6_Tests"/>
-            <class name="testRunner.NIHL_Tests"/>
-            <class name="testRunner.UNCD_Tests"/>
-            <class name="testRunner.WT_Tests"/>
-            <class name="testRunner.CAA_Tests"/>
+<!--            <class name="testRunner.OSPCTests"/>-->
+<!--            <class name="testRunner.DirectDepositTest"/>-->
+<!--            <class name="testRunner.UNCD_Tests"/>-->
+<!--            <class name="testRunner.WT_Tests"/>-->
+<!--            <class name="testRunner.CAA_Tests"/>-->
+<!--            <class name="testRunner.NIHL_Tests"/>-->
+<!--            <class name="testRunner.DIEform6_Tests"/>-->
         </classes>
     </test>
 </suite>

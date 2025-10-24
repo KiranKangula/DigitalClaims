@@ -12,7 +12,7 @@ import java.util.Date;
 
 @CucumberOptions(
         features = "src/test/resources/features/OSPC.feature",
-        tags = "@PrerequisiteTest or @DependentTest",
+        tags = "@DDSanity",
         glue = "definitions",
         monochrome = true,
         plugin = {"pretty"},

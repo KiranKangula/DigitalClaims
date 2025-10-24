@@ -1,12 +1,19 @@
 Feature: Document upload Numbered and Unnumbered - API Validations
 
-  @API @Token
+  @Token
   Scenario: Generate the Token
-    Given the UNCD Token endpoint is configured with "/b2c_1_udu_signinup/oauth2/v2.0/token"
-    When the token request body has set up
-    And a UNCD Token POST request is sent
-    Then the UNCD response status code should be 200
-    Then Capture the token value from response
+    Given User is on login page
+    When User submit email and password
+    Then User should be able to login successfully and retrieve the token for UNCD
+
+
+#  @API @Token
+#  Scenario: Generate the Token
+#    Given the UNCD Token endpoint is configured with "/b2c_1_udu_signinup/oauth2/v2.0/token"
+#    When the token request body has set up
+#    And a UNCD Token POST request is sent
+#    Then the UNCD response status code should be 200
+#    Then Capture the token value from response
 
   @API @UNCD_API
   Scenario: Authenticate user for document upload

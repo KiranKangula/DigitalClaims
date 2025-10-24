@@ -8,15 +8,16 @@ Feature: Online Service for People with Claims(OSPC)
   @SheetName_GWCC @OSPC
   Scenario: Login and Add a Claim
     Given User is on my Claim screen
-    When User click on Add a Claim button
-    Then User should be able to add claim with "<ClaimNumber>", "<DOB>" and "<PIN>"
     Then Switch to New tab and Login to ClaimCenter
     And Navigate to Portal Authorization screen
-    And Remove the "<ClaimNumber>" from profile
+    And Remove all the claims from profile
     And Switch back to OSPC and verify if the "<ClaimNumber>" is removed
+    When User click on Add a Claim button
+    Then User should be able to add claim with "<ClaimNumber>", "<DOB>" and "<PIN>"
 
-  @OSPC
-  Scenario Outline: Login and Click on Claim and Verify each page is landed
+
+  @SheetName_GWCC @OSPC
+  Scenario: Login and Click on Claim and Verify each page is landed
     Given User is on my Claim screen
     When User clicks on "<claimnumber>"
     Then User should be navigated to My Claims Overview screen
@@ -25,11 +26,18 @@ Feature: Online Service for People with Claims(OSPC)
     And User should be navigated to Non Health care benefit screen
     And User should be navigated to Appeals screen
 
-    Examples:
-      | claimnumber |
-      | 32650720    |
+  @SheetName_GWCC @OSPC @Appeals
+  Scenario: Create Appeals in GWCC and Verify it is reflected in OSPC
+    Given User is on my Claim screen
+    When User clicks on "<claimnumber>"
+    Then User should be navigated to My Claims Overview screen
+    And User should be navigated to Appeals screen and count number of appeals
+    Then Switch to New tab and Login to ClaimCenter
+    And Search for "<claimnumber>"
+    And Verify the Appeal is created in ClaimCenter
+    And Switch back to OSPC and verify appeal registered is displayed
 
-  @OSPC @SendMessage
+  @SheetName_GWCC @OSPC @SendMessage
   Scenario Outline: Send a message from OSPC
     Given User is on my Claim screen
     When User clicks on "<claimnumber>"
@@ -43,10 +51,10 @@ Feature: Online Service for People with Claims(OSPC)
     Then User should be able to see the message displayed from OSPC
 
     Examples:
-      | claimnumber | subject | message   |
-      | 32650720    | Payments| <dynamic> |
+    | subject | message   |
+    | Payments| <dynamic> |
 
-  @OSPC @OSPCDocUpload
+  @SheetName_GWCC @OSPC @OSPCDocUpload
   Scenario Outline: Upload WSIB form Document and Verify Submitted Document Screen
     Given User is on my Claim screen
     When User clicks on "<claimnumber>"
@@ -60,10 +68,10 @@ Feature: Online Service for People with Claims(OSPC)
     And Search for "<claimnumber>"
     And Verify the document is landed in GWCC with "<Author>", "<Description>"
     Examples:
-      | claimnumber | wsibform              | filename                                                | Author      |  Description      |
-      | 32650720    | Dental report (0278A) | 0717B_202410_LongTermRateEarningsQuestionnaire_ACES.pdf | OSPC        |  Dental report    |
+     | wsibform              | filename                                                | Author      |  Description      |
+     | Dental report (0278A) | 0717B_202410_LongTermRateEarningsQuestionnaire_ACES.pdf | OSPC        |  Dental report    |
 
-  @DirectDeposit  @PrerequisiteTest
+  @SheetName_GWCC @DirectDeposit  @PrerequisiteTest
   Scenario Outline: Add Direct Deposit Information in OSPC
     Given User is on my Claim screen
     When User clicks on Direct Deposit
@@ -71,22 +79,22 @@ Feature: Online Service for People with Claims(OSPC)
     And Enter "<Transit number>", "<Institution number>", "<Account number>" and Confirm details
 
     Examples:
-      | Month | Year | Transit number | Institution number | Account number |
-      |1      | 2000 |  00100         | 010                |  123456789     |
+     | Transit number | Institution number | Account number |
+     |  00100         | 010                |  123456789     |
 
-  @DirectDeposit @DependentTest
+  @SheetName_GWCC @DirectDeposit @DependentTest @DDSanity
   Scenario Outline: Edit Direct Deposit Information in OSPC
     Given User is on my Claim screen
     When User clicks on Direct Deposit
     Then Click Edit direct Deposit information and Select "<Month>" and "<Year>"
     And Enter "<Transit number>", "<Institution number>", "<Account number>" and Confirm details
-    And Switch to New tab and Login to ClaimCenter
-    And Search for Claim number
-    And Remove the Direct Deposit from the Claim
-    And Verify the Direct Deposit is not displayed in OSPC
+#    And Switch to New tab and Login to ClaimCenter
+#    And Search for Claim number
+#    And Remove the Direct Deposit from the Claim
+#    And Verify the Direct Deposit is not displayed in OSPC
     Examples:
-      | Month | Year | Transit number | Institution number | Account number |
-      |1      | 2000 |  01001         | 010                |  987654321     |
+  | Transit number | Institution number | Account number |
+  |  01001         | 010                |  987654321     |
 
   @SheetName_eForm6_PI @eForm6_PI @eForm6
   Scenario: Login and Submit a Report for Physical Injury

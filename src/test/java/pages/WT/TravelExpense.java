@@ -12,7 +12,7 @@ public class TravelExpense extends BaseDriverClass {
 	@FindBy(id = "repeatedExpense") private WebElement repeatedExpense;
 	@FindBy(xpath = "/html/body/app-root/div/div[4]/div[2]/app-travel-expense/div/table/tfoot/tr/td[2]/div/select") private WebElement reasonForTravel;
 	@FindBy(xpath = "//button[@class='btn-wsib'][contains(text(),'Choose date')]") private WebElement ChooseDate;
-	@FindBy(xpath = "//div[contains(@class,'today')]") private WebElement CurrentDate;
+	@FindBy(xpath = "//*[contains(@class,'today')]") private WebElement CurrentDate;
 	@FindBy(xpath = "//button[@class='btn-wsib'][contains(text(),'Ok')]") private WebElement OkButton;
 	@FindBy(id = "selectButt2") private WebElement SelectExpense;
 	@FindBy(xpath = "(//*[@type='checkbox'])[2]") private WebElement KilometersCheckbox;

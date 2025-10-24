@@ -57,12 +57,13 @@ public class GuidewireCC {
 
     @And("Search for {string}")
     public void searchForClaimnumber(String claimnumber) {
+        claimnumber = Hooks.currentRow.get().get("Claim Number");
         Assert.assertTrue(guidewirecc.searchClaim(claimnumber));
     }
 
     @And("Search for claim number")
     public void searchForClaimnumber2() {
-        String claimnumber = Hooks.currentRow.get().get("claimnumber");
+        String claimnumber = Hooks.currentRow.get().get("Claim Number");
         Assert.assertTrue(guidewirecc.searchClaim(claimnumber));
     }
 
@@ -85,6 +86,12 @@ public class GuidewireCC {
     public void removeTheFromProfile(String claimnumber) {
         claimnumber = Hooks.currentRow.get().get("Claim Number");
         Assert.assertTrue(guidewirecc.removeClaimfromPortalAuth(claimnumber));
+    }
+
+    @And("Remove all the claims from profile")
+    public void removeAllTheClaimsFromProfile() {
+
+        Assert.assertTrue(guidewirecc.removeAllClaimfromPortalAuth());
     }
 
     @And("Search for Claim number")
@@ -238,7 +245,13 @@ public class GuidewireCC {
         String Firstname = Hooks.currentRow.get().get("First Name");
         String Lastname = Hooks.currentRow.get().get("Last Name");
         String dateofbirth = Hooks.currentRow.get().get("DateofBirth");
-        dateofbirth  = getDateFormat(dateofbirth);
+        dateofbirth  = getDateFormat(dateofbirth, "d/MMMM/yyyy", "dd/MM/yyyy") ;
         Assert.assertTrue(guidewirecc.searchClaimant(Firstname, Lastname, dateofbirth));
+    }
+
+    @And("Verify the Appeal is created in ClaimCenter")
+    public void verifyTheAppealIsCreatedInClaimCenter() throws InterruptedException {
+
+        Assert.assertTrue(guidewirecc.createAppeal());
     }
 }

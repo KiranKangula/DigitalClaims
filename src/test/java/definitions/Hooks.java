@@ -134,12 +134,15 @@ public class Hooks {
                     chromeOptions.addArguments("--remote-allow-origins=*");
                     chromeOptions.addArguments("--disable-dev-shm-usage", "--no-sandbox");
                     if (isHeadless) {
-                        chromeOptions.addArguments("--headless"); //, "--disable-gpu", "--window-size=1440,768"
+                        chromeOptions.addArguments("--headless");
+                        chromeOptions.addArguments("--window-size=1440,768");//, "--disable-gpu", "--window-size=1440,768"
                     }
                     webDriver = new ChromeDriver(chromeOptions);
                     break;
                 case "edge":
-                    WebDriverManager.edgedriver().setup();
+                    //WebDriverManager.edgedriver().setup();
+                    System.setProperty("webdriver.edge.driver", "C:\\Users\\kangulak\\msedgedriver.exe");
+                    //WebDriver driver = new EdgeDriver();
                     EdgeOptions edgeOptions = new EdgeOptions();
                     edgeOptions.setExperimentalOption("useAutomationExtension", false);
                     edgeOptions.setAcceptInsecureCerts(true);

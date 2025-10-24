@@ -13,7 +13,7 @@ import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.GuidewireClaimCenter.GuidewirePage;
+//import pages.GuidewireClaimCenter.GuidewirePage;
 import pages.OSPC.HomePage;
 import pages.OSPC.LoginPage;
 import pages.OSPC.OSPCClaimOverview;

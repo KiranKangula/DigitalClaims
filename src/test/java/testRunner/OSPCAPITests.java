@@ -9,7 +9,7 @@ import java.util.Date;
 
 @CucumberOptions(
         features = "src/test/resources/features/OSPC_API.feature",
-        tags = "@Token or @DI6API",
+        tags = "@Token or @InjuryAPI or @DI6API",
         glue = "definitions",
         monochrome = true,
         plugin = {"pretty"},

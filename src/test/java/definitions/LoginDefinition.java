@@ -94,7 +94,7 @@ public class LoginDefinition {
 			if (value != null && !value.isEmpty()) {
 				try {
 					org.json.JSONObject jsonObject = new org.json.JSONObject(value);
-					if ("IdToken".equals(jsonObject.optString("credentialType"))) {
+					if ("AccessToken".equals(jsonObject.optString("credentialType"))) {
 						secret = jsonObject.optString("secret");
 						break;
 					}

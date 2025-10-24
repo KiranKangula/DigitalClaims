@@ -15,6 +15,8 @@ import utils.ConfigReader;
 
 import java.time.Duration;
 
+import static utils.BaseDriverClass.getDateFormat;
+
 public class DirectDeposit {
 	private WebDriver driver;
 	private WebDriverWait wait;
@@ -36,12 +38,15 @@ public class DirectDeposit {
 	}
 
 	@When("User clicks on Direct Deposit")
-	public void userClicksOnDirectDeposit() {
+	public void userClicksOnDirectDeposit() throws InterruptedException {
 		Assert.assertTrue(OSPCDirectDeposit.LandOnDirectDeposit());
 	}
 
 	@Then("Click Add direct Deposit information and Select {string} and {string}")
 	public void clickAddDirectDepositInformationAndSelectAnd(String Month, String Year) {
+		String newDate= getDateFormat(Hooks.currentRow.get().get("DOB"), "d/MMMM/yyyy", "dd/M/yyyy") ;
+		Month= newDate.split("/")[1];
+		Year= newDate.split("/")[2];
 		Assert.assertTrue(OSPCDirectDeposit.AddDirectDepositInformation(Month, Year));
 	}
 
@@ -63,6 +68,9 @@ public class DirectDeposit {
 
 	@Then("Click Edit direct Deposit information and Select {string} and {string}")
 	public void clickEditDirectDepositInformationAndSelectAnd(String Month, String Year) {
+		String newDate= getDateFormat(Hooks.currentRow.get().get("DOB"), "d/MMMM/yyyy", "dd/M/yyyy") ;
+		Month= newDate.split("/")[1];
+		Year= newDate.split("/")[2];
 		Assert.assertTrue(OSPCDirectDeposit.editDirectDepositInformation(Month, Year));
 	}
 }

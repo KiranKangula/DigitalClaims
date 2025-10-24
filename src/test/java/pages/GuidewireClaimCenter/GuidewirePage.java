@@ -35,6 +35,8 @@ public class GuidewirePage extends BaseDriverClass {
 	@FindBy(id = "TabBar:AdminTab") private WebElement AdminTab;
 	@FindBy(id = "Admin:MenuLinks:Admin_PortalAuthorizationAdminPage") private WebElement PortalAuthorizationLink;
 	@FindBy(id = "PortalAuthorizationAdminPage:PortalAuthAdminScreen:PortalUserSearchFieldsDV:SearchClaimNumberUserInput") private WebElement SearchClaimNumberUserInput;
+	@FindBy(id = "PortalAuthorizationAdminPage:PortalAuthAdminScreen:PortalUserSearchFieldsDV:SearchUsersUserNameInput") private WebElement SearchUsersUserNameInput;
+	@FindBy(id = "PortalAuthUserDetailPopup:PortalAuthUserGrantedAuthoritiesLV:_Checkbox") private WebElement CheckboxAll;
 	@FindBy(xpath = "//*[@id=\"PortalAuthorizationAdminPage:PortalAuthAdminScreen:PortalAuthUsersLV_tb:ToolbarButton\"]/span[2]") private WebElement SearchPortalAuth;
 	@FindBy(id = "PortalAuthorizationAdminPage:PortalAuthAdminScreen:PortalAuthUsersLV:0:UserNameCell") private WebElement EmailProfileLink;
 	@FindBy(id = "PortalAuthUserDetailPopup:PortalAuthUserDV_tb:Edit") private WebElement EditButton;
@@ -113,6 +115,27 @@ public class GuidewirePage extends BaseDriverClass {
 	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchDV:ClaimSearchOptionalInputSet:LastName") private WebElement SearchLastName;
 	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchDV:ClaimSearchOptionalInputSet:DateOfBirth") private WebElement SearchDOB;
 	@FindBy(id = "WSIB_Form8_FNOLWizard:Documents") private WebElement UnnumberedDocLink;
+
+	@FindBy(id = "Claim:MenuLinks:Claim_ClaimMattersGroup") private WebElement AppealsLink;
+	@FindBy(id = "ClaimMatters:ClaimMatterScreen:ClaimMatters_NewMatterButton") private WebElement NewMatterButton;
+	@FindBy(id = "NewMatter:NewMatterScreen:NewMatterDV:Matter_Name") private WebElement Matter_Name;
+	@FindBy(id = "NewMatter:NewMatterScreen:NewMatterDV:Appealtype") private WebElement Appealtype;
+	@FindBy(id = "NewMatter:NewMatterScreen:NewMatterDV:Objectingparty") private WebElement Objectingparty;
+	@FindBy(id = "NewMatter:NewMatterScreen:NewMatterDV_tb:Update") private WebElement AppealsUpdateButton;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:Edit") private WebElement AppealsEditButton;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:OITandInitialDVTab") private WebElement AppealTab;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:WSIB_AppealTypeCase") private WebElement WSIB_AppealTypeCase;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:WSIB_NewAppealType") private WebElement WSIB_NewAppealType;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:language") private WebElement language;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:CaseRefferal") private WebElement CaseRefferal;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:otherparticipating") private WebElement otherparticipating;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:DualObj") private WebElement ObjOrigin;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:Update") private WebElement MatterDetailPage_update;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:ToolbarButton_AppealRequest") private WebElement CreateNumber;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:Matter_Name") private WebElement AppealNumber;
+	//@FindBy(id = "MatterDetailPage:MatterDetailScreen:Update") private WebElement MatterDetailPage_update;
+	//@FindBy(id = "MatterDetailPage:MatterDetailScreen:Update") private WebElement MatterDetailPage_update;
+
 
 
 	public GuidewirePage(WebDriver driver, WebDriverWait wait) {
@@ -275,9 +298,9 @@ public class GuidewirePage extends BaseDriverClass {
 			List<WebElement> rows = UNCDDocumentsTable.findElements(By.tagName("tr"));
 			for (WebElement row : rows) {
 
-				String Author = row.findElement(By.xpath("./td[12]")).getText().toLowerCase();
+				String Author = row.findElement(By.xpath("./td[13]")).getText().toLowerCase();
 				String Description = row.findElement(By.xpath("./td[5]")).getText().toLowerCase();
-				String FinalDate = row.findElement(By.xpath("./td[18]")).getText().toLowerCase();
+				String FinalDate = row.findElement(By.xpath("./td[19]")).getText().toLowerCase();
 
 				if (Description.contains(description.toLowerCase()) && Author.contains(author.toLowerCase()) && FinalDate.contentEquals(getCurrentDate("dd/MMM/yyyy").toLowerCase())) {
 					recordFound = true;
@@ -548,5 +571,55 @@ public class GuidewirePage extends BaseDriverClass {
 		return ClaimRegistrationTitlebar.isDisplayed();
 
 
+	}
+
+	public boolean removeAllClaimfromPortalAuth() {
+		SearchUsersUserNameInput.sendKeys(prop.getProperty("OSPC_username"));
+		SearchPortalAuth.click();
+		EmailProfileLink.click();
+		EditButton.click();
+		if(isDisplayed(CheckboxAll)) {
+			CheckboxAll.click();
+			PortalAuthDeleteButton.click();
+		}
+
+		PortalAuthOKButton.click();
+		waitUntilElementVisible(PortalAuthAdminScreen);
+		return PortalAuthAdminScreen.isDisplayed();
+
+	}
+
+	public boolean createAppeal() throws InterruptedException {
+		AppealsLink.click();
+		NewMatterButton.click();
+		Matter_Name.sendKeys("AppealTest");
+		new Select(Appealtype).selectByVisibleText("Appeal");
+		new Select(Objectingparty).selectByIndex(1);
+		Thread.sleep(2000);
+		AppealsUpdateButton.click();
+		waitUntilElementVisible(AppealsEditButton);
+		AppealsEditButton.click();
+		AppealTab.click();
+		new Select(WSIB_AppealTypeCase).selectByVisibleText("Regular");
+		Thread.sleep(2000);
+		new Select(WSIB_NewAppealType).selectByVisibleText("Claims");
+		Thread.sleep(2000);
+		new Select(language).selectByVisibleText("English");
+		Thread.sleep(2000);
+		new Select(CaseRefferal).selectByVisibleText("OD");
+		Thread.sleep(2000);
+		new Select(otherparticipating).selectByVisibleText("No");
+		Thread.sleep(2000);
+		new Select(ObjOrigin).selectByVisibleText("Worker");
+		Thread.sleep(2000);
+		CreateNumber.click();
+		waitUntilElementVisible(AppealNumber);
+		if(!AppealNumber.getText().isEmpty()){
+			MatterDetailPage_update.click();
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 }

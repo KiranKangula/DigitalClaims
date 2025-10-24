@@ -83,7 +83,8 @@ public class DIeForm6 extends BaseDriverClass {
 
 	public boolean clickPrivacyStatement() {
 		AgreeCheckbox.click();
-		NextButton.click();
+		jsMoveClick(NextButton);
+		//NextButton.click();
 		waitUntilElementVisible(InjuryorIllnessRadio);
 		return InjuryorIllnessRadio.isDisplayed();
 

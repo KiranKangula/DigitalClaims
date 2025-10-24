@@ -5,6 +5,7 @@ Feature: Guidewire ClaimCenter
     When User submit username and password
     Then User should be able to login successfully into GWCC
 
+  @ClaimCreation
 Scenario Outline: Create a Claim in GW ClaimCenter
   Given User Logged into ClaimCenter
   When User initiates Manual Registration

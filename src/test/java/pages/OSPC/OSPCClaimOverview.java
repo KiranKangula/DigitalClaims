@@ -6,7 +6,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.GuidewireClaimCenter.GuidewirePage;
+//import pages.GuidewireClaimCenter.GuidewirePage;
 import utils.BaseDriverClass;
 import utils.ConfigReader;
 
@@ -58,8 +58,13 @@ public class OSPCClaimOverview extends BaseDriverClass {
 	@FindBy(id = "secondaryHeading") private WebElement secondaryHeading;
 	@FindBy(id = "returnToClaimsHomelLink") private WebElement returnToClaimsHomelLink;
 	@FindBy(id = "viewClaimLink") private WebElement viewClaimLink;
-	@FindBy(css = "div.rt-tbody.jut__DataTable__tableBody") private WebElement tableBody;
+
+	@FindBy(css = ".rt-tbody") private WebElement tableBody;
 	@FindBy(id = "isDuplicateClaimMsg") private WebElement isDuplicateClaimMsg;
+	@FindBy(id = "trackAppealHeading") private WebElement trackAppealHeading;
+	@FindBy(xpath = "//button[contains(@id, 'paginationSelectDropdownMenu-statusAppealDatatable')]") private WebElement paginationSelectDropdownMenu;
+	@FindBy(xpath = "//a[@data-code='All']") private WebElement ShowAll;
+
 
 	public OSPCClaimOverview(WebDriver driver, WebDriverWait wait) {
 		super(driver, wait);
@@ -77,35 +82,55 @@ public class OSPCClaimOverview extends BaseDriverClass {
 	}
 
 	public Boolean verifyOnBenefitpayments() {
-		benefitpaymentslink.click();
+		jsClick(benefitpaymentslink);
 		waitUntilElementVisible(benefitpaymentsheading);
 		Assert.assertEquals(benefitpaymentsheading.getText(), "Benefit payments");
 		return benefitpaymentsheading.isDisplayed();
 	}
 
 	public Boolean verifyOnHealthcarebenefits() {
-		healthcarebenefitslink.click();
+		jsClick(healthcarebenefitslink);
 		waitUntilElementVisible(healthcarebenefitsheading);
 		Assert.assertEquals(healthcarebenefitsheading.getText(), "Health care benefits");
 		return healthcarebenefitsheading.isDisplayed();
 	}
 
 	public Boolean verifyOnNonHealthcarebenefits() {
-		nonhealthcarebenefitslink.click();
+		jsClick(nonhealthcarebenefitslink);
 		waitUntilElementVisible(nonhealthcarebenefitsheading);
 		Assert.assertEquals(nonhealthcarebenefitsheading.getText(), "Non-health care benefits");
 		return nonhealthcarebenefitsheading.isDisplayed();
 	}
 
 	public Boolean verifyOnAppeals() {
-		appealslink.click();
+		jsClick(appealslink);
 		waitUntilElementVisible(appealsheading);
 		Assert.assertEquals(appealsheading.getText(), "Appeals");
 		return appealsheading.isDisplayed();
 	}
 
+	public int verifyCountOfAppeals() {
+		jsClick(appealslink);
+		waitUntilElementVisible(appealsheading);
+		Assert.assertEquals(appealsheading.getText(), "Appeals");
+
+		if(isDisplayed(trackAppealHeading)) {
+			paginationSelectDropdownMenu.click();
+			waitUntilElementVisible(ShowAll);
+			ShowAll.click();
+			List<WebElement> rows = getDriver().findElements(By.cssSelector(".rt-tbody .rt-tr-group"));
+			System.out.println("Number of appeals: " + rows.size());
+			return rows.size() ;
+		}
+		else {
+			System.out.println("No appeals found.");
+			return 0;
+		}
+
+	}
+
 	public Boolean verifyOnSubmitDocuments() {
-		submitdocumentslink.click();
+		jsClick(submitdocumentslink);
 		waitUntilElementVisible(submitdocumentsheading);
 		Assert.assertEquals(submitdocumentsheading.getText(), "Submit document(s)");
 		return submitdocumentsheading.isDisplayed();
@@ -153,7 +178,7 @@ public class OSPCClaimOverview extends BaseDriverClass {
 	}
 
 	public Boolean DocumentHistory(String filename) {
-		DocumentHistoryLink.click();
+		jsClick(DocumentHistoryLink);
 		waitUntilElementVisible(submittedDocumentsHeading);
 		for (int i = 0; i < 10; i++) {
 			System.out.println("Running the step for "+ i+ " times.");
@@ -173,7 +198,7 @@ public class OSPCClaimOverview extends BaseDriverClass {
 
 
 	public boolean verifyOnSendMessageScreen() {
-		SendusmessageLink.click();
+		jsClick(SendusmessageLink);
 		waitUntilElementVisible(SendusmessageHeader);
 		Assert.assertEquals(SendusmessageHeader.getText(), "Send us a message");
 		return SendusmessageHeader.isDisplayed();
@@ -211,29 +236,61 @@ public class OSPCClaimOverview extends BaseDriverClass {
 		return pageHeadingLabel.isDisplayed();
 	}
 
-	public boolean AddaClaimOSPC(String claimnumber, String yob, String pin, GuidewirePage guidewirecc) {
+//	public boolean AddaClaimOSPC(String claimnumber, String yob, String pin, GuidewirePage guidewirecc) {
+//
+//		ClaimNumberInput.sendKeys(claimnumber);
+//		yearOfBirthInput.sendKeys(yob);
+//		personalIdentificationInput.sendKeys(pin);
+//		termOfUseCheckBox.click();
+//		SubmitButton.click();
+//		try {
+//			if (isDuplicateClaimMsg.isDisplayed()) {
+//				ArrayList<String> tabs = guidewirecc.switchtab();
+//				guidewirecc.loginToGWCC(prop.getProperty("GWCC_Username"), prop.getProperty("GWCC_Password"));
+//				guidewirecc.navigatePortalAuthScreen();
+//				guidewirecc.removeClaimfromPortalAuth(claimnumber);
+//				guidewirecc.GWCClogout();
+//				getDriver().close();
+//				getDriver().switchTo().window(tabs.get(0));
+//				termOfUseCheckBox.click();
+//				SubmitButton.click();
+//			}
+//		}
+//		catch(NoSuchElementException ignored)
+//		{}
+//
+//		waitUntilElementVisible(secondaryHeading);
+//		returnToClaimsHomelLink.click();
+//
+//		// Locate all rows in the table
+//		List<WebElement> rows = tableBody.findElements(By.cssSelector("div.rt-tr"));
+//
+//		// Iterate through each row to search for the claim number
+//		for (WebElement row : rows) {
+//			// Locate the Claim Number cell (assuming it's the first column)
+//			WebElement claimCell = row.findElement(By.cssSelector("div.rt-td a.bluelink"));
+//			String cNumber = claimCell.getText();
+//
+//			// Check if the claim number matches the desired value
+//			if (cNumber.equals(claimnumber)) {
+//				System.out.println("Claim number " + claimnumber + " found.");
+//				return true;
+//            }
+//			else {
+//				System.out.println("Claim number " + claimnumber + " not found.");
+//				return false;
+//			}
+//		}
+//			return false;
+//	}
+
+		public boolean AddaClaimOSPC(String claimnumber, String yob, String pin) {
 
 		ClaimNumberInput.sendKeys(claimnumber);
 		yearOfBirthInput.sendKeys(yob);
 		personalIdentificationInput.sendKeys(pin);
 		termOfUseCheckBox.click();
 		SubmitButton.click();
-		try {
-			if (isDuplicateClaimMsg.isDisplayed()) {
-				ArrayList<String> tabs = guidewirecc.switchtab();
-				guidewirecc.loginToGWCC(prop.getProperty("GWCC_Username"), prop.getProperty("GWCC_Password"));
-				guidewirecc.navigatePortalAuthScreen();
-				guidewirecc.removeClaimfromPortalAuth(claimnumber);
-				guidewirecc.GWCClogout();
-				getDriver().close();
-				getDriver().switchTo().window(tabs.get(0));
-				termOfUseCheckBox.click();
-				SubmitButton.click();
-			}
-		}
-		catch(NoSuchElementException ignored)
-		{}
-
 		waitUntilElementVisible(secondaryHeading);
 		returnToClaimsHomelLink.click();
 
@@ -266,26 +323,30 @@ public class OSPCClaimOverview extends BaseDriverClass {
 		getDriver().switchTo().window(tabs.get(0));
 		getDriver().navigate().refresh();
 		//Thread.sleep(5000);
-		waitUntilElementVisible(tableBody);
+		if(isDisplayed(tableBody)) {
+			waitUntilElementVisible(tableBody);
+			// Locate all rows in the table
+			List<WebElement> rows = tableBody.findElements(By.cssSelector("div.rt-tr"));
 
-		// Locate all rows in the table
-		List<WebElement> rows = tableBody.findElements(By.cssSelector("div.rt-tr"));
+				// Iterate through each row to search for the claim number
+				for (WebElement row : rows) {
+					// Locate the Claim Number cell (assuming it's the first column)
+					WebElement claimCell = row.findElement(By.cssSelector("div.rt-td a.bluelink"));
+					String cNumber = claimCell.getText();
 
-		// Iterate through each row to search for the claim number
-		for (WebElement row : rows) {
-			// Locate the Claim Number cell (assuming it's the first column)
-			WebElement claimCell = row.findElement(By.cssSelector("div.rt-td a.bluelink"));
-			String cNumber = claimCell.getText();
-
-			// Check if the claim number matches the desired value
-			if (cNumber.equals(claimnumber)) {
-				System.out.println("Claim number " + claimnumber + " found.");
-				return false;
-			}
-			else {
-				System.out.println("Claim number " + claimnumber + " not found.");
-				return true;
-			}
+					// Check if the claim number matches the desired value
+					if (cNumber.equals(claimnumber)) {
+						System.out.println("Claim number " + claimnumber + " found.");
+						return false;
+					} else {
+						System.out.println("Claim number " + claimnumber + " not found.");
+						return true;
+					}
+				}
+					}
+		else {
+			System.out.println("No Claims Exists in the table");
+			return true;
 		}
 		return false;
 	}
@@ -337,4 +398,13 @@ public class OSPCClaimOverview extends BaseDriverClass {
 		return false;
 	}
 
+	public int appealRegisteredConfirmationOSPC() {
+		Set<String> windowHandles = getDriver().getWindowHandles();
+		List<String> tabs = new ArrayList<>(windowHandles);
+		getDriver().close();
+		getDriver().switchTo().window(tabs.get(0));
+		getDriver().navigate().refresh();
+		waitUntilElementVisible(trackAppealHeading);
+		return verifyCountOfAppeals();
+	}
 }

@@ -12,7 +12,7 @@ import java.util.Date;
 
 @CucumberOptions(
         features = "src/test/resources/features",
-        tags = "@eForm6",
+        tags = "@eForm6_PI",
         glue = "definitions",
         monochrome = true,
         plugin = {"pretty"},

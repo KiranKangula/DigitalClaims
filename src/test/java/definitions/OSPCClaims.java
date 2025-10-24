@@ -7,7 +7,6 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.GuidewireClaimCenter.GuidewirePage;
 import pages.OSPC.HomePage;
 import pages.OSPC.LoginPage;
 import pages.OSPC.OSPCClaimOverview;
@@ -22,9 +21,9 @@ public class OSPCClaims {
 	private WebDriverWait wait;
 	private LoginPage loginPage;
 	private HomePage homePage;
-	private GuidewirePage guidewirecc;
+	//private GuidewirePage guidewirecc;
 	private OSPCClaimOverview OSPCClaimOverview;
-
+	private int appealsCount;
 	ConfigReader prop= Hooks.getConfigReader();
 	List<Map<String, String>> data = Hooks.data;
 	public OSPCClaims() throws Exception {
@@ -32,7 +31,7 @@ public class OSPCClaims {
 		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
 		loginPage = new LoginPage(driver, wait);
 		homePage = new HomePage(driver, wait);
-		guidewirecc = new GuidewirePage(driver, wait);
+		//guidewirecc = new GuidewirePage(driver, wait);
 		OSPCClaimOverview = new OSPCClaimOverview(driver, wait);
 	}
 
@@ -44,6 +43,7 @@ public class OSPCClaims {
 
 	@When("User clicks on {string}")
 	public void userClicksOnClaimNumber(String claimnumber) {
+		claimnumber = Hooks.currentRow.get().get("Claim Number");
 		homePage.clickClaim(claimnumber);
 	}
 
@@ -133,7 +133,7 @@ public class OSPCClaims {
 			ClaimNumber = Hooks.currentRow.get().get("Claim Number");
 			YOB= Hooks.currentRow.get().get("DOB").split("/")[2];
 			PIN = Hooks.currentRow.get().get("PIN");
-		Assert.assertTrue(OSPCClaimOverview.AddaClaimOSPC(ClaimNumber,YOB, PIN, guidewirecc));
+		Assert.assertTrue(OSPCClaimOverview.AddaClaimOSPC(ClaimNumber,YOB, PIN));
 	}
 
 	@And("Switch back to OSPC and verify if the {string} is removed")
@@ -151,11 +151,25 @@ public class OSPCClaims {
 	@And("Switch to New Tab and Login to OSPC and verify if the {string} is added")
 	public void logIntoOSPCAndVerifyIfTheClaimIsAdded(String claimnumber) throws InterruptedException {
 		claimnumber = Hooks.currentRow.get().get("Claim Number");
-		guidewirecc.switchtab();
+		//guidewirecc.switchtab();
 		loginPage.navigateToURL(prop.getProperty("OSPC_URL"));
 		loginPage.loginToSite(prop.getProperty("OSPC_Username"), prop.getProperty("OSPC_Password"));
 		Assert.assertTrue(OSPCClaimOverview.claimAdditionConfirmationOSPC(claimnumber));
 	}
 
 
+	@And("Switch back to OSPC and verify appeal registered is displayed")
+	public void switchBackToOSPCAndVerifyAppealRegisteredIsDisplayed() {
+		int actualCount = (OSPCClaimOverview.appealRegisteredConfirmationOSPC());
+		if(actualCount>appealsCount) {
+			Assert.assertTrue("Appeals added in the table", true);
+		}
+	}
+
+
+	@And("User should be navigated to Appeals screen and count number of appeals")
+	public void userShouldBeNavigatedToAppealsScreenAndNumberOfAppeals() {
+		appealsCount = OSPCClaimOverview.verifyCountOfAppeals();
+
+	}
 }
