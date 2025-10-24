@@ -124,4 +124,10 @@ public class LoginDefinition {
 
 
 	}
+
+	@Then("User should be able to login successfully to OSBC portal")
+	public void userShouldBeAbleToLoginSuccessfullyToOSBCPortal() {
+
+		Assert.assertTrue(homePage.verifyOSBCOnHomePage());
+	}
 }

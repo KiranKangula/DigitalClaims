@@ -17,6 +17,7 @@ public class HomePage extends BaseDriverClass {
 	ConfigReader prop= Hooks.getConfigReader();
 
 	@FindBy(xpath = "//*[@id='divTitle']/h1") private WebElement homepageHeader;
+	@FindBy(xpath = "//*[contains(@aria-label,'Go to Report an injury or illness (Form 7)')]") private WebElement GOButton;
 
 	public HomePage(WebDriver driver, WebDriverWait wait) {
 		super(driver, wait);
@@ -38,5 +39,8 @@ public class HomePage extends BaseDriverClass {
 	}
 
 
-
+	public boolean verifyOSBCOnHomePage() {
+		waitUntilElementVisible(GOButton);
+		return GOButton.isDisplayed();
+	}
 }

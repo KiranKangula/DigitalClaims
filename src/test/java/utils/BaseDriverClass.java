@@ -3,6 +3,7 @@ package utils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.text.ParseException;
@@ -112,11 +113,27 @@ public class BaseDriverClass {
           return true;
       }
         catch (NoSuchElementException e) {
-            System.out.println("Element is not displayed: " + e.getMessage());
+            System.out.println("Element is not displayed: ");
           return false;
         }
     }
 
+    // Utility to select partial value from the dropdown
+    protected void Select(WebElement element, String value) throws InterruptedException {
+
+        element.click();
+        DynamicTextClick( value );
+
+
+    }
+
+    public void selectRadioButtonOption(String fieldId, String option) {
+        // Construct dynamic XPath to locate the radio button options within the container
+        String dynamicXPath = "//*[@id='" + fieldId + "']//label/span[contains(text(),'" + option + "')]";
+        WebElement radioButtonOption = new WebDriverWait(getDriver(), Duration.ofSeconds(20))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(dynamicXPath)));
+        radioButtonOption.click();
+    }
 
     protected WebDriver getDriver() {
         return driver;
