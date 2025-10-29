@@ -27,9 +27,10 @@ public class WorkerTravel {
 	private WTLandingPage WTlandingpage;
 	private TravelExpense travelExpense;
 	ConfigReader prop= Hooks.getConfigReader();
+	ConfigReader common = Hooks.getCommonReader();
 	public WorkerTravel() throws Exception {
 		driver = Hooks.getDriver();
-		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
+		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(common.getProperty("timeout"))));
 		loginPage = new LoginPage(driver, wait);
 		WTlandingpage = new WTLandingPage(driver, wait);
 		travelExpense = new TravelExpense(driver, wait);

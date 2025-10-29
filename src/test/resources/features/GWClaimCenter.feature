@@ -44,3 +44,8 @@ Scenario Outline: Create a Claim in GW ClaimCenter
     Examples:
       | firstname |   lastname   |  dateofbirth  | Author     | Description        |
       | Kiran    |  PAULNMVFQ   |  01/01/2000     | UNCD      |  Worker's Report of Injury|
+
+  @TestBatchRun
+  Scenario: Test Batch Run
+    Given User Logged into ClaimCenter
+    And Run the DI batch job in ClaimCenter to process the Auto Registration

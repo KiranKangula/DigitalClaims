@@ -357,7 +357,7 @@ public class OSPCClaimOverview extends BaseDriverClass {
 		getDriver().switchTo().window(tabs.get(0));
 		getDriver().navigate().refresh();
 		Thread.sleep(5000);
-		waitUntilElementVisible(tableBody);
+		//waitUntilElementVisible(tableBody);
 
 		for (WebElement row : tableBody.findElements(By.cssSelector("div.rt-tr"))) {
 			String cNumber = row.findElement(By.cssSelector("div.rt-td a.bluelink")).getText();

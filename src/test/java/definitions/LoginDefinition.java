@@ -25,9 +25,10 @@ public class LoginDefinition {
 	private HomePage homePage;
 	private GetStarted getStarted;
 	ConfigReader prop= Hooks.getConfigReader();
+	ConfigReader common = Hooks.getCommonReader();
 	public LoginDefinition() throws Exception {
 		driver = Hooks.getDriver();
-		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
+		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(common.getProperty("timeout"))));
 		loginPage = new LoginPage(driver, wait);
 		getStarted = new GetStarted(driver, wait);
 		homePage = new HomePage(driver, wait);
@@ -128,6 +129,6 @@ public class LoginDefinition {
 	@Then("User should be able to login successfully to OSBC portal")
 	public void userShouldBeAbleToLoginSuccessfullyToOSBCPortal() {
 
-		Assert.assertTrue(homePage.verifyOSBCOnHomePage());
+		Assert.assertTrue(homePage.verifyOSBCUnifiedLandingPage());
 	}
 }

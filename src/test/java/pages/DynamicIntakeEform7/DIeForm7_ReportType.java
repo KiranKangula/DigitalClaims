@@ -16,7 +16,7 @@ public class DIeForm7_ReportType extends BaseDriverClass {
 
 	@FindBy(xpath = "//*[@id='myModal' and @class='modal show']") private WebElement ModalPopup;
 	@FindBy(xpath = "//*[@class='DistributionPopUpButton2']") private WebElement DistributionPopUpNo;
-	@FindBy(xpath = "//*[contains(text(),'Next')]") private WebElement NextButton;
+	@FindBy(xpath = "//*[contains(@class,'rightImgIcon')]") private WebElement NextButton;
 	private static final String PhysicalInjury_radio = "occurrenceContainer";
 	private static final String AccidentType_radio = "oneTimeContainer";
 	private static final String InjuryType_radio = "injureContainer";

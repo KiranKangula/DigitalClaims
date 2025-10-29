@@ -15,7 +15,7 @@ public class DIeForm7 extends BaseDriverClass {
 
 
 
-	@FindBy(xpath = "//*[@id='myModal' and @class='modal show']") private WebElement ModalPopup;
+	@FindBy(xpath = "//*[@id='myModal' and @class='modalSurveyLink']") private WebElement ModalPopup;
 	@FindBy(xpath = "//*[@class='DistributionPopUpButton2']") private WebElement DistributionPopUpNo;
 	@FindBy(xpath = "//*[contains(@aria-label,'Go to Report an injury or illness (Form 7)')]") private WebElement GOButton;
 	@FindBy(id = "businessServicesTitle") private WebElement businessServicesTitle;
@@ -25,7 +25,7 @@ public class DIeForm7 extends BaseDriverClass {
 	@FindBy(id = "submitnewreport") private WebElement submitnewreport;
 	@FindBy(id = "privacyPolicyH3") private WebElement privacyPolicyH3;
 	@FindBy(xpath = "//*[@id=\"divConcentContainer\"]/div/div/div[1]/span") private WebElement AgreeCheckbox;
-	@FindBy(xpath = "//*[contains(text(),'Next')]") private WebElement NextButton;
+	@FindBy(xpath = "//*[contains(@class,'rightImgIcon')]") private WebElement NextButton;
 	@FindBy(id = "injuryIllnessCard") private WebElement injuryIllnessCard;
 	@FindBy(id = "exposureCard") private WebElement exposureCard;
 	@FindBy(id = "fatalityCard") private WebElement fatalityCard;
@@ -44,9 +44,9 @@ public class DIeForm7 extends BaseDriverClass {
 	}
 
 	public Boolean verifyBusinessHomepage() {
-		waitUntilElementVisible(GOButton);
+		waitUntilElementVisible(reportsGoButton);
 
-		return GOButton.isDisplayed();
+		return reportsGoButton.isDisplayed();
 
 	}
 
@@ -55,8 +55,8 @@ public class DIeForm7 extends BaseDriverClass {
 		if(isDisplayed(ModalPopup)) {
 			DistributionPopUpNo.click();
 		}
-		GOButton.click();
-		Thread.sleep(5000);
+//		GOButton.click();
+//		Thread.sleep(5000);
 		waitUntilElementVisible(businessServicesTitle);
 
 		reportsGoButton.click();
@@ -68,8 +68,10 @@ public class DIeForm7 extends BaseDriverClass {
 		Select(accountListSingleSelect,accountNumber);
 		submitnewreport.click();
 		waitUntilElementVisible(privacyPolicyH3);
+		Thread.sleep(2000);
 		AgreeCheckbox.click();
 		NextButton.click();
+		Thread.sleep(2000);
 		if(isDisplayed(ModalPopup)) {
 			DistributionPopUpNo.click();
 		}
@@ -78,9 +80,9 @@ public class DIeForm7 extends BaseDriverClass {
 	}
 
 	public boolean selectReportType(String reporttype) {
-		if(isDisplayed(ModalPopup)) {
-			DistributionPopUpNo.click();
-		}
+//		if(isDisplayed(ModalPopup)) {
+//			DistributionPopUpNo.click();
+//		}
 		if(reporttype.equalsIgnoreCase("Injury or Illness")) {
 			injuryIllnessCard.click();
 		}

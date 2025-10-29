@@ -24,7 +24,18 @@ public class BaseDriverClass {
     }
 
     protected void waitUntilElementVisible(WebElement element) {
-        wait.until(ExpectedConditions.visibilityOf(element));
+        wait.until(driver -> {
+            try {
+                // Check if the element is visible
+                if (element.isDisplayed()) {
+                    // Check if the element is enabled and interactable
+                    return element.isEnabled() && element.getCssValue("opacity").equals("1");
+                }
+                return false;
+            } catch (Exception e) {
+                return false;
+            }
+        });
     }
 
     protected String getCurrentDate(String format)
@@ -108,13 +119,13 @@ public class BaseDriverClass {
     }
     // Utility to verify if the element is displayed
     protected boolean isDisplayed(WebElement element) {
-      try {
-          element.isDisplayed();
-          return true;
-      }
-        catch (NoSuchElementException e) {
-            System.out.println("Element is not displayed: ");
-          return false;
+        try {
+            // Check if the element is displayed and visible
+            return element.isDisplayed() && element.getCssValue("visibility").equals("visible")
+                    && !element.getCssValue("display").equals("none");
+        } catch (NoSuchElementException | ElementNotInteractableException e) {
+            System.out.println("Web Element is not displayed or interactable.");
+            return false;
         }
     }
 
@@ -127,7 +138,7 @@ public class BaseDriverClass {
 
     }
 
-    public void selectRadioButtonOption(String fieldId, String option) {
+    protected void selectRadioButtonOption(String fieldId, String option) {
         // Construct dynamic XPath to locate the radio button options within the container
         String dynamicXPath = "//*[@id='" + fieldId + "']//label/span[contains(text(),'" + option + "')]";
         WebElement radioButtonOption = new WebDriverWait(getDriver(), Duration.ofSeconds(20))
@@ -135,7 +146,24 @@ public class BaseDriverClass {
         radioButtonOption.click();
     }
 
+    protected void selectDropdownValue(WebElement element, String value) {
+        element.click();
+        Actions actions = new Actions(getDriver());
+        actions.sendKeys(value).build().perform();
+        actions.sendKeys(Keys.ENTER).build().perform();
+    }
+
     protected WebDriver getDriver() {
         return driver;
+    }
+
+    protected void mimicAltShiftT(WebDriver driver) {
+        Actions actions = new Actions(driver);
+        actions.keyDown(Keys.ALT)
+                .keyDown(Keys.SHIFT)
+                .sendKeys("t")
+                .keyUp(Keys.SHIFT)
+                .keyUp(Keys.ALT)
+                .perform();
     }
 }

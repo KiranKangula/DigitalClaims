@@ -27,9 +27,10 @@ public class UNCD {
 	private SubmitDocuments submitDocument;
 	private ReviewSubmission reviewSubmission;
 	ConfigReader prop= Hooks.getConfigReader();
+	ConfigReader common = Hooks.getCommonReader();
 	public UNCD() throws Exception {
 		driver = Hooks.getDriver();
-		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
+		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(common.getProperty("timeout"))));
 		loginPage = new LoginPage(driver, wait);
 		getStarted = new GetStarted(driver, wait);
 		addClaimantInfo = new AddClaimantInfo(driver, wait);

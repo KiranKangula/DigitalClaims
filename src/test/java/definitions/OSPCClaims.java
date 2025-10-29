@@ -25,10 +25,11 @@ public class OSPCClaims {
 	private OSPCClaimOverview OSPCClaimOverview;
 	private int appealsCount;
 	ConfigReader prop= Hooks.getConfigReader();
+	ConfigReader common = Hooks.getCommonReader();
 	List<Map<String, String>> data = Hooks.data;
 	public OSPCClaims() throws Exception {
 		driver = Hooks.getDriver();
-		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
+		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(common.getProperty("timeout"))));
 		loginPage = new LoginPage(driver, wait);
 		homePage = new HomePage(driver, wait);
 		//guidewirecc = new GuidewirePage(driver, wait);

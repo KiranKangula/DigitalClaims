@@ -26,10 +26,11 @@ public class DirectDeposit {
 	private pages.OSPC.OSPCClaimOverview OSPCClaimOverview;
 	private pages.DirectDeposit.OSPCDirectDeposit OSPCDirectDeposit;
 	ConfigReader prop= Hooks.getConfigReader();
+	ConfigReader common = Hooks.getCommonReader();
 	public static String Claimnumber;
 	public DirectDeposit() throws Exception {
         driver = Hooks.getDriver();
-		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
+		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(common.getProperty("timeout"))));
 		loginPage = new LoginPage(driver, wait);
 		homePage = new HomePage(driver, wait);
 		guidewirecc = new GuidewirePage(driver, wait);

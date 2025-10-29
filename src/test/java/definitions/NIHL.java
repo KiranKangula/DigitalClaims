@@ -35,9 +35,10 @@ public class NIHL {
 	private SupportingDocuments	supportingdocuments;
 	private ReviewandConfirm reviewandconfirm;
 	ConfigReader prop= Hooks.getConfigReader();
+	ConfigReader common = Hooks.getCommonReader();
 	public NIHL() throws Exception {
 		driver = Hooks.getDriver();
-		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
+		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(common.getProperty("timeout"))));
 		loginPage = new LoginPage(driver, wait);
 		nihllandingpage = new NIHLLandingPage(driver, wait);
 		myinformation = new MyInformation(driver, wait);

@@ -2,6 +2,7 @@ package pages.GuidewireClaimCenter;
 
 import definitions.Hooks;
 import io.cucumber.datatable.DataTable;
+import junit.framework.AssertionFailedError;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
@@ -10,6 +11,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.BaseDriverClass;
 import utils.ConfigReader;
+import utils.ExcelUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,124 +21,235 @@ import static definitions.Hooks.getDriver;
 import static pages.OSPC.OSPCClaimOverview.randommessage;
 
 public class GuidewirePage extends BaseDriverClass {
-	ConfigReader prop= Hooks.getConfigReader();
-	@FindBy(id = "Login:LoginScreen:LoginDV:username") private WebElement usernameTextField;
-	@FindBy(id = "Login:LoginScreen:LoginDV:password") private WebElement passwordTextField;
-	@FindBy(id = "Login:LoginScreen:LoginDV:submit") private WebElement loginButton;
-	@FindBy(id = "TabBar:SearchTab") private WebElement SearchTab;
-	@FindBy(id = "DesktopActivities") private WebElement DesktopActivities;
-	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchDV:ClaimSearchOptionalInputSet:ClaimNumber") private WebElement ClaimSearchField;
-	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchDV:ClaimSearchAndResetInputSet:Search_link") private WebElement SearchButton;
-	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchResultsLV:0:ClaimNumber") private WebElement SelectClaimfromSearch;
-	@FindBy(id = "Claim:MenuLinks:Claim_WSIB_MessagingGroup") private WebElement MessagingLink;
-	@FindBy(id = "WSIB_ClaimCustomerMessages:WSIB_MessagingScreen:WSIB_MessagePanelSet:0:MessageBody") private WebElement MessagingBody;
-	@FindBy(id = "ClaimSummary:ClaimSummaryScreen:ttlBar") private WebElement SummaryTitlebar;
-	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ttlBar") private WebElement ClaimRegistrationTitlebar;
-	@FindBy(id = "TabBar:AdminTab") private WebElement AdminTab;
-	@FindBy(id = "Admin:MenuLinks:Admin_PortalAuthorizationAdminPage") private WebElement PortalAuthorizationLink;
-	@FindBy(id = "PortalAuthorizationAdminPage:PortalAuthAdminScreen:PortalUserSearchFieldsDV:SearchClaimNumberUserInput") private WebElement SearchClaimNumberUserInput;
-	@FindBy(id = "PortalAuthorizationAdminPage:PortalAuthAdminScreen:PortalUserSearchFieldsDV:SearchUsersUserNameInput") private WebElement SearchUsersUserNameInput;
-	@FindBy(id = "PortalAuthUserDetailPopup:PortalAuthUserGrantedAuthoritiesLV:_Checkbox") private WebElement CheckboxAll;
-	@FindBy(xpath = "//*[@id=\"PortalAuthorizationAdminPage:PortalAuthAdminScreen:PortalAuthUsersLV_tb:ToolbarButton\"]/span[2]") private WebElement SearchPortalAuth;
-	@FindBy(id = "PortalAuthorizationAdminPage:PortalAuthAdminScreen:PortalAuthUsersLV:0:UserNameCell") private WebElement EmailProfileLink;
-	@FindBy(id = "PortalAuthUserDetailPopup:PortalAuthUserDV_tb:Edit") private WebElement EditButton;
-	@FindBy(id = "PortalAuthUserDetailPopup:PortalAuthUserGrantedAuthoritiesLV") private WebElement PortalAuthTable;
-	@FindBy(id = "PortalAuthUserDetailPopup:PortalAuthUserGrantedAuthoritiesLV_tb:deleteAuthoritiesButton") private WebElement PortalAuthDeleteButton;
-	@FindBy(id = "PortalAuthUserDetailPopup:PortalAuthUserDV_tb:Update") private WebElement PortalAuthOKButton;
-	@FindBy(id = "PortalAuthorizationAdminPage:PortalAuthAdminScreen:0") private WebElement PortalAuthAdminScreen;
-	@FindBy(id = "TabBar:LogoutTabBarLink") private WebElement GWCCLogout;
-	@FindBy(id = "Claim:MenuLinks:Claim_ClaimPartiesGroup") private WebElement ClaimParticipantsLink;
-	@FindBy(id = "ClaimContacts:ClaimContactsScreen:PeopleInvolvedDetailedListDetail:PeopleInvolvedDetailedLV") private WebElement ClaimParticipantsTable;
-	@FindBy(id = "ClaimContacts:ClaimContactsScreen:PeopleInvolvedDetailedListDetail:ContactBasicsDV_tb:ContactDetailToolbarButtonSet:LinkContactToolbarButtonSet:LinkContactToolbarButtons_SyncFromAddressBookButton") private WebElement CopyfromContactManagerButton;
-	@FindBy(id = "Claim:MenuLinks:Claim_ClaimDocumentsGroup") private WebElement ClaimDocumentsLink;
-	@FindBy(xpath = "//*[contains(@id, 'DocumentsMemosScreen:ClaimDocumentSearchDV:Hidden')]") private WebElement HiddenDropdown;
-	@FindBy(xpath = "//*[contains(@id, 'DocumentsMemosScreen:ClaimDocumentSearchDV:RedactionRequired')]") private WebElement RedactionRequiredDropdown;
-	@FindBy(xpath = "//*[contains(@id, 'DocumentsMemosScreen:ClaimDocumentSearchDV:NoAccess')]") private WebElement NoAccessDropdown;
-	@FindBy(xpath = "//*[contains(@id, 'DocumentsMemosScreen:ClaimDocumentSearchDV:SearchAndResetInputSet:SearchLinksInputSet:Search_link')]") private WebElement Search_link;
-	@FindBy(id = "ClaimDocuments:DocumentsMemosScreen:DocumentsLV") private WebElement DocumentsTable;
-	@FindBy(id = "WSIB_Form8_FNOLWizard:IndependentWizardStepSet:DocumentsMemosScreen:DocumentsLV") private WebElement UNCDDocumentsTable;
-	@FindBy(xpath = "//*[@id=\"TabBar:ClaimTab_arrow\"]/span") private WebElement ClaimTab_arrow;
-	@FindBy(id = "TabBar:DesktopTab") private WebElement DesktopTab;
-	@FindBy(id = "TabBar:ClaimTab:QuickClaimRegistrarion") private WebElement ManualRegistrationlink;
-	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ttlBar") private WebElement ttlBar;
-	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:IntakeIdDV:WSIB_IntakeForm") private WebElement SourceofInformation;
-	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:IntakeIdDV:WSIB_IntakeChannel") private WebElement IntakeChannel;
+	ConfigReader prop = Hooks.getConfigReader();
+	@FindBy(id = "Login:LoginScreen:LoginDV:username")
+	private WebElement usernameTextField;
+	@FindBy(id = "Login:LoginScreen:LoginDV:password")
+	private WebElement passwordTextField;
+	@FindBy(id = "Login:LoginScreen:LoginDV:submit")
+	private WebElement loginButton;
+	@FindBy(id = "TabBar:SearchTab")
+	private WebElement SearchTab;
+	@FindBy(id = "DesktopActivities")
+	private WebElement DesktopActivities;
+	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchDV:ClaimSearchOptionalInputSet:ClaimNumber")
+	private WebElement ClaimSearchField;
+	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchDV:ClaimSearchAndResetInputSet:Search_link")
+	private WebElement SearchButton;
+	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchResultsLV:0:ClaimNumber")
+	private WebElement SelectClaimfromSearch;
+	@FindBy(id = "Claim:MenuLinks:Claim_WSIB_MessagingGroup")
+	private WebElement MessagingLink;
+	@FindBy(id = "WSIB_ClaimCustomerMessages:WSIB_MessagingScreen:WSIB_MessagePanelSet:0:MessageBody")
+	private WebElement MessagingBody;
+	@FindBy(id = "ClaimSummary:ClaimSummaryScreen:ttlBar")
+	private WebElement SummaryTitlebar;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ttlBar")
+	private WebElement ClaimRegistrationTitlebar;
+	@FindBy(id = "TabBar:AdminTab")
+	private WebElement AdminTab;
+	@FindBy(id = "Admin:MenuLinks:Admin_PortalAuthorizationAdminPage")
+	private WebElement PortalAuthorizationLink;
+	@FindBy(id = "PortalAuthorizationAdminPage:PortalAuthAdminScreen:PortalUserSearchFieldsDV:SearchClaimNumberUserInput")
+	private WebElement SearchClaimNumberUserInput;
+	@FindBy(id = "PortalAuthorizationAdminPage:PortalAuthAdminScreen:PortalUserSearchFieldsDV:SearchUsersUserNameInput")
+	private WebElement SearchUsersUserNameInput;
+	@FindBy(id = "PortalAuthUserDetailPopup:PortalAuthUserGrantedAuthoritiesLV:_Checkbox")
+	private WebElement CheckboxAll;
+	@FindBy(xpath = "//*[@id=\"PortalAuthorizationAdminPage:PortalAuthAdminScreen:PortalAuthUsersLV_tb:ToolbarButton\"]/span[2]")
+	private WebElement SearchPortalAuth;
+	@FindBy(id = "PortalAuthorizationAdminPage:PortalAuthAdminScreen:PortalAuthUsersLV:0:UserNameCell")
+	private WebElement EmailProfileLink;
+	@FindBy(id = "PortalAuthUserDetailPopup:PortalAuthUserDV_tb:Edit")
+	private WebElement EditButton;
+	@FindBy(id = "PortalAuthUserDetailPopup:PortalAuthUserGrantedAuthoritiesLV")
+	private WebElement PortalAuthTable;
+	@FindBy(id = "PortalAuthUserDetailPopup:PortalAuthUserGrantedAuthoritiesLV_tb:deleteAuthoritiesButton")
+	private WebElement PortalAuthDeleteButton;
+	@FindBy(id = "PortalAuthUserDetailPopup:PortalAuthUserDV_tb:Update")
+	private WebElement PortalAuthOKButton;
+	@FindBy(id = "PortalAuthorizationAdminPage:PortalAuthAdminScreen:0")
+	private WebElement PortalAuthAdminScreen;
+	@FindBy(id = "TabBar:LogoutTabBarLink")
+	private WebElement GWCCLogout;
+	@FindBy(id = "Claim:MenuLinks:Claim_ClaimPartiesGroup")
+	private WebElement ClaimParticipantsLink;
+	@FindBy(id = "ClaimContacts:ClaimContactsScreen:PeopleInvolvedDetailedListDetail:PeopleInvolvedDetailedLV")
+	private WebElement ClaimParticipantsTable;
+	@FindBy(id = "ClaimContacts:ClaimContactsScreen:PeopleInvolvedDetailedListDetail:ContactBasicsDV_tb:ContactDetailToolbarButtonSet:LinkContactToolbarButtonSet:LinkContactToolbarButtons_SyncFromAddressBookButton")
+	private WebElement CopyfromContactManagerButton;
+	@FindBy(id = "Claim:MenuLinks:Claim_ClaimDocumentsGroup")
+	private WebElement ClaimDocumentsLink;
+	@FindBy(xpath = "//*[contains(@id, 'DocumentsMemosScreen:ClaimDocumentSearchDV:Hidden')]")
+	private WebElement HiddenDropdown;
+	@FindBy(xpath = "//*[contains(@id, 'DocumentsMemosScreen:ClaimDocumentSearchDV:RedactionRequired')]")
+	private WebElement RedactionRequiredDropdown;
+	@FindBy(xpath = "//*[contains(@id, 'DocumentsMemosScreen:ClaimDocumentSearchDV:NoAccess')]")
+	private WebElement NoAccessDropdown;
+	@FindBy(xpath = "//*[contains(@id, 'DocumentsMemosScreen:ClaimDocumentSearchDV:SearchAndResetInputSet:SearchLinksInputSet:Search_link')]")
+	private WebElement Search_link;
+	@FindBy(id = "ClaimDocuments:DocumentsMemosScreen:DocumentsLV")
+	private WebElement DocumentsTable;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:IndependentWizardStepSet:DocumentsMemosScreen:DocumentsLV")
+	private WebElement UNCDDocumentsTable;
+	@FindBy(xpath = "//*[@id=\"TabBar:ClaimTab_arrow\"]/span")
+	private WebElement ClaimTab_arrow;
+	@FindBy(id = "TabBar:DesktopTab")
+	private WebElement DesktopTab;
+	@FindBy(id = "TabBar:ClaimTab:QuickClaimRegistrarion")
+	private WebElement ManualRegistrationlink;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ttlBar")
+	private WebElement ttlBar;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:IntakeIdDV:WSIB_IntakeForm")
+	private WebElement SourceofInformation;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:IntakeIdDV:WSIB_IntakeChannel")
+	private WebElement IntakeChannel;
 
-	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Claimant:ClaimantMenuIcon") private WebElement ClaimantMenuIcon;
-	@FindBy(xpath = "//*[contains(@id,'ClaimNewWorkerOnlyPickerMenuItemSet_NewWorkerMenuItem')]") private WebElement NewWorkerMenuItem;
-	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:PersonNameInputSet:FirstName')]") private WebElement FirstName;
-	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:PersonNameInputSet:LastName')]") private WebElement LastName;
-	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:PersonContactInfoInputSet:PrimaryPhone')]") private WebElement PrimaryPhone;
-	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:WSIB_MailingAddressInputSet:FNOLAddressInputSet:Address_PostalCode')]") private WebElement Address_PostalCode;
-	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:WSIB_MailingAddressInputSet:FNOLAddressInputSet:Standardize')]/span[2]") private WebElement AddressLookUp;
-	@FindBy(xpath = "//*[contains(@id,'WSIB_AddressStandardizationPopup:WSIB_AddressStandardizationLV:0:_Select_link')]") private WebElement AddressSelectButton;
-	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:AdditionalInfoInputSet:Gender')]") private WebElement Gender;
-	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:AdditionalInfoInputSet:WSIB_ContactDateOfBirthInputSet:DateOfBirth')]") private WebElement DateOfBirth;
-	@FindBy(xpath = "//*[@id=\"NewContactPopup:ContactDetailScreen:ContactBasicsDV_tb:ContactDetailToolbarButtonSet:Update\"]/span[2]") private WebElement UpdateContactButton;
-	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:AdditionalInfoInputSet:SINDoesNotExist')]") private WebElement SINDoesNotExist;
-	@FindBy(xpath = "//*[@id=\"WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:AddressValidation\"]/span[2]") private WebElement ValidateAddressButton;
-	@FindBy(xpath = "//*[contains(@id,'AddressBookMatchWorksheet_CreateNewContactButton')]/span[2]") private WebElement CreateNewWorkerCM;
-	@FindBy(xpath = "//a[contains(@id,'WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:employerName:employerNameMenuIcon')]") private WebElement employerNameMenuIcon;
-	@FindBy(xpath = "//*[contains(@id,'WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:employerName:MenuItem_Search')]") private WebElement MenuItem_Search;
-	@FindBy(xpath = "//*[contains(@id,'AddressBookPolicyCenterPanel:AddressBookPolicyCenterSearchPanelSet:AddressBookSearchDV:accountNumber')]") private WebElement accountNumberInput;
-	@FindBy(xpath = "//*[contains(@id,'AddressBookPolicyCenterSearchPanelSet:AddressBookSearchDV:SearchAndResetInputSet:SearchLinksInputSet:Search_link')]") private WebElement EmployerSearch_link;
-	@FindBy(xpath = "//*[contains(@id,'AddressBookPolicyCenterSearchPanelSet:WSIB_AddressBookSearchLV:0:_Select_link')]") private WebElement EmployerSelect_link;
-	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_BranchLocation:AddressInputSet:AddressPicker')]") private WebElement BranchAddressPicker;
-	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_MailingAddress:AddressInputSet:AddressPicker')]") private WebElement MailingAddressPicker;
-	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimLossDate')]") private WebElement DateofAccident;
-	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_DateRptedToEmployer')]") private WebElement DateReportedToEmployer;
-	@FindBy(xpath = "//*[@id=\"WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ClaimPolicyGeneral_SelectPolicyButton\"]/span[2]") private WebElement SelectBussActivity;
-	@FindBy(xpath = "//*[contains(@id,'ClaimPolicySelectPolicyScreen:PolicyResultLV:0:_Select_link')]") private WebElement BussinessActivitySelect_link;
-	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:EditableBodyPartDetailsLV:0:PrimaryBodyPart')]") private WebElement AreaofBody;
-	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:EditableBodyPartDetailsLV:0:DetailedBodyPart')]") private WebElement AreaofInjury;
-	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_AccidentType')]") private WebElement AccidentType;
-	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_TypeOfInjury')]") private WebElement DetailedAccidentType;
-	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_NatureOfInjury')]") private WebElement NatureOfInjury;
-	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ThirdPartyYesNo_false')]") private WebElement ThirdPartyNo;
-	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ThirdPartyYesNo_true')]") private WebElement ThirdPartyYes;
-	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:accidentlocation2:AddressInputSet:AddressPicker')]") private WebElement AccidentLocation;
-	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_HCReceivedWorker')]") private WebElement HealthCareReceived;
-	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimType')]") private WebElement ClaimType;
-	@FindBy(xpath = "//*[@id=\"WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ToolbarButton__dup_1\"]/span[2]") private WebElement RegisterClaim;
-	@FindBy(xpath = "//*[@id=\"NewClaimSaved:NewClaimSavedScreen:NewClaimSavedDV:Header\"]") private WebElement NewClaimHeader;
-	@FindBy(xpath = "//*[@id=\"NewClaimSaved:NewClaimSavedScreen:NewClaimSavedDV:GoToClaim\"]/span") private WebElement GoToClaim;
-	@FindBy(xpath = "//*[contains(@id,'Claim:ClaimInfoBar:WSIB_WorkerSelfEnrollmentPIN_link')]") private WebElement PIN;
-	@FindBy(xpath = "//*[contains(@id,'Claim:ClaimInfoBar:DOB_link')]") private WebElement DOB;
-	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimantFirstName") private WebElement ClaimantFName;
-	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimantLastName") private WebElement ClaimantLName;
-	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimantGender") private WebElement GenderClaimant;
-	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimantPronoun") private WebElement ClaimantPronouns;
-	@FindBy(xpath = "//*[@id='WebMessageWorksheet:WebMessageWorksheetScreen:grpMsgs_msgs']/div[1]") private WebElement WarningMessage;
-	@FindBy(xpath = "//*[@id=\"WebMessageWorksheet:WebMessageWorksheetScreen:WebMessageWorksheet_ClearButton\"]/span[2]") private WebElement ClearButton;
-	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:PriorClaimsTabTab") private WebElement PriorClaimsTab;
-	@FindBy(xpath = "//*[@id=\"WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:EditableBodyPartDetailsLV_tb:Add\"]/span[2]") private WebElement AddBodyPart;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Claimant:ClaimantMenuIcon")
+	private WebElement ClaimantMenuIcon;
+	@FindBy(xpath = "//*[contains(@id,'ClaimNewWorkerOnlyPickerMenuItemSet_NewWorkerMenuItem')]")
+	private WebElement NewWorkerMenuItem;
+	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:PersonNameInputSet:FirstName')]")
+	private WebElement FirstName;
+	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:PersonNameInputSet:LastName')]")
+	private WebElement LastName;
+	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:PersonContactInfoInputSet:PrimaryPhone')]")
+	private WebElement PrimaryPhone;
+	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:WSIB_MailingAddressInputSet:FNOLAddressInputSet:Address_PostalCode')]")
+	private WebElement Address_PostalCode;
+	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:WSIB_MailingAddressInputSet:FNOLAddressInputSet:Standardize')]/span[2]")
+	private WebElement AddressLookUp;
+	@FindBy(xpath = "//*[contains(@id,'WSIB_AddressStandardizationPopup:WSIB_AddressStandardizationLV:0:_Select_link')]")
+	private WebElement AddressSelectButton;
+	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:AdditionalInfoInputSet:Gender')]")
+	private WebElement Gender;
+	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:AdditionalInfoInputSet:WSIB_ContactDateOfBirthInputSet:DateOfBirth')]")
+	private WebElement DateOfBirth;
+	@FindBy(xpath = "//*[@id=\"NewContactPopup:ContactDetailScreen:ContactBasicsDV_tb:ContactDetailToolbarButtonSet:Update\"]/span[2]")
+	private WebElement UpdateContactButton;
+	@FindBy(xpath = "//*[contains(@id,'ContactBasicsDV:AdditionalInfoInputSet:SINDoesNotExist')]")
+	private WebElement SINDoesNotExist;
+	@FindBy(xpath = "//*[@id=\"WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:AddressValidation\"]/span[2]")
+	private WebElement ValidateAddressButton;
+	@FindBy(xpath = "//*[contains(@id,'AddressBookMatchWorksheet_CreateNewContactButton')]/span[2]")
+	private WebElement CreateNewWorkerCM;
+	@FindBy(xpath = "//a[contains(@id,'WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:employerName:employerNameMenuIcon')]")
+	private WebElement employerNameMenuIcon;
+	@FindBy(xpath = "//*[contains(@id,'WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:employerName:MenuItem_Search')]")
+	private WebElement MenuItem_Search;
+	@FindBy(xpath = "//*[contains(@id,'AddressBookPolicyCenterPanel:AddressBookPolicyCenterSearchPanelSet:AddressBookSearchDV:accountNumber')]")
+	private WebElement accountNumberInput;
+	@FindBy(xpath = "//*[contains(@id,'AddressBookPolicyCenterSearchPanelSet:AddressBookSearchDV:SearchAndResetInputSet:SearchLinksInputSet:Search_link')]")
+	private WebElement EmployerSearch_link;
+	@FindBy(xpath = "//*[contains(@id,'AddressBookPolicyCenterSearchPanelSet:WSIB_AddressBookSearchLV:0:_Select_link')]")
+	private WebElement EmployerSelect_link;
+	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_BranchLocation:AddressInputSet:AddressPicker')]")
+	private WebElement BranchAddressPicker;
+	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_MailingAddress:AddressInputSet:AddressPicker')]")
+	private WebElement MailingAddressPicker;
+	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimLossDate')]")
+	private WebElement DateofAccident;
+	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_DateRptedToEmployer')]")
+	private WebElement DateReportedToEmployer;
+	@FindBy(xpath = "//*[@id=\"WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ClaimPolicyGeneral_SelectPolicyButton\"]/span[2]")
+	private WebElement SelectBussActivity;
+	@FindBy(xpath = "//*[contains(@id,'ClaimPolicySelectPolicyScreen:PolicyResultLV:0:_Select_link')]")
+	private WebElement BussinessActivitySelect_link;
+	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:EditableBodyPartDetailsLV:0:PrimaryBodyPart')]")
+	private WebElement AreaofBody;
+	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:EditableBodyPartDetailsLV:0:DetailedBodyPart')]")
+	private WebElement AreaofInjury;
+	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_AccidentType')]")
+	private WebElement AccidentType;
+	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_TypeOfInjury')]")
+	private WebElement DetailedAccidentType;
+	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_NatureOfInjury')]")
+	private WebElement NatureOfInjury;
+	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ThirdPartyYesNo_false')]")
+	private WebElement ThirdPartyNo;
+	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ThirdPartyYesNo_true')]")
+	private WebElement ThirdPartyYes;
+	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:accidentlocation2:AddressInputSet:AddressPicker')]")
+	private WebElement AccidentLocation;
+	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_HCReceivedWorker')]")
+	private WebElement HealthCareReceived;
+	@FindBy(xpath = "//*[contains(@id,'WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimType')]")
+	private WebElement ClaimType;
+	@FindBy(xpath = "//*[@id=\"WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:ToolbarButton__dup_1\"]/span[2]")
+	private WebElement RegisterClaim;
+	@FindBy(xpath = "//*[@id=\"NewClaimSaved:NewClaimSavedScreen:NewClaimSavedDV:Header\"]")
+	private WebElement NewClaimHeader;
+	@FindBy(xpath = "//*[@id=\"NewClaimSaved:NewClaimSavedScreen:NewClaimSavedDV:GoToClaim\"]/span")
+	private WebElement GoToClaim;
+	@FindBy(xpath = "//*[contains(@id,'Claim:ClaimInfoBar:WSIB_WorkerSelfEnrollmentPIN_link')]")
+	private WebElement PIN;
+	@FindBy(xpath = "//*[contains(@id,'Claim:ClaimInfoBar:DOB_link')]")
+	private WebElement DOB;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimantFirstName")
+	private WebElement ClaimantFName;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimantLastName")
+	private WebElement ClaimantLName;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimantGender")
+	private WebElement GenderClaimant;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:Registration_ClaimantPronoun")
+	private WebElement ClaimantPronouns;
+	@FindBy(xpath = "//*[@id='WebMessageWorksheet:WebMessageWorksheetScreen:grpMsgs_msgs']/div[1]")
+	private WebElement WarningMessage;
+	@FindBy(xpath = "//*[@id=\"WebMessageWorksheet:WebMessageWorksheetScreen:WebMessageWorksheet_ClearButton\"]/span[2]")
+	private WebElement ClearButton;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:PriorClaimsTabTab")
+	private WebElement PriorClaimsTab;
+	@FindBy(xpath = "//*[@id=\"WSIB_Form8_FNOLWizard:WorkersCompWizardStepSet:WSIB_ClaimRegistrationScreen:EditableBodyPartDetailsLV_tb:Add\"]/span[2]")
+	private WebElement AddBodyPart;
 
-	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchDV:ClaimSearchOptionalInputSet:FirstName") private WebElement SearchFirstName;
-	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchDV:ClaimSearchOptionalInputSet:LastName") private WebElement SearchLastName;
-	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchDV:ClaimSearchOptionalInputSet:DateOfBirth") private WebElement SearchDOB;
-	@FindBy(id = "WSIB_Form8_FNOLWizard:Documents") private WebElement UnnumberedDocLink;
+	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchDV:ClaimSearchOptionalInputSet:FirstName")
+	private WebElement SearchFirstName;
+	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchDV:ClaimSearchOptionalInputSet:LastName")
+	private WebElement SearchLastName;
+	@FindBy(id = "ClaimSearch:ClaimSearchScreen:ClaimSearchDV:ClaimSearchOptionalInputSet:DateOfBirth")
+	private WebElement SearchDOB;
+	@FindBy(id = "WSIB_Form8_FNOLWizard:Documents")
+	private WebElement UnnumberedDocLink;
 
-	@FindBy(id = "Claim:MenuLinks:Claim_ClaimMattersGroup") private WebElement AppealsLink;
-	@FindBy(id = "ClaimMatters:ClaimMatterScreen:ClaimMatters_NewMatterButton") private WebElement NewMatterButton;
-	@FindBy(id = "NewMatter:NewMatterScreen:NewMatterDV:Matter_Name") private WebElement Matter_Name;
-	@FindBy(id = "NewMatter:NewMatterScreen:NewMatterDV:Appealtype") private WebElement Appealtype;
-	@FindBy(id = "NewMatter:NewMatterScreen:NewMatterDV:Objectingparty") private WebElement Objectingparty;
-	@FindBy(id = "NewMatter:NewMatterScreen:NewMatterDV_tb:Update") private WebElement AppealsUpdateButton;
-	@FindBy(id = "MatterDetailPage:MatterDetailScreen:Edit") private WebElement AppealsEditButton;
-	@FindBy(id = "MatterDetailPage:MatterDetailScreen:OITandInitialDVTab") private WebElement AppealTab;
-	@FindBy(id = "MatterDetailPage:MatterDetailScreen:WSIB_AppealTypeCase") private WebElement WSIB_AppealTypeCase;
-	@FindBy(id = "MatterDetailPage:MatterDetailScreen:WSIB_NewAppealType") private WebElement WSIB_NewAppealType;
-	@FindBy(id = "MatterDetailPage:MatterDetailScreen:language") private WebElement language;
-	@FindBy(id = "MatterDetailPage:MatterDetailScreen:CaseRefferal") private WebElement CaseRefferal;
-	@FindBy(id = "MatterDetailPage:MatterDetailScreen:otherparticipating") private WebElement otherparticipating;
-	@FindBy(id = "MatterDetailPage:MatterDetailScreen:DualObj") private WebElement ObjOrigin;
-	@FindBy(id = "MatterDetailPage:MatterDetailScreen:Update") private WebElement MatterDetailPage_update;
-	@FindBy(id = "MatterDetailPage:MatterDetailScreen:ToolbarButton_AppealRequest") private WebElement CreateNumber;
-	@FindBy(id = "MatterDetailPage:MatterDetailScreen:Matter_Name") private WebElement AppealNumber;
+	@FindBy(id = "Claim:MenuLinks:Claim_ClaimMattersGroup")
+	private WebElement AppealsLink;
+	@FindBy(id = "ClaimMatters:ClaimMatterScreen:ClaimMatters_NewMatterButton")
+	private WebElement NewMatterButton;
+	@FindBy(id = "NewMatter:NewMatterScreen:NewMatterDV:Matter_Name")
+	private WebElement Matter_Name;
+	@FindBy(id = "NewMatter:NewMatterScreen:NewMatterDV:Appealtype")
+	private WebElement Appealtype;
+	@FindBy(id = "NewMatter:NewMatterScreen:NewMatterDV:Objectingparty")
+	private WebElement Objectingparty;
+	@FindBy(id = "NewMatter:NewMatterScreen:NewMatterDV_tb:Update")
+	private WebElement AppealsUpdateButton;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:Edit")
+	private WebElement AppealsEditButton;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:OITandInitialDVTab")
+	private WebElement AppealTab;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:WSIB_AppealTypeCase")
+	private WebElement WSIB_AppealTypeCase;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:WSIB_NewAppealType")
+	private WebElement WSIB_NewAppealType;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:language")
+	private WebElement language;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:CaseRefferal")
+	private WebElement CaseRefferal;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:otherparticipating")
+	private WebElement otherparticipating;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:DualObj")
+	private WebElement ObjOrigin;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:Update")
+	private WebElement MatterDetailPage_update;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:ToolbarButton_AppealRequest")
+	private WebElement CreateNumber;
+	@FindBy(id = "MatterDetailPage:MatterDetailScreen:Matter_Name")  private WebElement AppealNumber;
 	//@FindBy(id = "MatterDetailPage:MatterDetailScreen:Update") private WebElement MatterDetailPage_update;
 	//@FindBy(id = "MatterDetailPage:MatterDetailScreen:Update") private WebElement MatterDetailPage_update;
 
-
+	@FindBy(id = "BatchProcessInfo:BatchProcessScreen:ttlBar") private WebElement BatchProcessInfoBar;
+	@FindBy(id = "InternalToolsTabBar:ReturnTabBarLink") private WebElement ReturnToClaimCenter;
+	@FindBy(id = "Claim:ClaimInfoBar:originatingChannel_link") private WebElement OriginatingChannel;
 
 	public GuidewirePage(WebDriver driver, WebDriverWait wait) {
 		super(driver, wait);
@@ -164,10 +277,10 @@ public class GuidewirePage extends BaseDriverClass {
 	}
 
 	public boolean searchClaim(String claimnumber) {
-			SearchTab.click();
-			ClaimSearchField.sendKeys(claimnumber);
-			SearchButton.click();
-			SelectClaimfromSearch.click();
+		SearchTab.click();
+		ClaimSearchField.sendKeys(claimnumber);
+		SearchButton.click();
+		SelectClaimfromSearch.click();
 		return SummaryTitlebar.isDisplayed();
 	}
 
@@ -185,11 +298,11 @@ public class GuidewirePage extends BaseDriverClass {
 	}
 
 	public boolean navigatePortalAuthScreen() {
-        AdminTab.click();
+		AdminTab.click();
 		PortalAuthorizationLink.click();
 		waitUntilElementVisible(SearchClaimNumberUserInput);
 		return SearchClaimNumberUserInput.isDisplayed();
-    }
+	}
 
 	public boolean removeClaimfromPortalAuth(String claimnumber) {
 		SearchClaimNumberUserInput.sendKeys(claimnumber);
@@ -197,13 +310,11 @@ public class GuidewirePage extends BaseDriverClass {
 		EmailProfileLink.click();
 		EditButton.click();
 		List<WebElement> rows = PortalAuthTable.findElements(By.tagName("tr"));
-		for(WebElement row: rows)
-		{
+		for (WebElement row : rows) {
 			List<WebElement> cells = row.findElements(By.tagName("td"));
-			for(WebElement cell:cells)
-			{
-				if(cell.getText().equals(claimnumber)){
-					WebElement checkbox=row.findElement(By.xpath(".//input[@type='checkbox']"));
+			for (WebElement cell : cells) {
+				if (cell.getText().equals(claimnumber)) {
+					WebElement checkbox = row.findElement(By.xpath(".//input[@type='checkbox']"));
 
 					checkbox.click();
 					break;
@@ -223,13 +334,11 @@ public class GuidewirePage extends BaseDriverClass {
 	public boolean removeDirectDeposit() {
 		ClaimParticipantsLink.click();
 		List<WebElement> rows = ClaimParticipantsTable.findElements(By.tagName("tr"));
-		for(WebElement row: rows)
-		{
+		for (WebElement row : rows) {
 			List<WebElement> cells = row.findElements(By.tagName("td"));
-			for(WebElement cell:cells)
-			{
-				if(cell.getText().equals("Worker")){
-					WebElement Role=row.findElement(By.xpath(".//span[@value='Worker']"));
+			for (WebElement cell : cells) {
+				if (cell.getText().equals("Worker")) {
+					WebElement Role = row.findElement(By.xpath(".//span[@value='Worker']"));
 					Role.click();
 					break;
 				}
@@ -241,6 +350,7 @@ public class GuidewirePage extends BaseDriverClass {
 	}
 
 	public boolean verifyLandedDocument(String author, String description) throws InterruptedException {
+		int times = 2;
 		ClaimDocumentsLink.click();
 		Select hidden = new Select(HiddenDropdown);
 		hidden.selectByValue("Yes");
@@ -251,8 +361,10 @@ public class GuidewirePage extends BaseDriverClass {
 		Search_link.click();
 		Thread.sleep(5000);
 		boolean recordFound = false;
-
-		for (int i = 0; i < 50; i++) {
+		if (prop.getProperty("DocuploadVerification").equalsIgnoreCase("Yes")) {
+			times = 50;
+		}
+		for (int i = 0; i < times; i++) {
 			waitUntilElementVisible(DocumentsTable);
 			List<WebElement> rows = DocumentsTable.findElements(By.tagName("tr"));
 			for (WebElement row : rows) {
@@ -270,7 +382,7 @@ public class GuidewirePage extends BaseDriverClass {
 				break;
 			} else {
 				Thread.sleep(5000);
-				System.out.println("Retrying for "+ i+ " times");
+				System.out.println("Retrying for " + i + " times");
 				Search_link.click();
 				Thread.sleep(5000);
 			}
@@ -281,6 +393,7 @@ public class GuidewirePage extends BaseDriverClass {
 	}
 
 	public boolean verifyLandedUNCDDocument(String author, String description) throws InterruptedException {
+		int times = 2;
 		UnnumberedDocLink.click();
 		Select hidden = new Select(HiddenDropdown);
 		hidden.selectByValue("Yes");
@@ -292,8 +405,11 @@ public class GuidewirePage extends BaseDriverClass {
 		Thread.sleep(5000);
 
 		boolean recordFound = false;
+		if (prop.getProperty("DocuploadVerification").equalsIgnoreCase("Yes")) {
+			times = 50;
+		}
 
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < times; i++) {
 			waitUntilElementVisible(UNCDDocumentsTable);
 			List<WebElement> rows = UNCDDocumentsTable.findElements(By.tagName("tr"));
 			for (WebElement row : rows) {
@@ -311,7 +427,7 @@ public class GuidewirePage extends BaseDriverClass {
 				break;
 			} else {
 				Thread.sleep(5000);
-				System.out.println("Retrying for "+ i+ " times");
+				System.out.println("Retrying for " + i + " times");
 				Search_link.click();
 				Thread.sleep(5000);
 			}
@@ -322,12 +438,10 @@ public class GuidewirePage extends BaseDriverClass {
 	}
 
 	public boolean verifyonGWCC() {
-		if(prop.getProperty("env").equalsIgnoreCase("BAT")) {
+		if (prop.getProperty("env").equalsIgnoreCase("BAT")) {
 			getDriver().switchTo().frame("top_frame");
 			return usernameTextField.isDisplayed();
-		}
-		else
-		{
+		} else {
 			getDriver().switchTo().defaultContent();
 			getDriver().switchTo().frame("top_frame");
 			return true;
@@ -510,17 +624,16 @@ public class GuidewirePage extends BaseDriverClass {
 	public String[] registerClaim() throws InterruptedException {
 		Thread.sleep(2000);
 		RegisterClaim.click();
-		try{
-			if(WarningMessage.isDisplayed()){
-				if(WarningMessage.getText().contains("This worker has recent prior claims. Please review")){
-				PriorClaimsTab.click();
-				Thread.sleep(2000);
-				RegisterClaim.click();
+		try {
+			if (WarningMessage.isDisplayed()) {
+				if (WarningMessage.getText().contains("This worker has recent prior claims. Please review")) {
+					PriorClaimsTab.click();
+					Thread.sleep(2000);
+					RegisterClaim.click();
 				}
 			}
-		}
-		catch(Exception e){
-			System.out.println("Warning Message: "+e);
+		} catch (Exception e) {
+			System.out.println("Warning Message: " + e);
 		}
 		waitUntilElementVisible(NewClaimHeader);
 		String claimnumber = NewClaimHeader.getText().split(" ")[1];
@@ -534,7 +647,7 @@ public class GuidewirePage extends BaseDriverClass {
 		} catch (NoAlertPresentException e) {
 			System.out.println("No alert present");
 		}
-		return	claimdetails;
+		return claimdetails;
 
 	}
 
@@ -549,26 +662,64 @@ public class GuidewirePage extends BaseDriverClass {
 	}
 
 	public boolean searchClaimant(String firstname, String lastname, String dateofbirth) throws InterruptedException {
+		int times = 2;
 		SearchTab.click();
 		SearchFirstName.sendKeys(firstname);
 		SearchLastName.sendKeys(lastname);
 		jsSendKeys(SearchDOB, dateofbirth);
 		SearchButton.click();
-		for (int loop = 0; loop < 50; loop++) {
+		if (prop.getProperty("DocuploadVerification").equalsIgnoreCase("Yes")) {
+			times = 50;
+		}
+		for (int loop = 0; loop < times; loop++) {
 			try {
 				if (SelectClaimfromSearch.isDisplayed()) {
 					SelectClaimfromSearch.click();
 					break;
 				}
-			}catch(Exception e){
-					System.out.println("Search Results not available Yet, trying again..." + loop);
-					Thread.sleep(5000);
-					SearchTab.click();
-				}
+			} catch (Exception e) {
+				System.out.println("Search Results not available Yet, trying again..." + loop);
+				Thread.sleep(5000);
+				SearchTab.click();
+			}
 
 		}
 		waitUntilElementVisible(ClaimRegistrationTitlebar);
 		return ClaimRegistrationTitlebar.isDisplayed();
+
+
+	}
+	public boolean searchDIClaim(String firstname, String lastname, String dateofbirth) throws InterruptedException {
+
+		SearchTab.click();
+		SearchFirstName.sendKeys(firstname);
+		SearchLastName.sendKeys(lastname);
+		jsSendKeys(SearchDOB, dateofbirth);
+		SearchButton.click();
+
+		for (int loop = 0; loop < 10; loop++) {
+			try {
+				if (SelectClaimfromSearch.isDisplayed()) {
+					// Update the current row data with the new values
+					System.out.println("Claim found in GWCC: " + SelectClaimfromSearch.getText());
+					Map<String, String> currentRowData = Hooks.currentRow.get();
+					currentRowData.put("Claim Number", SelectClaimfromSearch.getText());
+
+					String sheetName = Hooks.sheetName;
+					ExcelUtils.updateExcelData(sheetName, currentRowData);
+					Hooks.currentRow.set(currentRowData);
+					SelectClaimfromSearch.click();
+					break;
+				}
+			} catch (Exception e) {
+				System.out.println("Search Results not available Yet, trying again..." + loop);
+				Thread.sleep(5000);
+				SearchTab.click();
+			}
+
+		}
+		waitUntilElementVisible(OriginatingChannel);
+		return OriginatingChannel.isDisplayed();
 
 
 	}
@@ -578,7 +729,7 @@ public class GuidewirePage extends BaseDriverClass {
 		SearchPortalAuth.click();
 		EmailProfileLink.click();
 		EditButton.click();
-		if(isDisplayed(CheckboxAll)) {
+		if (isDisplayed(CheckboxAll)) {
 			CheckboxAll.click();
 			PortalAuthDeleteButton.click();
 		}
@@ -614,12 +765,57 @@ public class GuidewirePage extends BaseDriverClass {
 		Thread.sleep(2000);
 		CreateNumber.click();
 		waitUntilElementVisible(AppealNumber);
-		if(!AppealNumber.getText().isEmpty()){
+		if (!AppealNumber.getText().isEmpty()) {
 			MatterDetailPage_update.click();
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
+
+	public boolean runDIBatchJob(String batchNameToRun) throws InterruptedException {
+		mimicAltShiftT(getDriver());
+		// Locate the table rows
+		waitUntilElementVisible(BatchProcessInfoBar);
+		List<WebElement> rows = getDriver().findElements(By.xpath("//table[@id='BatchProcessInfo:BatchProcessScreen:BatchProcessesLV']/tbody/tr"));
+		WebElement lastRunStatus = null;
+
+		for (WebElement row : rows) {
+			// Find the batch name in the current row
+			WebElement batchNameElement = row.findElement(By.xpath(".//span[contains(@id, 'BatchProcess')]"));
+			String batchName = batchNameElement.getText();
+
+			// Check if the batch name matches the desired batch
+			if (batchNameToRun.equals(batchName)) {
+				// Click the "Run" button in the same row
+				WebElement runButton = row.findElement(By.xpath(".//a[contains(@id, 'RunBatchWithoutNotify')]"));
+				runButton.click();
+				Thread.sleep(5000);
+
+				// Re-locate the row and the Last Run Status element after the refresh
+				for (int i = 0; i < 10; i++) {
+					row = getDriver().findElement(By.xpath("//table[@id='BatchProcessInfo:BatchProcessScreen:BatchProcessesLV']/tbody/tr[.//span[text()='" + batchNameToRun + "']]"));
+					lastRunStatus = row.findElement(By.xpath(".//span[contains(@id, 'LastRunStatus')]"));
+
+					// Check if the batch has completed
+					if (lastRunStatus.getText().equalsIgnoreCase("Completed")) {
+						break;
+					}
+					Thread.sleep(2000); // Wait before re-checking
+				}
+				break;
+			}
+		}
+
+		// Check if the batch completed successfully
+		if (lastRunStatus != null && lastRunStatus.getText().equalsIgnoreCase("Completed")) {
+			System.out.println("Batch job run has been completed");
+			ReturnToClaimCenter.click();
+			return true;
+		} else {
+			System.out.println("Batch job run has failed");
+			return false;
+		}
+	}
+
 }

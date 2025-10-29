@@ -1,19 +1,13 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Suite" parallel="tests" thread-count="2">
+<suite name="Sanity Test Suite">
     <listeners>
 <!--        <listener class-name="utils.ExtentReportListener"/>-->
 <!--        <listener class-name="utils.CustomReportListener"/>-->
 <!--        <listener class-name="utils.TestListener"/>-->
     </listeners>
-    <test name="Sanity Test">
-        <classes>
-<!--            <class name="testRunner.OSPCTests"/>-->
-<!--            <class name="testRunner.DirectDepositTest"/>-->
-<!--            <class name="testRunner.UNCD_Tests"/>-->
-<!--            <class name="testRunner.WT_Tests"/>-->
-<!--            <class name="testRunner.CAA_Tests"/>-->
-<!--            <class name="testRunner.NIHL_Tests"/>-->
-<!--            <class name="testRunner.DIEform6_Tests"/>-->
-        </classes>
-    </test>
+    <suite-files>
+        <suite-file path="src/test/resources/BATEnvironment.xml"/>
+        <suite-file path="src/test/resources/PPDEnvironment.xml"/>
+        <!-- Add other test XML files here -->
+    </suite-files>
 </suite>

@@ -8,10 +8,7 @@ import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.DynamicIntakeEform6.*;
-import pages.DynamicIntakeEform7.DIeForm7;
-import pages.DynamicIntakeEform7.DIeForm7_EmployerDetails;
-import pages.DynamicIntakeEform7.DIeForm7_ReportType;
-import pages.DynamicIntakeEform7.DIeForm7_ReporterDetails;
+import pages.DynamicIntakeEform7.*;
 import pages.GuidewireClaimCenter.GuidewirePage;
 import pages.OSPC.OSPCClaimOverview;
 import utils.ConfigReader;
@@ -19,7 +16,10 @@ import utils.ExcelUtils;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Map;
+
+import static utils.BaseDriverClass.generateRandomText;
 
 public class EForm7 {
 
@@ -29,13 +29,21 @@ public class EForm7 {
     private DIeForm7_ReportType eform7_reporttype;
     private DIeForm7_ReporterDetails eform7_reporterdetails;
     private DIeForm7_EmployerDetails eform7_employerdetails;
+    private DIeForm7_EmployeeDetails eform7_employeedetails;
+    private DIeForm7_WorkHistory eform7_workhistorydetails;
+    private DIeForm7_InjuryIllnessDetails eform7_injuryillnessdetails;
+    private DIeForm7_HealthCareDetails eform7_healthcaredetails;
+    private DIeForm7_LosstimeEarningsDetails eform7_losstimeearningsdetails;
+    private DIeForm7_SupportingDocuments eform7_supportingdocuments;
+    private DIeForm7_ReviewandSubmit eform7_reviewandsubmit;
 
     private GuidewirePage guidewirecc;
     private pages.OSPC.OSPCClaimOverview OSPCClaimOverview;
     ConfigReader prop= Hooks.getConfigReader();
+    ConfigReader common = Hooks.getCommonReader();
     public EForm7() throws Exception {
         driver = Hooks.getDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(common.getProperty("timeout"))));
 
         guidewirecc = new GuidewirePage(driver, wait);
         OSPCClaimOverview = new OSPCClaimOverview(driver, wait);
@@ -43,6 +51,13 @@ public class EForm7 {
         eform7_reporttype = new DIeForm7_ReportType(driver, wait);
         eform7_reporterdetails = new DIeForm7_ReporterDetails(driver, wait);
         eform7_employerdetails = new DIeForm7_EmployerDetails(driver, wait);
+        eform7_employeedetails = new DIeForm7_EmployeeDetails(driver, wait);
+        eform7_workhistorydetails = new DIeForm7_WorkHistory(driver, wait);
+        eform7_injuryillnessdetails = new DIeForm7_InjuryIllnessDetails(driver, wait);
+        eform7_healthcaredetails = new DIeForm7_HealthCareDetails(driver, wait);
+        eform7_losstimeearningsdetails = new DIeForm7_LosstimeEarningsDetails(driver, wait);
+        eform7_supportingdocuments = new DIeForm7_SupportingDocuments(driver, wait);
+        eform7_reviewandsubmit = new DIeForm7_ReviewandSubmit(driver, wait);
     }
 
 
@@ -114,5 +129,96 @@ public class EForm7 {
 
 
 
+    }
+
+    @And("User should be able to enter Employee details")
+    public void userShouldBeAbleToEnterEmployeeDetails() throws InterruptedException {
+        String EmployeeFirstName = "Auto"+ generateRandomText(5) ;
+        String EmployeeLastName = "Test"+ generateRandomText(5);
+        String PhoneNumber = Hooks.currentRow.get().get("Phone Number");
+        String Sex = Hooks.currentRow.get().get("Sex");
+        String Pronouns = Hooks.currentRow.get().get("Pronouns");
+        String DateOfBirth = Hooks.currentRow.get().get("Date of Birth");
+        String Language = Hooks.currentRow.get().get("Language of Service");
+        String SIN = Hooks.currentRow.get().get("SIN");
+        String Address = Hooks.currentRow.get().get("Address");
+
+
+        // Update the Excel sheet with the manipulated names
+        Map<String, String> updatedRowData = new HashMap<>();
+        updatedRowData.put("First Name", EmployeeFirstName);
+        updatedRowData.put("Last Name", EmployeeLastName);
+        try {
+            ExcelUtils.updateExcelData(Hooks.sheetName, updatedRowData);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Assert.assertTrue(eform7_employeedetails.selectEmployeeDetails(EmployeeFirstName,EmployeeLastName,
+                PhoneNumber,Sex,Pronouns,DateOfBirth,Language,SIN,Address));
+    }
+
+    @And("User should be able to enter Work History details")
+    public void userShouldBeAbleToEnterWorkHistoryDetails() throws InterruptedException {
+        // Implementation for Work History details can be added here
+        String JobTitle = Hooks.currentRow.get().get("Job Title");
+        String EmpStartDate = Hooks.currentRow.get().get("Emp Start Date");
+        String EmpYears = Hooks.currentRow.get().get("Emp Years");
+        String EmpMonths = Hooks.currentRow.get().get("Emp Months");
+        String SupervisorContact = Hooks.currentRow.get().get("Supervisor Contact");
+        String Employees = Hooks.currentRow.get().get("# Employees");
+        String Union = Hooks.currentRow.get().get("Union?");
+        String IsSpouseRelavtive = Hooks.currentRow.get().get("IsSpouseRelavtive");
+        String EmployerRelation = Hooks.currentRow.get().get("EmployerRelation");
+
+
+        Assert.assertTrue(eform7_workhistorydetails.selectWorkHistoryDetails(JobTitle,EmpStartDate,EmpYears,EmpMonths,SupervisorContact,
+                Employees,Union,IsSpouseRelavtive,EmployerRelation));
+    }
+
+
+    @And("User should be able to enter Injury Illness details")
+    public void userShouldBeAbleToEnterInjuryIllnessDetails() throws InterruptedException {
+        // Implementation for Injury/Illness details can be added here
+        String WhatHappenedInput = Hooks.currentRow.get().get("WhatHappenedInput");
+        String InjuryDate = Hooks.currentRow.get().get("Injury Date");
+        String BodyParts = Hooks.currentRow.get().get("Body Parts");
+        String EmployerKnownDate = Hooks.currentRow.get().get("EmployerKnownDate");
+        String reportedTo = Hooks.currentRow.get().get("reported to?");
+        String Witness = Hooks.currentRow.get().get("Witness");
+        String PriorConditions = Hooks.currentRow.get().get("Prior Conditions");
+        String ThirdParty = Hooks.currentRow.get().get("Third Party");
+        String Objection = Hooks.currentRow.get().get("Objection");
+
+        Assert.assertTrue(eform7_injuryillnessdetails.selectInjuryIllnessDetails(WhatHappenedInput,InjuryDate,BodyParts,
+                EmployerKnownDate,reportedTo,Witness,PriorConditions,ThirdParty,Objection));
+
+    }
+
+    @And("User should be able to enter Health care details")
+    public void userShouldBeAbleToEnterHealthCareDetails() throws InterruptedException {
+        // Implementation for Health Care details can be added here
+        String HealthCare = Hooks.currentRow.get().get("HealthCare");
+        Assert.assertTrue(eform7_healthcaredetails.selectHealthCareDetails(HealthCare));
+    }
+
+    @And("User should be able to enter Loss Time and Earnings details")
+    public void userShouldBeAbleToEnterLossTimeAndEarningsDetails() {
+        // Implementation for Loss Time and Earnings details can be added here
+        String LOE = Hooks.currentRow.get().get("LOE");
+        String TypeofWork = Hooks.currentRow.get().get("Type of Work");
+        String WageLoss = Hooks.currentRow.get().get("Wage Loss");
+        Assert.assertTrue(eform7_losstimeearningsdetails.selectLossTimeAndEarningsDetails(LOE,TypeofWork,WageLoss));
+    }
+
+    @And("User should be able to attach Supporting Documents")
+    public void userShouldBeAbleToAttachSupportingDocuments() throws InterruptedException {
+        // Implementation for attaching Supporting Documents can be added here
+       Assert.assertTrue( eform7_supportingdocuments.attachSupportingDocuments());
+    }
+
+    @And("User should be able to review and submit the report")
+    public void userShouldBeAbleToReviewAndSubmitTheReport() {
+        Assert.assertTrue( eform7_reviewandsubmit.submitEform7Report());
     }
 }

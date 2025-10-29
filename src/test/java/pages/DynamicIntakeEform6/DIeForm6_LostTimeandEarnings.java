@@ -125,12 +125,11 @@ public class DIeForm6_LostTimeandEarnings extends BaseDriverClass {
 
 			} else {
 				typeOfWorkModified.click();
-				expectedModifiedDateDay.click();
-				ClickusingActions(modifiedDate.split("\\|")[0]);
-				expectedModifiedMonth.click();
-				ClickusingActions(modifiedDate.split("\\|")[1]);
-				expectedModifiedYear.click();
-				ClickusingActions(modifiedDate.split("\\|")[2]);
+				waitUntilElementVisible(expectedModifiedDateDay);
+				selectDropdownValue(expectedModifiedDateDay, modifiedDate.split("\\|")[0]);
+				selectDropdownValue(expectedModifiedMonth, modifiedDate.split("\\|")[1]);
+				selectDropdownValue(expectedModifiedYear, modifiedDate.split("\\|")[2]);
+
 				if(wageLoss.equalsIgnoreCase("yes")) {
 					wageLostYes.click();
 				} else {

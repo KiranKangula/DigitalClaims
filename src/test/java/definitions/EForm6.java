@@ -31,9 +31,10 @@ public class EForm6 {
     private GuidewirePage guidewirecc;
     private pages.OSPC.OSPCClaimOverview OSPCClaimOverview;
     ConfigReader prop= Hooks.getConfigReader();
+    ConfigReader common = Hooks.getCommonReader();
     public EForm6() throws Exception {
         driver = Hooks.getDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(common.getProperty("timeout"))));
         eform6= new DIeForm6(driver, wait);
         eform6WorkHistory = new DIeForm6_WorkHistory(driver, wait);
         eform6InjuryDetails = new DIeForm6_InjuryDetails(driver, wait);
@@ -401,4 +402,6 @@ public class EForm6 {
 
 
     }
+
+
 }

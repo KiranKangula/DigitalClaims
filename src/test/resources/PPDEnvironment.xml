@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Sanity Test Suite for PPD Environment">
+    <listeners>
+<!--        <listener class-name="utils.ExtentReportListener"/>-->
+<!--        <listener class-name="utils.CustomReportListener"/>-->
+<!--        <listener class-name="utils.TestListener"/>-->
+    </listeners>
+    <test name="Sanity Tests for PPD Environment">
+    <classes>
+        <class name="testRunner.UNCD_Tests"/>
+        <class name="testRunner.NIHL_Tests"/>
+        <class name="testRunner.WT_Tests"/>
+        <class name="testRunner.CAA_Tests"/>
+    </classes>
+    </test>
+</suite>

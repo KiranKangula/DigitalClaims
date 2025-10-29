@@ -24,9 +24,10 @@ public class ClothingAllowance {
 	private WTLandingPage WTlandingpage;
 	private Clothingallowance clothingallowance;
 	ConfigReader prop= Hooks.getConfigReader();
+	ConfigReader common = Hooks.getCommonReader();
 	public ClothingAllowance() throws Exception {
 		driver = Hooks.getDriver();
-		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
+		wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(common.getProperty("timeout"))));
 		loginPage = new LoginPage(driver, wait);
 		WTlandingpage = new WTLandingPage(driver, wait);
 		clothingallowance = new Clothingallowance(driver, wait);

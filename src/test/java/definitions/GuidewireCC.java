@@ -34,10 +34,11 @@ public class GuidewireCC {
     private HomePage homePage;
     private GuidewirePage guidewirecc;
     ConfigReader prop= Hooks.getConfigReader();
+    ConfigReader common = Hooks.getCommonReader();
     List<Map<String, String>> data = Hooks.data;
     public GuidewireCC() throws Exception {
         driver = getDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(prop.getProperty("timeout"))));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(common.getProperty("timeout"))));
         loginPage = new LoginPage(driver, wait);
         homePage = new HomePage(driver, wait);
         guidewirecc = new GuidewirePage(driver, wait);
@@ -253,5 +254,20 @@ public class GuidewireCC {
     public void verifyTheAppealIsCreatedInClaimCenter() throws InterruptedException {
 
         Assert.assertTrue(guidewirecc.createAppeal());
+    }
+
+
+    @And("Run the DI batch job in ClaimCenter to process the Auto Registration")
+    public void runTheDIBatchJobInClaimCenterToProcessTheAutoRegistration() throws InterruptedException {
+        Assert.assertTrue(guidewirecc.runDIBatchJob("Process Auto Reg Claims"));
+    }
+
+    @And("Verify the Claim is Auto Registered in ClaimCenter")
+    public void verifyTheClaimIsAutoRegisteredInClaimCenter() throws InterruptedException {
+        String Firstname = Hooks.currentRow.get().get("First Name");
+        String Lastname = Hooks.currentRow.get().get("Last Name");
+        String dateofbirth = Hooks.currentRow.get().get("Date of Birth");
+        dateofbirth  = getDateFormat(dateofbirth, "d/MMMM/yyyy", "dd/MM/yyyy") ;
+        Assert.assertTrue(guidewirecc.searchDIClaim(Firstname, Lastname, dateofbirth));
     }
 }

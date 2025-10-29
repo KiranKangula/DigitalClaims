@@ -9,6 +9,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.BaseDriverClass;
 import utils.ConfigReader;
 
+import java.time.LocalDate;
+
 public class DIeForm7_EmployerDetails extends BaseDriverClass {
 	ConfigReader prop = Hooks.getConfigReader();
 
@@ -16,7 +18,7 @@ public class DIeForm7_EmployerDetails extends BaseDriverClass {
 	private WebElement ModalPopup;
 	@FindBy(xpath = "//*[@class='DistributionPopUpButton2']")
 	private WebElement DistributionPopUpNo;
-	@FindBy(xpath = "//*[contains(text(),'Next')]")
+	@FindBy(xpath = "//*[contains(@class,'rightImgIcon')]")
 	private WebElement NextButton;
 	@FindBy(id = "employerDetailsHeading")
 	private WebElement employerDetailsHeading;
@@ -49,9 +51,17 @@ public class DIeForm7_EmployerDetails extends BaseDriverClass {
 		NextButton.click();
 		selectRadioButtonOption(employerInfoAddress_radio, branchAddress);
 		NextButton.click();
-		selectRadioButtonOption(intakeBodySection_checkbox, "Pick");
-		Select(dropdownYear, businessYear);
-		SearchButton.click();
+		// Get the current date
+		LocalDate today = LocalDate.now();
+		// Extract the current year
+		int currentYear = today.getYear();
+		Integer.parseInt(businessYear);
+		if(Integer.parseInt(businessYear)!= currentYear+1) {
+			selectRadioButtonOption(intakeBodySection_checkbox, "Pick");
+			Select(dropdownYear, businessYear);
+			SearchButton.click();
+		}
+
 		selectRadioButtonOption(NAICS_radio, naicsCode);
 		NextButton.click();
 		return RefNum;

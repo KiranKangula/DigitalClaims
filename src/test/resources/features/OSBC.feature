@@ -15,6 +15,16 @@ Feature: Online Service for Business with Claims(OSBC)
     And User should be able to select radio PhysicalInjury, Body Part
     And User should be able to Select Reported by
     And User should be able to enter Employer details and get Reference Claim Number
-#    And User should be able to enter "<ExistingClaimNumber>" if applicable
-#    And User should be able to enter "<FirstName>", "<LastName>", "<PhoneNumber>", "<Pronouns>"
-#    And Enter Additional personal details
+    And User should be able to enter Employee details
+    And User should be able to enter Work History details
+    And User should be able to enter Injury Illness details
+    And User should be able to enter Health care details
+    And User should be able to enter Loss Time and Earnings details
+    And User should be able to attach Supporting Documents
+    And User should be able to review and submit the report
+    Then Switch to New tab and Login to ClaimCenter
+    And Run the DI batch job in ClaimCenter to process the Auto Registration
+    And Verify the Claim is Auto Registered in ClaimCenter
+
+
+

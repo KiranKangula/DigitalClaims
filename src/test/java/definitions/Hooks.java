@@ -32,7 +32,9 @@ import utils.ExtentReportListener;
 
 public class Hooks {
     private static ConfigReader configReader;
+    private static ConfigReader commonPropReader;
     public static List<Map<String, String>> data;
+    //private static ThreadLocal<List<Map<String, String>>> data = ThreadLocal.withInitial(() -> null);
      public static int currentIndex=0;
     public static ThreadLocal<Map<String, String>> currentRow = ThreadLocal.withInitial(() -> null);
     private static ThreadLocal<WebDriver> driver = ThreadLocal.withInitial(() -> null);
@@ -46,6 +48,8 @@ public class Hooks {
                 [scenario.getUri().getPath().split("/").length-1].replace(".feature", "");
         String propertyFilePath= "src/test/resources/config/"+ featureName+ ".properties";
         configReader = new ConfigReader(propertyFilePath);
+        String commonPropReaderPath= "src/test/resources/config/Common.properties";
+        commonPropReader = new ConfigReader(commonPropReaderPath);
         sheetName = scenario.getSourceTagNames()
                 .stream()
                 .filter(tag -> tag.startsWith("@SheetName_"))
@@ -66,13 +70,18 @@ public class Hooks {
             scenario.log("Sheet name could not be determined for this scenario");
             return;
         }
+        //List<Map<String, String>> testData = ExcelUtils.readExcelData(sheetname);
         data = ExcelUtils.readExcelData(sheetname);
+
         data.forEach(row-> System.out.println(row));
+        //data.get().forEach(row -> System.out.println(row));
+        //data.set(testData);
         currentIndex = 0; // Reset currentIndex before each test run
     }
 
     @Before(order = 2)
     public void setScenarioData(Scenario scenario) {
+        //List<Map<String, String>> testData = data.get();
         if (data != null && !data.isEmpty()) {
             if (currentRow == null) {
                 currentRow = ThreadLocal.withInitial(() -> null);
@@ -89,6 +98,8 @@ public class Hooks {
             scenario.log("Test data is not loaded or is empty.");
            // currentRow.set(data.get(currentIndex));
         }
+
+
     }
 
     public static String getSheetName(Scenario scenario) {
@@ -104,11 +115,13 @@ public class Hooks {
     public static ConfigReader getConfigReader(){
         return configReader;
     }
+    public static ConfigReader getCommonReader(){
+        return commonPropReader;
+    }
 
     public static WebDriver getDriver() {
         return driver.get();
     }
-
     @Before
     public void openBrowser(Scenario scenario) throws Exception {
 
@@ -119,7 +132,7 @@ public class Hooks {
         }
             WebDriver webDriver;
             String browser = configReader.getProperty("browser");
-            boolean isHeadless = configReader.getProperty("headless").contentEquals("true");
+            boolean isHeadless = commonPropReader.getProperty("headless").contentEquals("true");
 
             switch (browser) {
                 case "chrome":
@@ -182,7 +195,7 @@ public class Hooks {
     @AfterStep
     public void takeScreenshot(Scenario scenario) {
 
-                if(scenario.isFailed() || configReader.getProperty("screenshots").contentEquals("true")) {
+                if(scenario.isFailed() || commonPropReader.getProperty("screenshots").contentEquals("true")) {
             try {
                 final byte[] screenshot = ((TakesScreenshot)driver.get()).getScreenshotAs(OutputType.BYTES);
                 String screenshotname = scenario.getName().replaceAll(" ","_")+".png";

@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Sanity Test Suite for BAT Environment">
+    <listeners>
+<!--        <listener class-name="utils.ExtentReportListener"/>-->
+<!--        <listener class-name="utils.CustomReportListener"/>-->
+<!--        <listener class-name="utils.TestListener"/>-->
+    </listeners>
+    <test name="Sanity Tests for BAT Environment">
+    <classes>
+        <class name="testRunner.OSPCTests"/>
+        <class name="testRunner.DirectDepositTest"/>
+        <class name="testRunner.DIEform6_Tests"/>
+        <class name="testRunner.OSBCTests"/>
+    </classes>
+    </test>
+</suite>

@@ -12,7 +12,7 @@ import java.util.Date;
 
 @CucumberOptions(
         features = "src/test/resources/features",
-        tags = "@ClaimCreation",
+        tags = "@TestBatchRun",
         glue = "definitions",
         monochrome = true,
         plugin = {"pretty"},
