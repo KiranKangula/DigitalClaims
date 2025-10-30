@@ -311,7 +311,7 @@ public class EForm6 {
     public void selectDecisionToAddClaimToYourAccount() throws InterruptedException {
         String AddClaimtoProfile= Hooks.currentRow.get().get("AddClaimtoProfile");
         Assert.assertTrue(eform6ReviewandSubmit.selectAddClaimtoProfile(AddClaimtoProfile));
-        eform6ReviewandSubmit.verifyReturnToDashBoard();
+        Assert.assertTrue(eform6ReviewandSubmit.verifyReturnToDashBoard());
     }
 
     @And("Enter the injury or illness details")

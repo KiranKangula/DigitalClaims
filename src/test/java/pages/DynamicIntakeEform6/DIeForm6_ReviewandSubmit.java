@@ -18,8 +18,8 @@ public class DIeForm6_ReviewandSubmit extends BaseDriverClass {
 	@FindBy(xpath = "//*[@id=\"radioTimeLost\"]/div[2]/label") private WebElement AddClaimtoProfileNo;
 	@FindBy(xpath = "//*[@id=\"intakeBodySection\"]/div[2]/div[1]/span[2]/a/span") private WebElement submitReportButton;
 	@FindBy(xpath = "//*[@id=\"acnHeadingH1\"]") private WebElement confirmationMessage;
-	@FindBy(xpath = "//*[@id=\"returnToDashboardButton\"]/span/span") private WebElement returnToDashboardButton;
-
+	@FindBy(xpath = "//*[@id=\"returnToDashboardButton\"]/span") private WebElement returnToDashboardButton;
+	@FindBy(xpath = "//*[@id=\"claimSummaryBodySection\"]") private WebElement ClaimSummaryPage;
 
 	public DIeForm6_ReviewandSubmit(WebDriver driver, WebDriverWait wait) {
 		super(driver, wait);
@@ -36,15 +36,16 @@ public class DIeForm6_ReviewandSubmit extends BaseDriverClass {
 		return AddClaimtoProfile.isDisplayed();
 	}
 
-	public void verifyReturnToDashBoard() {
-		if(isDisplayed(returnToDashboardButton)) {
+	public boolean verifyReturnToDashBoard() {
+		if (isDisplayed(returnToDashboardButton)) {
 			waitUntilElementVisible(this.returnToDashboardButton);
 			returnToDashboardButton.click();
-		}
-		else{
+			waitUntilElementVisible(this.ClaimSummaryPage);
+			return this.ClaimSummaryPage.isDisplayed();
+		} else {
 			System.out.println("Return to Dashboard button is not displayed");
+			return false;
 		}
-
 	}
 
 	public boolean verifyReviewAndSubmitExposure() {

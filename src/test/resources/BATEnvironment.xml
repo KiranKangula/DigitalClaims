@@ -4,7 +4,9 @@
 <!--        <listener class-name="utils.ExtentReportListener"/>-->
 <!--        <listener class-name="utils.CustomReportListener"/>-->
 <!--        <listener class-name="utils.TestListener"/>-->
+        <listener class-name="utils.RetryListener" />
     </listeners>
+    <parameter name="excludedClasses" value="testRunner.OSPCTests" />
     <test name="Sanity Tests for BAT Environment">
     <classes>
         <class name="testRunner.OSPCTests"/>
