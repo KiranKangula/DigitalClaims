@@ -1,6 +1,7 @@
 package pages.DynamicIntakeEform7;
 
 import definitions.Hooks;
+import io.cucumber.java.Scenario;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -42,11 +43,12 @@ public class DIeForm7_EmployerDetails extends BaseDriverClass {
 
 
 	public String enterEmployerDetails(String mailingaddress, String branchAddress, String businessYear, String naicsCode) throws InterruptedException {
+		Scenario scenario = Hooks.scenario.get();
 		waitUntilElementVisible(employerDetailsHeading);
 		NextButton.click();
 		String RefNum = ReferenceNumber.getText();
 		onBoardContinueId.click();
-
+		scenario.log("E-Form 7 Reference Number is: " + RefNum);
 		selectRadioButtonOption(employerInfoAddress_radio, mailingaddress);
 		NextButton.click();
 		selectRadioButtonOption(employerInfoAddress_radio, branchAddress);

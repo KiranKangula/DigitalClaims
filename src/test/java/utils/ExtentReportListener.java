@@ -2,6 +2,7 @@ package utils;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 import definitions.Hooks;
@@ -10,14 +11,13 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class ExtentReportListener implements ITestListener {
     private static ExtentReports extent;
-    //private static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
-    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+    private static ThreadLocal<ExtentTest> parentTest = new ThreadLocal<>();
     private static Map<String, ExtentTest> testMap = new HashMap<>();
 
     @Override
@@ -33,66 +33,70 @@ public class ExtentReportListener implements ITestListener {
 
     @Override
     public void onTestStart(ITestResult result) {
-        String scenarioName = Hooks.getScenarioName();
-        String testName = scenarioName != null ? scenarioName : result.getMethod().getMethodName();
+        String testName = result.getTestContext().getName();
+        ExtentTest parent;
 
-        if (!testMap.containsKey(testName)) {
-            ExtentTest extentTest = extent.createTest(testName);
-            if (scenarioName != null) {
-                extentTest.getModel().setDescription("Scenario: " + scenarioName);
-            }
-            testMap.put(testName, extentTest);
-            Hooks.extentTest.set(extentTest);
+        // Use a map to track the top-level TestNG <test> name from testng.xml
+        if (testMap.containsKey(testName)) {
+            parent = testMap.get(testName);
         } else {
-            Hooks.extentTest.set(testMap.get(testName));
+            parent = extent.createTest(testName);
+            testMap.put(testName, parent);
+        }
+        parentTest.set(parent);
+
+        // Get the scenario name from the Hooks class
+        String scenarioName = Hooks.getScenarioName();
+        if (scenarioName != null) {
+            // Create a child node for the specific Cucumber scenario
+            ExtentTest childTest = parentTest.get().createNode(scenarioName);
+            Hooks.extentTest.set(childTest);
+        } else {
+            // Fallback for non-Cucumber tests (e.g., if you run TestNG tests directly)
+            ExtentTest childTest = parentTest.get().createNode(result.getMethod().getMethodName());
+            Hooks.extentTest.set(childTest);
         }
     }
 
-
     @Override
     public void onTestSuccess(ITestResult result) {
-//        String scenarioName = Hooks.getScenarioName();
-//        if (scenarioName != null) {
-//            Hooks.extentTest.get().getModel().setName(scenarioName);
-//            Hooks.extentTest.get().getModel().setDescription("Scenario: " + scenarioName);
-//        }
-        Hooks.extentTest.get().pass("Test passed");
+        ExtentTest currentTest = Hooks.extentTest.get();
+        if (currentTest != null) {
+            currentTest.pass("PASSED");
+        }
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
-        String scenarioName = Hooks.getScenarioName();
-        if (scenarioName != null) {
-            Hooks.extentTest.get().getModel().setName(scenarioName);
-            Hooks.extentTest.get().getModel().setDescription("Scenario: " + scenarioName);
+        ExtentTest currentTest = Hooks.extentTest.get();
+        if (currentTest != null) {
+            WebDriver driver = Hooks.getDriver();
+            if (driver != null) {
+                try {
+                    String screenshotName = Hooks.getScenarioName() != null ? Hooks.getScenarioName() : result.getMethod().getMethodName();
+                    String screenshotPath = ScreenshotUtil.getScreenshot(driver, screenshotName);
+                    currentTest.fail("FAILED:" + "\n" + result.getThrowable(),
+                            MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
+                } catch (IOException e) {
+                    currentTest.fail("FAILED:" + "\n" + result.getThrowable());
+                    currentTest.warning("Failed to attach screenshot: " + e.getMessage());
+                }
+            } else {
+                currentTest.fail("FAILED:" + "\n" + result.getThrowable());
+            }
         }
-        Hooks.extentTest.get().fail(result.getThrowable());
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        String scenarioName = Hooks.getScenarioName();
-        if (scenarioName != null) {
-            Hooks.extentTest.get().getModel().setName(scenarioName);
-            Hooks.extentTest.get().getModel().setDescription("Scenario: " + scenarioName);
+        ExtentTest currentTest = Hooks.extentTest.get();
+        if (currentTest != null) {
+            currentTest.skip("Test skipped");
         }
-        Hooks.extentTest.get().skip("Test skipped");
     }
 
     @Override
     public void onFinish(ITestContext context) {
         extent.flush();
-    }
-
-    public static ExtentReports getExtent() {
-        return extent;
-    }
-
-    public static WebDriver getDriver() {
-        return driver.get();
-    }
-
-    public static void setDriver(WebDriver webDriver) {
-        driver.set(webDriver);
     }
 }

@@ -7,6 +7,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.BaseDriverClass;
 
+import static definitions.Hooks.scenario;
+
 public class AddClaimantInfo extends BaseDriverClass {
 
 	@FindBy(id = "claim-number") private WebElement claimNumber;
@@ -42,6 +44,7 @@ public class AddClaimantInfo extends BaseDriverClass {
 		this.birthdateSelect.sendKeys(dob[0]);
 		this.birthmonthSelect.sendKeys(dob[1]);
 		this.birthyearSelect.sendKeys(dob[2]);
+		scenario.get().log("Claim Number: " + claimNumber + ", Last Name: " + lastName + ", Date of Birth: " + dateOfBirth);
 		NextButton.click();
 		try{
 			if(dateOfBirthHelperText.isDisplayed()){
@@ -65,6 +68,7 @@ public class AddClaimantInfo extends BaseDriverClass {
 			firstname = this.firstname;
 			lastname= this.lastname;
 		}
+		scenario.get().log("First Name: " + firstname + ", Last Name: " + lastname + ", Date of Birth: " + dateofbirth );
 		this.firstName.sendKeys(firstname);
 		this.lastName.sendKeys(lastname);
 		String[] dob = dateofbirth.split("/");

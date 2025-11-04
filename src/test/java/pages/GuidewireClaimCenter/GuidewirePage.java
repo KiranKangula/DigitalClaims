@@ -2,6 +2,7 @@ package pages.GuidewireClaimCenter;
 
 import definitions.Hooks;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.Scenario;
 import junit.framework.AssertionFailedError;
 import org.junit.Assert;
 import org.openqa.selenium.*;
@@ -13,11 +14,13 @@ import utils.BaseDriverClass;
 import utils.ConfigReader;
 import utils.ExcelUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import static definitions.Hooks.getDriver;
+import static definitions.Hooks.scenario;
 import static pages.OSPC.OSPCClaimOverview.randommessage;
 
 public class GuidewirePage extends BaseDriverClass {
@@ -369,15 +372,17 @@ public class GuidewirePage extends BaseDriverClass {
 			List<WebElement> rows = DocumentsTable.findElements(By.tagName("tr"));
 			for (WebElement row : rows) {
 
-				String Author = row.findElement(By.xpath("./td[12]")).getText().toLowerCase();
+				String Author = row.findElement(By.xpath("./td[13]")).getText().toLowerCase();
 				String Description = row.findElement(By.xpath("./td[5]")).getText().toLowerCase();
-				String FinalDate = row.findElement(By.xpath("./td[18]")).getText().toLowerCase();
+				String FinalDate = row.findElement(By.xpath("./td[19]")).getText().toLowerCase();
+				System.out.println("Author: " + Author + ", Description: " + Description + ", FinalDate: " + FinalDate);
 
 				if (Description.contains(description.toLowerCase()) && Author.contains(author.toLowerCase()) && FinalDate.contentEquals(getCurrentDate("dd/MMM/yyyy").toLowerCase())) {
 					recordFound = true;
 					break;
 				}
 			}
+
 			if (recordFound) {
 				break;
 			} else {
@@ -417,7 +422,7 @@ public class GuidewirePage extends BaseDriverClass {
 				String Author = row.findElement(By.xpath("./td[13]")).getText().toLowerCase();
 				String Description = row.findElement(By.xpath("./td[5]")).getText().toLowerCase();
 				String FinalDate = row.findElement(By.xpath("./td[19]")).getText().toLowerCase();
-
+				scenario.get().log("Author: " + Author + ", Description: " + Description + ", FinalDate: " + FinalDate);
 				if (Description.contains(description.toLowerCase()) && Author.contains(author.toLowerCase()) && FinalDate.contentEquals(getCurrentDate("dd/MMM/yyyy").toLowerCase())) {
 					recordFound = true;
 					break;
@@ -662,11 +667,20 @@ public class GuidewirePage extends BaseDriverClass {
 	}
 
 	public boolean searchClaimant(String firstname, String lastname, String dateofbirth) throws InterruptedException {
+		Scenario scenario = Hooks.scenario.get();
 		int times = 2;
+		boolean recordFound = false;
 		SearchTab.click();
 		SearchFirstName.sendKeys(firstname);
 		SearchLastName.sendKeys(lastname);
 		jsSendKeys(SearchDOB, dateofbirth);
+		// Log the information to the HTML report
+		scenario.log("firstname: " + firstname);
+		scenario.log("lastname: " + lastname);
+		scenario.log("dateofbirth: " + dateofbirth);
+		System.out.println("firstname: " + firstname);
+		System.out.println("lastname: " + lastname);
+		System.out.println("dateofbirth: " + dateofbirth);
 		SearchButton.click();
 		if (prop.getProperty("DocuploadVerification").equalsIgnoreCase("Yes")) {
 			times = 50;
@@ -674,6 +688,8 @@ public class GuidewirePage extends BaseDriverClass {
 		for (int loop = 0; loop < times; loop++) {
 			try {
 				if (SelectClaimfromSearch.isDisplayed()) {
+					System.out.println("Document Landed in GWCC:: Reference#: " + SelectClaimfromSearch.getText());
+					recordFound= true;
 					SelectClaimfromSearch.click();
 					break;
 				}
@@ -684,38 +700,44 @@ public class GuidewirePage extends BaseDriverClass {
 			}
 
 		}
-		waitUntilElementVisible(ClaimRegistrationTitlebar);
-		return ClaimRegistrationTitlebar.isDisplayed();
+		return recordFound;
 
 
 	}
-	public boolean searchDIClaim(String firstname, String lastname, String dateofbirth) throws InterruptedException {
-
+	public boolean searchDIClaim(String firstname, String lastname, String dateofbirth) throws InterruptedException, IOException {
+		System.out.println("firstname: " + firstname);
+		System.out.println("lastname: " + lastname);
+		System.out.println("dateofbirth: " + dateofbirth);
 		SearchTab.click();
 		SearchFirstName.sendKeys(firstname);
 		SearchLastName.sendKeys(lastname);
 		jsSendKeys(SearchDOB, dateofbirth);
-		SearchButton.click();
+		for (int loop = 0; loop < 50; loop++) {
+			SearchButton.click();
+			Thread.sleep(2000);
+				if (isDisplayed(SelectClaimfromSearch)) {
+					if (SelectClaimfromSearch.getText().charAt(0) == '3') {
 
-		for (int loop = 0; loop < 10; loop++) {
-			try {
-				if (SelectClaimfromSearch.isDisplayed()) {
-					// Update the current row data with the new values
-					System.out.println("Claim found in GWCC: " + SelectClaimfromSearch.getText());
-					Map<String, String> currentRowData = Hooks.currentRow.get();
-					currentRowData.put("Claim Number", SelectClaimfromSearch.getText());
+						// Update the current row data with the new values
+						System.out.println("Claim found in GWCC: " + SelectClaimfromSearch.getText());
+						Map<String, String> currentRowData = Hooks.currentRow.get();
+						currentRowData.put("Claim Number", SelectClaimfromSearch.getText());
 
-					String sheetName = Hooks.sheetName;
-					ExcelUtils.updateExcelData(sheetName, currentRowData);
-					Hooks.currentRow.set(currentRowData);
-					SelectClaimfromSearch.click();
-					break;
+						String sheetName = Hooks.sheetName;
+						ExcelUtils.updateExcelData(sheetName, currentRowData);
+						Hooks.currentRow.set(currentRowData);
+						SelectClaimfromSearch.click();
+						break;
+					} else {
+						System.out.println("Waiting for Auto Registration to Complete ");
+
+					}
 				}
-			} catch (Exception e) {
-				System.out.println("Search Results not available Yet, trying again..." + loop);
-				Thread.sleep(5000);
-				SearchTab.click();
-			}
+				else {
+					System.out.println("Search Results not available Yet, trying again..." + loop);
+					Thread.sleep(5000);
+					SearchTab.click();
+				}
 
 		}
 		waitUntilElementVisible(OriginatingChannel);

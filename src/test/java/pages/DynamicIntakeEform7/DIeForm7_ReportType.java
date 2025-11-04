@@ -14,7 +14,7 @@ public class DIeForm7_ReportType extends BaseDriverClass {
 
 
 
-	@FindBy(xpath = "//*[@id='myModal' and @class='modal show']") private WebElement ModalPopup;
+	@FindBy(xpath = "//*[@id='myModal' and @class='modalSurveyLink']") private WebElement ModalPopup;
 	@FindBy(xpath = "//*[@class='DistributionPopUpButton2']") private WebElement DistributionPopUpNo;
 	@FindBy(xpath = "//*[contains(@class,'rightImgIcon')]") private WebElement NextButton;
 	private static final String PhysicalInjury_radio = "occurrenceContainer";
@@ -34,6 +34,9 @@ public class DIeForm7_ReportType extends BaseDriverClass {
 
 	public boolean selectPhysicalInjuryDetails(String physicalInjury, String accidentType, String describedBy) {
 		waitUntilElementVisible(natureOfPhysicalInjury);
+		if(isDisplayed(ModalPopup)) {
+			DistributionPopUpNo.click();
+		}
 
 		selectRadioButtonOption(PhysicalInjury_radio, physicalInjury);
 		selectRadioButtonOption(AccidentType_radio, accidentType);

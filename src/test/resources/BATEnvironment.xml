@@ -4,15 +4,17 @@
 <!--        <listener class-name="utils.ExtentReportListener"/>-->
 <!--        <listener class-name="utils.CustomReportListener"/>-->
 <!--        <listener class-name="utils.TestListener"/>-->
-        <listener class-name="utils.RetryListener" />
+        <listener class-name="utils.ExtentReportListener" />
     </listeners>
-    <parameter name="excludedClasses" value="testRunner.OSPCTests" />
+<!--    <parameter name="excludedClasses" value="testRunner.OSPCUI_Tests" />-->
     <test name="Sanity Tests for BAT Environment">
     <classes>
-        <class name="testRunner.OSPCTests"/>
-        <class name="testRunner.DirectDepositTest"/>
+        <class name="testRunner.OSPCUI_Tests"/>
+        <class name="testRunner.OSPCAppeals_Tests"/>
+        <class name="testRunner.OSPCDocUpload_Tests"/>
+        <class name="testRunner.DirectDeposit_Test"/>
         <class name="testRunner.DIEform6_Tests"/>
-        <class name="testRunner.OSBCTests"/>
+        <class name="testRunner.OSBC_Tests"/>
     </classes>
     </test>
 </suite>

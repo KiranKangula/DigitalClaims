@@ -263,11 +263,12 @@ public class GuidewireCC {
     }
 
     @And("Verify the Claim is Auto Registered in ClaimCenter")
-    public void verifyTheClaimIsAutoRegisteredInClaimCenter() throws InterruptedException {
+    public void verifyTheClaimIsAutoRegisteredInClaimCenter() throws InterruptedException, IOException {
         String Firstname = Hooks.currentRow.get().get("First Name");
         String Lastname = Hooks.currentRow.get().get("Last Name");
         String dateofbirth = Hooks.currentRow.get().get("Date of Birth");
         dateofbirth  = getDateFormat(dateofbirth, "d/MMMM/yyyy", "dd/MM/yyyy") ;
-        Assert.assertTrue(guidewirecc.searchDIClaim(Firstname, Lastname, dateofbirth));
+        Assert.assertTrue("Failed DI7 Auto Registration...", guidewirecc.searchDIClaim(Firstname, Lastname, dateofbirth));
+
     }
 }

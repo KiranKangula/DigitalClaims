@@ -6,13 +6,13 @@
     <groups>
       <group name="cucumber">
         <method signature="AbstractTestNGCucumberTests.runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DIEform6_Tests@6ca8564a]" name="runScenario" class="io.cucumber.testng.AbstractTestNGCucumberTests"/>
-        <method signature="AbstractTestNGCucumberTests.runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DirectDepositTest@1817d444]" name="runScenario" class="io.cucumber.testng.AbstractTestNGCucumberTests"/>
-        <method signature="AbstractTestNGCucumberTests.runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.OSPCTests@635eaaf1]" name="runScenario" class="io.cucumber.testng.AbstractTestNGCucumberTests"/>
+        <method signature="AbstractTestNGCucumberTests.runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DirectDeposit_Test@1817d444]" name="runScenario" class="io.cucumber.testng.AbstractTestNGCucumberTests"/>
+        <method signature="AbstractTestNGCucumberTests.runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.OSPCUI_Tests@635eaaf1]" name="runScenario" class="io.cucumber.testng.AbstractTestNGCucumberTests"/>
       </group> <!-- cucumber -->
     </groups>
     <test started-at="2025-01-21T16:17:08 EST" name="PPD Sanity Test" finished-at="2025-01-21T16:39:49 EST" duration-ms="1360793">
-      <class name="testRunner.OSPCTests">
-        <test-method is-config="true" signature="setUpClass(org.testng.ITestContext)[pri:0, instance:testRunner.OSPCTests@635eaaf1]" started-at="2025-01-21T16:17:09 EST" name="setUpClass" finished-at="2025-01-21T16:17:10 EST" duration-ms="1470" status="PASS">
+      <class name="testRunner.OSPCUI_Tests">
+        <test-method is-config="true" signature="setUpClass(org.testng.ITestContext)[pri:0, instance:testRunner.OSPCUI_Tests@635eaaf1]" started-at="2025-01-21T16:17:09 EST" name="setUpClass" finished-at="2025-01-21T16:17:10 EST" duration-ms="1470" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -23,7 +23,7 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpClass -->
-        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.OSPCTests@635eaaf1]" started-at="2025-01-21T16:17:10 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:18:31 EST" duration-ms="81113" status="PASS">
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.OSPCUI_Tests@635eaaf1]" started-at="2025-01-21T16:17:10 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:18:31 EST" duration-ms="81113" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -39,7 +39,7 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- runScenario -->
-        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.OSPCTests@635eaaf1]" started-at="2025-01-21T16:18:31 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:19:06 EST" duration-ms="34818" status="PASS">
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.OSPCUI_Tests@635eaaf1]" started-at="2025-01-21T16:18:31 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:19:06 EST" duration-ms="34818" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -55,7 +55,7 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- runScenario -->
-        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.OSPCTests@635eaaf1]" started-at="2025-01-21T16:19:06 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:19:44 EST" duration-ms="38258" status="PASS">
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.OSPCUI_Tests@635eaaf1]" started-at="2025-01-21T16:19:06 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:19:44 EST" duration-ms="38258" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -71,7 +71,7 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- runScenario -->
-        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.OSPCTests@635eaaf1]" started-at="2025-01-21T16:19:44 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:20:48 EST" duration-ms="63331" status="FAIL">
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.OSPCUI_Tests@635eaaf1]" started-at="2025-01-21T16:19:44 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:20:48 EST" duration-ms="63331" status="FAIL">
           <params>
             <param index="0">
               <value>
@@ -99,11 +99,11 @@ at ✽.Verify the document is landed in GWCC with "OSPC", "Dental report"(file:/
           <reporter-output>
           </reporter-output>
         </test-method> <!-- runScenario -->
-        <test-method is-config="true" signature="tearDownClass()[pri:0, instance:testRunner.OSPCTests@635eaaf1]" started-at="2025-01-21T16:20:48 EST" name="tearDownClass" finished-at="2025-01-21T16:20:53 EST" duration-ms="5450" status="PASS">
+        <test-method is-config="true" signature="tearDownClass()[pri:0, instance:testRunner.OSPCUI_Tests@635eaaf1]" started-at="2025-01-21T16:20:48 EST" name="tearDownClass" finished-at="2025-01-21T16:20:53 EST" duration-ms="5450" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDownClass -->
-      </class> <!-- testRunner.OSPCTests -->
+      </class> <!-- testRunner.OSPCUI_Tests -->
       <class name="testRunner.DIEform6_Tests">
         <test-method is-config="true" signature="setUpClass(org.testng.ITestContext)[pri:0, instance:testRunner.DIEform6_Tests@6ca8564a]" started-at="2025-01-21T16:22:18 EST" name="setUpClass" finished-at="2025-01-21T16:22:18 EST" duration-ms="55" status="PASS">
           <params>
@@ -217,8 +217,8 @@ at ✽.Verify the document is landed in GWCC with "OSPC", "Dental report"(file:/
           </reporter-output>
         </test-method> <!-- tearDownClass -->
       </class> <!-- testRunner.DIEform6_Tests -->
-      <class name="testRunner.DirectDepositTest">
-        <test-method is-config="true" signature="setUpClass(org.testng.ITestContext)[pri:0, instance:testRunner.DirectDepositTest@1817d444]" started-at="2025-01-21T16:20:53 EST" name="setUpClass" finished-at="2025-01-21T16:20:53 EST" duration-ms="61" status="PASS">
+      <class name="testRunner.DirectDeposit_Test">
+        <test-method is-config="true" signature="setUpClass(org.testng.ITestContext)[pri:0, instance:testRunner.DirectDeposit_Test@1817d444]" started-at="2025-01-21T16:20:53 EST" name="setUpClass" finished-at="2025-01-21T16:20:53 EST" duration-ms="61" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -229,7 +229,7 @@ at ✽.Verify the document is landed in GWCC with "OSPC", "Dental report"(file:/
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpClass -->
-        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DirectDepositTest@1817d444]" started-at="2025-01-21T16:20:53 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:21:33 EST" duration-ms="39475" status="FAIL">
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DirectDeposit_Test@1817d444]" started-at="2025-01-21T16:20:53 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:21:33 EST" duration-ms="39475" status="FAIL">
           <params>
             <param index="0">
               <value>
@@ -290,7 +290,7 @@ at ✽.Click Add direct Deposit information and Select "1" and "2000"(file:///C:
           <reporter-output>
           </reporter-output>
         </test-method> <!-- runScenario -->
-        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DirectDepositTest@1817d444]" started-at="2025-01-21T16:21:33 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:22:15 EST" duration-ms="42631" status="PASS">
+        <test-method signature="runScenario(io.cucumber.testng.PickleWrapper,io.cucumber.testng.FeatureWrapper)[pri:0, instance:testRunner.DirectDeposit_Test@1817d444]" started-at="2025-01-21T16:21:33 EST" name="runScenario" description="Runs Cucumber Scenarios" groups="cucumber" data-provider="scenarios" finished-at="2025-01-21T16:22:15 EST" duration-ms="42631" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -306,11 +306,11 @@ at ✽.Click Add direct Deposit information and Select "1" and "2000"(file:///C:
           <reporter-output>
           </reporter-output>
         </test-method> <!-- runScenario -->
-        <test-method is-config="true" signature="tearDownClass()[pri:0, instance:testRunner.DirectDepositTest@1817d444]" started-at="2025-01-21T16:22:15 EST" name="tearDownClass" finished-at="2025-01-21T16:22:18 EST" duration-ms="2697" status="PASS">
+        <test-method is-config="true" signature="tearDownClass()[pri:0, instance:testRunner.DirectDeposit_Test@1817d444]" started-at="2025-01-21T16:22:15 EST" name="tearDownClass" finished-at="2025-01-21T16:22:18 EST" duration-ms="2697" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDownClass -->
-      </class> <!-- testRunner.DirectDepositTest -->
+      </class> <!-- testRunner.DirectDeposit_Test -->
     </test> <!-- PPD Sanity Test -->
   </suite> <!-- Suite -->
 </testng-results>

@@ -12,6 +12,8 @@ import utils.ConfigReader;
 
 import java.time.Duration;
 
+import static definitions.Hooks.scenario;
+
 public class DIeForm6 extends BaseDriverClass {
 	ConfigReader prop= Hooks.getConfigReader();
 
@@ -264,6 +266,7 @@ public class DIeForm6 extends BaseDriverClass {
 	}
 
 	public String verifyReferenceNumber() {
+		scenario.get().log("E-Form 6 Reference Number is: " + ReferenceNumber.getText());
 		String reference =  ReferenceNumber.getText();
 		ContinueButton.click();
 		return reference;

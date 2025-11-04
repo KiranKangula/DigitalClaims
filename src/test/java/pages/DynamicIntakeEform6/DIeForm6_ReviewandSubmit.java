@@ -12,6 +12,8 @@ import utils.ConfigReader;
 public class DIeForm6_ReviewandSubmit extends BaseDriverClass {
 	ConfigReader prop= Hooks.getConfigReader();
 
+	@FindBy(xpath = "//*[@id='myModal' and @class='modalSurveyLink']") private WebElement ModalPopup;
+	@FindBy(xpath = "//*[@class='DistributionPopUpButton2']") private WebElement DistributionPopUpNo;
 	@FindBy(xpath = "//*[@id=\"intakeBodySection\"]/div[2]/div[1]/span[2]/a/span") private WebElement nextButton;
 	@FindBy(xpath = "//*[@id=\"CheckboxContainer\"]/div/div/div[1]/div") private WebElement DeclarationCheckbox;
 	@FindBy(xpath = "//*[@id=\"radioTimeLost\"]/div[1]/label") private WebElement AddClaimtoProfile;
@@ -37,6 +39,9 @@ public class DIeForm6_ReviewandSubmit extends BaseDriverClass {
 	}
 
 	public boolean verifyReturnToDashBoard() {
+			if(isDisplayed(ModalPopup)) {
+				DistributionPopUpNo.click();
+			}
 		if (isDisplayed(returnToDashboardButton)) {
 			waitUntilElementVisible(this.returnToDashboardButton);
 			returnToDashboardButton.click();

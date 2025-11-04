@@ -5,7 +5,7 @@ Feature: Online Service for People with Claims(OSPC)
     When User submit email and password
     Then User should be able to login successfully and new page open
 
-  @SheetName_GWCC @OSPC
+  @SheetName_GWCC @OSPC @OSPCUI
   Scenario: Login and Add a Claim
     Given User is on my Claim screen
     Then Switch to New tab and Login to ClaimCenter
@@ -16,7 +16,7 @@ Feature: Online Service for People with Claims(OSPC)
     Then User should be able to add claim with "<ClaimNumber>", "<DOB>" and "<PIN>"
 
 
-  @SheetName_GWCC @OSPC
+  @SheetName_GWCC @OSPC @OSPCUI
   Scenario: Login and Click on Claim and Verify each page is landed
     Given User is on my Claim screen
     When User clicks on "<claimnumber>"
@@ -37,7 +37,7 @@ Feature: Online Service for People with Claims(OSPC)
     And Verify the Appeal is created in ClaimCenter
     And Switch back to OSPC and verify appeal registered is displayed
 
-  @SheetName_GWCC @OSPC @SendMessage
+  @SheetName_GWCC @OSPC @SendMessage @OSPCUI
   Scenario Outline: Send a message from OSPC
     Given User is on my Claim screen
     When User clicks on "<claimnumber>"

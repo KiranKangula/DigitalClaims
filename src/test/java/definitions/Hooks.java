@@ -41,9 +41,11 @@ public class Hooks {
     public static String sheetName;
     private static ThreadLocal<String> scenarioName = new ThreadLocal<>();
     public static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<>();
+    public static ThreadLocal<Scenario> scenario = new ThreadLocal<>();
     @Before(order = 0)
     public void setup(Scenario scenario)
     {
+       Hooks.scenario.set(scenario);
         String featureName = scenario.getUri().getPath().split("/")
                 [scenario.getUri().getPath().split("/").length-1].replace(".feature", "");
         String propertyFilePath= "src/test/resources/config/"+ featureName+ ".properties";
@@ -113,6 +115,9 @@ public class Hooks {
     }
 
     public static ConfigReader getConfigReader(){
+        if (configReader == null) {
+            throw new IllegalStateException("ConfigReader is not initialized. Ensure the @Before method in Hooks is executed before accessing it.");
+        }
         return configReader;
     }
     public static ConfigReader getCommonReader(){
