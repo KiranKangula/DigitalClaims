@@ -10,7 +10,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.GuidewireClaimCenter.GuidewirePage;
 import pages.OSPC.HomePage;
 import pages.OSPC.LoginPage;
-import pages.OSPC.OSPCClaimOverview;
 import utils.ConfigReader;
 
 import java.time.Duration;
