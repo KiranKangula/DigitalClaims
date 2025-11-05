@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Random;
@@ -38,12 +39,13 @@ public class BaseDriverClass {
         });
     }
 
-    protected String getCurrentDate(String format)
+    public static String getCurrentDate(String format)
     {
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
         return currentDate.format(formatter);
     }
+
 
     public static String getDateFormat(String inputDate, String inFormat, String outFormat)
     {

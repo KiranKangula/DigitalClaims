@@ -15,6 +15,7 @@
         <class name="testRunner.DirectDeposit_Test"/>
         <class name="testRunner.DIEform6_Tests"/>
         <class name="testRunner.OSBC_Tests"/>
+        <class name="testRunner.B2BForm7"/>
     </classes>
     </test>
 </suite>
