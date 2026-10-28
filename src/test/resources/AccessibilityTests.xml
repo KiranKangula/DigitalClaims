@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Accessibility Suite" verbose="1">
+    <test name="WCAG Accessibility Tests">
+        <parameter name="env" value="PPD"/>
+        <classes>
+            <class name="testRunner.Accessibility_Tests"/>
+        </classes>
+    </test>
+</suite>

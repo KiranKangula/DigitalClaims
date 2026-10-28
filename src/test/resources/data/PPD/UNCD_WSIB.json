@@ -1,0 +1,15 @@
+[
+  {
+    "claimnumber": "32710725",
+    "lastname": "BROWNE",
+    "dateofbirth": "1996-03-03",
+    "wsibform": "MHPOC - Treatment Report (10873)",
+    "filename": "Chi0148ro.pdf",
+    "Author": "UNCD",
+    "Description": "Treatment Report",
+
+    "wsibforms" : "Dental report (0278A)|Earnings questionnaire (0296A)|ENT consultation report (1787A)|subsequent statement|General worker expense form (3164A)|Out of province election form (38)",
+    "filenames": "Chi0148ro.pdf,DOB_Letter.docx,DOB_Letter.jpeg,DOB_Letter-Copy.jpg,Sample_DocUpload_GDDE.tif,Sample_DocUpload_GDDE.tiff",
+    "Descriptions" : "Dental report|Earnings questionnaire|consultation report|EMPLOYERS SUB STATEMENT|General worker expense|Out of province election"
+  }
+]

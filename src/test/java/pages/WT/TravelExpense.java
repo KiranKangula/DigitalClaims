@@ -1,0 +1,109 @@
+package pages.WT;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.BaseDriverClass;
+
+public class TravelExpense extends BaseDriverClass {
+
+	@FindBy(id = "repeatedExpense") private WebElement repeatedExpense;
+	@FindBy(xpath = "/html/body/app-root/div/div[4]/div[2]/app-travel-expense/div/table/tfoot/tr/td[2]/div/select") private WebElement reasonForTravel;
+	@FindBy(xpath = "//button[@class='btn-wsib'][contains(text(),'Choose date')]") private WebElement ChooseDate;
+	@FindBy(xpath = "//*[contains(@class,'today')]") private WebElement CurrentDate;
+	@FindBy(xpath = "//button[@class='btn-wsib'][contains(text(),'Ok')]") private WebElement OkButton;
+	@FindBy(id = "selectButt2") private WebElement SelectExpense;
+	@FindBy(xpath = "(//*[@type='checkbox'])[2]") private WebElement KilometersCheckbox;
+	@FindBy(xpath = "//button[@class='btn-wsib'][contains(text(),'OK')]") private WebElement OKButton;
+	@FindBy(id = "travel2Amt2") private WebElement Amount;
+	@FindBy(xpath = "//button[@class='btn-wsib'][contains(text(),'Update')]") private WebElement UpdateButton;
+	@FindBy(id = "additiionalInfo") private WebElement AdditionalInfo;
+	@FindBy(xpath = "//button[@class='btn-wsib'][contains(text(),'Next')]") private WebElement NextButton;
+
+	@FindBy(xpath = "//*[@name='newOtherType']") private WebElement OtherExpenseType;
+	@FindBy(id = "newexpenseDesc") private WebElement OtherExpenseDescription;
+	@FindBy(id = "expAmountNew_en") private WebElement OtherExpenseAmount;
+	@FindBy(xpath = "//h2[contains(text(),'Summary')]") private WebElement SummaryHeader;
+
+	@FindBy(id = "isEmailNeeded") private WebElement isEmailNeeded;
+	@FindBy(id = "emailAddress") private WebElement emailAddress;
+	@FindBy(id = "declared") private WebElement declaration;
+	@FindBy(xpath = "//button[@class='btn-wsib'][contains(text(),'Submit')]") private WebElement SubmitButton;
+
+	@FindBy(xpath = "//h2[contains(text(),'Submission was successful')]") private WebElement ConfirmationHeader;
+	@FindBy(xpath = "//*[@id='DistributionPopUpNo']/div") private WebElement DistributionPopUpNo;
+
+
+	public TravelExpense(WebDriver driver, WebDriverWait wait) {
+		super(driver, wait);
+		PageFactory.initElements(driver, this);
+	}
+
+	public Boolean enterExpenseDetails(String expenseType, String reason, String expenses,
+									   String totalKM, String pubTransit, String parking, String others,
+									   String additionalInfo) throws InterruptedException {
+		waitUntilElementVisible(repeatedExpense);
+		if(expenseType.equalsIgnoreCase("Repeated Travel")){
+			Click(repeatedExpense);
+			Click(reasonForTravel);
+			GWSelect(reasonForTravel, reason);
+			Click(ChooseDate);
+			Click(CurrentDate);
+			Click(OKButton);
+			Click(SelectExpense);
+			if ( expenses.equalsIgnoreCase("Kilometers")) {
+				Click(KilometersCheckbox);
+				Sleep(2000);
+				Click(OkButton);
+				Enter(Amount, totalKM);// This is a sendKeys, not a click
+			}
+
+			Click(UpdateButton);
+			AdditionalInfo.sendKeys(additionalInfo); // This is a sendKeys, not a click
+			Click(NextButton);
+		}
+
+		waitUntilElementVisible(OtherExpenseType);
+		return OtherExpenseType.isDisplayed();
+	}
+
+
+	public boolean otherExpenseDetails(String otherExpenseType, String otherExpenseDescription, String otherExpenseAmount, String otherAdditionalInfo) {
+
+		GWSelect(OtherExpenseType, otherExpenseType);
+		ChooseDate.click();
+		Click(CurrentDate);
+		Click(OKButton);
+		Enter(OtherExpenseDescription, otherExpenseDescription);
+		Enter(OtherExpenseAmount, otherExpenseAmount);
+		Click(UpdateButton);
+		Enter(AdditionalInfo, otherAdditionalInfo);
+		Click(NextButton);
+		waitUntilElementVisible(SummaryHeader);
+		return SummaryHeader.isDisplayed();
+	}
+
+	public boolean reviewAndSubmit(String email) throws InterruptedException {
+
+		if(!email.isEmpty()){
+			jsClick(isEmailNeeded);
+			Enter(emailAddress, email);
+
+		}
+		Sleep(5000);
+		jsMoveClick(declaration);
+		jsMoveClick(SubmitButton);
+		Sleep(3000);
+		if(isDisplayed(DistributionPopUpNo)){
+			Click(DistributionPopUpNo);
+		}
+		else {
+			System.out.println("DistributionPopUpNo not displayed");
+		}
+		Sleep(5000);
+		isDisplayed(ConfirmationHeader);
+		return ConfirmationHeader.isDisplayed();
+	}
+}

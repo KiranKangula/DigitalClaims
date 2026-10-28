@@ -1,0 +1,36 @@
+# Maven target directory (build outputs, compiled .class files, jars)
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Test execution reports and screenshots
+test-output/
+reports/
+ExtentReports/
+*.log
+*.html
+*.png
+*.jpeg
+
+# IntelliJ IDEA metadata
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Eclipse metadata (if anyone opens in Eclipse)
+.classpath
+.project
+.settings/
+
+# OS-generated files
+Thumbs.db
+.DS_Store

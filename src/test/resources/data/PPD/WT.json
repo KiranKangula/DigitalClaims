@@ -1,0 +1,22 @@
+[
+  {
+    "Claim Number": 32710725,
+    "lastname": "BROWNE",
+    "dateofbirth": "03/03/1996",
+    "expenseType": "Repeated Travel",
+    "Reason": "Meeting",
+    "Expenses": "Kilometers",
+    "TotalKM": 1000,
+    "PubTransit": null,
+    "Parking": null,
+    "Others": null,
+    "AdditionalInfo": "Additiona information entered",
+    "OtherExpenseType": "Textbooks",
+    "OtherExpenseDescription": "Description test",
+    "OtherExpenseAmount": 3000,
+    "OtherAdditionalInfo": "Other information",
+    "email": "Kiran_Kangula@wsib.on.ca",
+    "Author": "WT",
+    "Description": "Worker Travel"
+  }
+]

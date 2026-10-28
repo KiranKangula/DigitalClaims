@@ -1,0 +1,23 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Sanity Test Suite for BAT Environment">
+    <parameter name="env" value="BAT" />
+    <listeners>
+        <listener class-name="utils.ExtentReportListener" />
+        <listener class-name="utils.ExtentTestNameListener" />
+         <listener class-name="utils.RetryInvokedListener" />
+    </listeners>
+    <!-- STEP 1: This runs by itself first -->
+<!--    <test name="Sequential Phase - OSPC UI" preserve-order="true">-->
+<!--        <classes>-->
+<!--            <class name="testRunner.OSPCUI_Tests"/>-->
+<!--        </classes>-->
+<!--    </test>-->
+
+    <!-- STEP 2: Everything here runs in parallel AFTER Step 1 finishes -->
+    <test name="Parallel Phase - All Other Tests" parallel="classes" thread-count="5">
+        <classes>
+            <class name="testRunner.OSPCUI_Sanity_Tests"/>
+        </classes>
+    </test>
+
+</suite>

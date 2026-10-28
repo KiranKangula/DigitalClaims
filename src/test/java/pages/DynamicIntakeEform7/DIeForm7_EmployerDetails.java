@@ -1,0 +1,71 @@
+package pages.DynamicIntakeEform7;
+
+import definitions.Hooks;
+import io.cucumber.java.Scenario;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.BaseDriverClass;
+import utils.ConfigReader;
+
+import java.time.LocalDate;
+
+public class DIeForm7_EmployerDetails extends BaseDriverClass {
+	ConfigReader prop = Hooks.getConfigReader();
+
+	@FindBy(xpath = "//*[@id='myModal' and @class='modal show']")
+	private WebElement ModalPopup;
+	@FindBy(xpath = "//*[@class='DistributionPopUpButton2']")
+	private WebElement DistributionPopUpNo;
+	@FindBy(xpath = "//*[contains(@class,'rightImgIcon')]")
+	private WebElement NextButton;
+	@FindBy(id = "employerDetailsHeading")
+	private WebElement employerDetailsHeading;
+	@FindBy(xpath = "//*[@id=\"claimsNumberBody\"]/p")
+	private WebElement ReferenceNumber;
+	@FindBy(id = "onBoardContinueId")
+	private WebElement onBoardContinueId;
+	private static final String employerInfoAddress_radio = "employerInfoAddress";
+	private static final String intakeBodySection_checkbox = "intakeBodySection";
+	@FindBy(id = "dropdownYear-wrapper")
+	private WebElement dropdownYear;
+	@FindBy(id = "Button")
+	private WebElement SearchButton;
+	private static final String NAICS_radio = "radiobutton";
+
+
+	public DIeForm7_EmployerDetails(WebDriver driver, WebDriverWait wait) {
+		super(driver, wait);
+		PageFactory.initElements(driver, this);
+	}
+
+
+	public String enterEmployerDetails(String mailingaddress, String branchAddress, String businessYear, String naicsCode) throws InterruptedException {
+		Scenario scenario = Hooks.scenario.get();
+		waitUntilElementVisible(employerDetailsHeading);
+		Click(NextButton);
+		String RefNum = ReferenceNumber.getText();
+		Click(onBoardContinueId);
+		scenario.log("E-Form 7 Reference Number is: " + RefNum);
+		selectRadioButtonOption(employerInfoAddress_radio, mailingaddress);
+		Click(NextButton);
+		selectRadioButtonOption(employerInfoAddress_radio, branchAddress);
+		Click(NextButton);
+		// Get the current date
+		LocalDate today = LocalDate.now();
+		// Extract the current year
+		int currentYear = today.getYear();
+		Integer.parseInt(businessYear);
+		if(Integer.parseInt(businessYear)!= currentYear+1) {
+			selectRadioButtonOption(intakeBodySection_checkbox, "Pick"); // This is a radio button selection, not a direct click
+			Select(dropdownYear, businessYear);
+			Click(SearchButton);
+		}
+
+		selectRadioButtonOption(NAICS_radio, naicsCode);
+		Click(NextButton);
+		return RefNum;
+	}
+}

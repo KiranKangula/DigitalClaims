@@ -1,0 +1,30 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Sanity Test Suite for SIT2 Environment">
+    <parameter name="env" value="SIT2" />
+    <listeners>
+        <listener class-name="utils.ExtentReportListener" />
+        <listener class-name="utils.ExtentTestNameListener" />
+<!--         <listener class-name="utils.RetryInvokedListener" />-->
+    </listeners>
+    <!-- STEP 1: This runs by itself first -->
+    <test name="Sequential Phase - OSPC UI" preserve-order="true">
+        <classes>
+            <class name="testRunner.OSPCUI_Tests"/>
+        </classes>
+    </test>
+
+    <!-- STEP 2: Everything here runs in parallel AFTER Step 1 finishes -->
+    <test name="Parallel Phase - All Other Tests" parallel="classes" thread-count="5">
+        <classes>
+<!--            <class name="testRunner.OSPCAppeals_Tests"/>-->
+<!--            <class name="testRunner.OSPCDocUpload_Tests"/>-->
+<!--            <class name="testRunner.DirectDeposit_Test"/>-->
+<!--            <class name="testRunner.DIEform6_Tests"/>-->
+<!--            <class name="testRunner.OSBC_Tests"/>-->
+<!--&lt;!&ndash;             <class name="testRunner.B2BForm7"/>&ndash;&gt;-->
+<!--             <class name="testRunner.TombstoneEmail_Tests"/>-->
+<!--             <class name="testRunner.TombstonePhone_Tests"/>-->
+        </classes>
+    </test>
+
+</suite>

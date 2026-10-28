@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Sanity Test Suite for ITE2 Environment" data-provider-thread-count="5">
+    <parameter name="env" value="ITE2" />
+    <listeners>
+        <listener class-name="utils.ExtentReportListener" />
+        <listener class-name="utils.ExtentTestNameListener" />
+<!--         <listener class-name="utils.RetryInvokedListener" />-->
+    </listeners>
+
+    <!-- STEP 2: Everything here runs in parallel AFTER Step 1 finishes. Changed parallel to "methods" to run tests within the class in parallel. -->
+    <test name="Parallel Phase - All Other Tests" parallel="methods" thread-count="5">
+        <classes>
+            <class name="testRunner.OSPCUI_Sanity_Tests"/>
+        </classes>
+    </test>
+
+</suite>
