@@ -1,0 +1,117 @@
+package testRunner;
+
+import definitions.Hooks;
+import io.cucumber.testng.CucumberOptions;
+import io.cucumber.testng.FeatureWrapper;
+import io.cucumber.testng.PickleWrapper;
+import io.cucumber.testng.TestNGCucumberRunner;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+import utils.ConfigReader;
+import utils.ExtentReportListener;
+import utils.ExtentTestNameListener;
+import utils.JsonUtils;
+import utils.RetryInvokedListener;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+@Listeners({
+        ExtentReportListener.class,
+        ExtentTestNameListener.class,
+        RetryInvokedListener.class
+})
+@CucumberOptions(
+        features = "src/test/resources/features/UNCD.feature",
+        tags = "@UNCDUnnumbered",
+        glue = "definitions",
+        monochrome = true,
+        plugin = {"pretty", "json:target/cucumber_UNCDUnnumbered.json"},
+        publish = false
+)
+public class UNCDUnnumbered_Tests {
+    private static final String DATA_FILE = "UNCD_UnNumbered";
+    private TestNGCucumberRunner runner;
+
+    @BeforeSuite
+    public void setupCucumberPlugin() {
+        String environment = System.getProperty("env", "PPD");
+        System.setProperty("env", environment);
+
+        new ConfigReader("src/test/resources/config/" + environment + "/UNCD.properties");
+
+        String dateFolder = new SimpleDateFormat("dd_MMM_yyyy").format(new Date());
+        String timestamp = new SimpleDateFormat("HHmmss").format(new Date());
+        String resultsPath = "target/TestResults/UNCD/" + dateFolder + "/" + environment;
+
+        File folder = new File(resultsPath);
+        if (!folder.exists() && !folder.mkdirs()) {
+            throw new IllegalStateException("Could not create result folder: " + resultsPath);
+        }
+
+        System.setProperty(
+                "cucumber.plugin",
+                "html:" + resultsPath + "/UNCDUnnumberedResults_" + timestamp + ".html"
+        );
+        System.setProperty("cucumber.testng.testname", "true");
+    }
+
+    @BeforeClass(alwaysRun = true)
+    public void setUpClass() {
+        runner = new TestNGCucumberRunner(this.getClass());
+    }
+
+    @AfterClass(alwaysRun = true)
+    public void tearDownClass() {
+        if (runner != null) {
+            runner.finish();
+            runner = null;
+        }
+    }
+
+    @DataProvider(parallel = false)
+    public Object[][] scenarios() {
+        if (runner == null) {
+            runner = new TestNGCucumberRunner(this.getClass());
+        }
+
+        Object[][] cucumberScenarios = runner.provideScenarios();
+        List<Map<String, String>> rows = JsonUtils.readJsonData(DATA_FILE);
+
+        if (rows.isEmpty()) {
+            throw new IllegalStateException(
+                    "No records found in src/test/resources/data/" + System.getProperty("env", "PPD")
+                            + "/" + DATA_FILE + ".json"
+            );
+        }
+
+        List<Object[]> expanded = new ArrayList<>();
+        for (Object[] scenario : cucumberScenarios) {
+            PickleWrapper pickle = (PickleWrapper) scenario[0];
+
+            if (pickle.getPickle().getTags().contains("@UNCDUnnumbered")) {
+                for (int rowIndex = 0; rowIndex < rows.size(); rowIndex++) {
+                    expanded.add(new Object[] { scenario[0], scenario[1], rowIndex });
+                }
+            } else {
+                expanded.add(new Object[] { scenario[0], scenario[1], -1 });
+            }
+        }
+
+        return expanded.toArray(new Object[0][]);
+    }
+
+    @Test(dataProvider = "scenarios")
+    public void runScenario(PickleWrapper pickle, FeatureWrapper feature, Integer rowIndex) {
+        Hooks.setExplicitDataRowIndex(rowIndex >= 0 ? rowIndex : null);
+        runner.runScenario(pickle.getPickle());
+    }
+}
