@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite" parallel="tests" thread-count="2">
+    <listeners>
+<!--        <listener class-name="utils.ExtentReportListener"/>-->
+<!--        <listener class-name="utils.CustomReportListener"/>-->
+<!--        <listener class-name="utils.TestListener"/>-->
+    </listeners>
+    <test name="API Sanity Test">
+        <classes>
+            <class name="testRunner.TombstoneEmail_Tests"/>
+            <class name="testRunner.UNCDAPITests"/>
+
+        </classes>
+    </test>
+</suite>

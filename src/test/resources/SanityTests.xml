@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Sanity Test Suite ">
+    <parameter name="env" value="PPD" />
+    <listeners>
+        <listener class-name="utils.ExtentReportListener"/>
+        <listener class-name="utils.ExtentTestNameListener"/>
+    </listeners>
+
+    <test name="Testing Scripts">
+        <classes>
+            <class name="testRunner.SanityTests"/>
+        </classes>
+    </test>
+</suite>
