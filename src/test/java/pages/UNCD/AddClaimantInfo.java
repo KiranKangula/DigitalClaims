@@ -14,12 +14,12 @@ public class AddClaimantInfo extends BaseDriverClass {
 	@FindBy(id = "claim-number") private WebElement claimNumber;
 	@FindBy(id = "first-name") private WebElement firstName;
 	@FindBy(id = "last-name") private WebElement lastName;
-	@FindBy(id = "birthdate-select") private WebElement birthdateSelect;
-	@FindBy(id = "birthmonth-select") private WebElement birthmonthSelect;
-	@FindBy(id = "birthyear-select") private WebElement birthyearSelect;
-	@FindBy(id = "accidentdate-select") private WebElement accidentdateSelect;
-	@FindBy(id = "accidentmonth-select") private WebElement accidentmonthSelect;
-	@FindBy(id = "accidentyear-select") private WebElement accidentyearSelect;
+	@FindBy(id = "birthdate-picker") private WebElement birthdate;
+//	@FindBy(id = "birthmonth-select") private WebElement birthmonthSelect;
+//	@FindBy(id = "birthyear-select") private WebElement birthyearSelect;
+	@FindBy(id = "accidentdate-picker") private WebElement accidentdate;
+//	@FindBy(id = "accidentmonth-select") private WebElement accidentmonthSelect;
+//	@FindBy(id = "accidentyear-select") private WebElement accidentyearSelect;
 	@FindBy(xpath = "//*[@type='checkbox']") private WebElement confirmCheckbox;
 	@FindBy(xpath = "//*[@type='submit']") private WebElement NextButton;
 	@FindBy(xpath = "//*[@id=\"dateof-birth-helper-text\"]/span") private WebElement dateOfBirthHelperText;
@@ -38,18 +38,16 @@ public class AddClaimantInfo extends BaseDriverClass {
 
 	public void AddClaimantInformation(String claimNumber, String lastName, String dateOfBirth) {
 		waitUntilElementVisible(this.claimNumber);
-		this.claimNumber.sendKeys(claimNumber);
-		this.lastName.sendKeys(lastName);
-		String[] dob = dateOfBirth.split("/");
-		this.birthdateSelect.sendKeys(dob[0]);
-		this.birthmonthSelect.sendKeys(dob[1]);
-		this.birthyearSelect.sendKeys(dob[2]);
-		scenario.get().log("Claim Number: " + claimNumber + ", Last Name: " + lastName + ", Date of Birth: " + dateOfBirth);
-		NextButton.click();
+		Enter(this.claimNumber, claimNumber);
+		Enter(this.lastName, lastName);
+		Enter(this.birthdate, dateOfBirth);
+		this.claimNumber.click();
+		scenario.get().log("Claim Number: " + claimNumber + ", Last Name: " + lastName + ", Date of Birth: " + dateOfBirth); // This is a log, not a click
+		Click(NextButton);
 		try{
 			if(dateOfBirthHelperText.isDisplayed()){
 				System.out.println("Date of Birth is invalid error message displayed");
-				NextButton.click();
+				Click(NextButton);
 			}
 		}
 		catch(Exception e){
@@ -69,22 +67,18 @@ public class AddClaimantInfo extends BaseDriverClass {
 			lastname= this.lastname;
 		}
 		scenario.get().log("First Name: " + firstname + ", Last Name: " + lastname + ", Date of Birth: " + dateofbirth );
-		this.firstName.sendKeys(firstname);
-		this.lastName.sendKeys(lastname);
-		String[] dob = dateofbirth.split("/");
-		this.birthdateSelect.sendKeys(dob[0]);
-		this.birthmonthSelect.sendKeys(dob[1]);
-		this.birthyearSelect.sendKeys(dob[2]);
-		String[] doi = dateofinjury.split("/");
-		this.accidentdateSelect.sendKeys(doi[0]);
-		this.accidentmonthSelect.sendKeys(doi[1]);
-		this.accidentyearSelect.sendKeys(doi[2]);
-		confirmCheckbox.click();
-		NextButton.click();
+		Enter(this.firstName, firstname);
+		Enter(this.lastName, lastname);
+
+		Enter(this.birthdate, dateofbirth);
+		Enter(this.accidentdate, dateofinjury);
+		this.firstName.click();
+		Click(confirmCheckbox);
+		Click(NextButton);
 		try{
 			if(dateOfBirthHelperText.isDisplayed()){
 				System.out.println("Date of Birth is invalid error message displayed");
-				NextButton.click();
+				Click(NextButton);
 			}
 		}
 		catch(Exception e){

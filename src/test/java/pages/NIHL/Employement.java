@@ -63,66 +63,66 @@ public class Employement extends BaseDriverClass {
 	public void EnterEmploymentDetails(String areyouretired, String retirementDate, String employedRadio, String employerName, String employerAddress, String employerPhone, String hazardousNoiseRadio, String selfEmployedRadio, String insuranceRadio, String businessName, String businessAddress, String businessFrom, String businessTo, String noisyMachineryOffwork, String usedNoisyMachinery, String stillInBusiness, String jobTitle, String employedFrom, String employedTo, String toolsEquipmentUsed, String hoursUsed) throws InterruptedException {
 
 		if (areyouretired.equalsIgnoreCase("Yes")) {
-			RetiredRadioYes.click();
-			RetirementDate.sendKeys(retirementDate);
+			Click(RetiredRadioYes);
+			Enter(RetirementDate, retirementDate);
 		} else {
-			RetiredRadioNo.click();
+			Click(RetiredRadioNo);
 			if (employedRadio.equalsIgnoreCase("Yes")) {
-				EmployedRadioYes.click();
-				EmployerName.sendKeys(employerName);
-				EmployerAddress.sendKeys(employerAddress);
-				EmployerPhoneNumber.sendKeys(employerPhone);
+				Click(EmployedRadioYes);
+				Enter(EmployerName, employerName);
+				Enter(EmployerAddress, employerAddress);
+				Enter(EmployerPhoneNumber, employerPhone);
 				if (hazardousNoiseRadio.equalsIgnoreCase("Yes")) {
-					HazardousNoiseRadioYes.click();
+					Click(HazardousNoiseRadioYes);
 				} else {
-					HazardousNoiseRadioNo.click();
+					Click(HazardousNoiseRadioNo);
 				}
 			} else {
-				EmployedRadioNo.click();
+				Click(EmployedRadioNo);
 			}
 
 		}
 
 
 		if (selfEmployedRadio.equalsIgnoreCase("Yes")) {
-			SelfEmployedRadioYes.click();
+			Click(SelfEmployedRadioYes);
 			if (insuranceRadio.equalsIgnoreCase("Yes")) {
-				InsuranceRadioYes.click();
-				BusinessName.sendKeys(businessName);
-				BusinessAddress.sendKeys(businessAddress);
-				BusinessFrom.sendKeys(businessFrom);
-				BusinessName.click();
-				BusinessTo.sendKeys(businessTo);
+				Click(InsuranceRadioYes);
+				Enter(BusinessName, businessName);
+				Enter(BusinessAddress, businessAddress);
+				Enter(BusinessFrom, businessFrom);
+				Click(BusinessName);
+				Enter(BusinessTo, businessTo);
 			} else {
-				InsuranceRadioNo.click();
+				Click(InsuranceRadioNo);
 			}
 
 		} else {
-			SelfEmployedRadioNo.click();
+			Click(SelfEmployedRadioNo);
 		}
 
 		if (noisyMachineryOffwork.equalsIgnoreCase("Yes")) {
-			noisyMachineryOffworkYes.click();
-			this.usedNoisyMachinery.sendKeys(usedNoisyMachinery);
+			Click(noisyMachineryOffworkYes);
+			Enter(this.usedNoisyMachinery, usedNoisyMachinery);
 		} else {
-			noisyMachineryOffworkNo.click();
+			Click(noisyMachineryOffworkNo);
 		}
 
-		AddButton.click();
+		Click(AddButton);
 		if (stillInBusiness.equalsIgnoreCase("Yes")) {
-			stillInBusinessYes.click();
+			Click(stillInBusinessYes);
 		} else {
-			stillInBusinessNo.click();
+			Click(stillInBusinessNo);
 		}
-		JobTitle.sendKeys(jobTitle);
-		EmployedFrom.sendKeys(employedFrom);
-		JobTitle.click();
-		EmployedTo.sendKeys(employedTo);
-		ToolsEquipmentUsed.sendKeys(toolsEquipmentUsed);
-		HoursUsed.sendKeys(hoursUsed);
-		DoneButton.click();
-		Thread.sleep(2000);
-		NextButton.click();
+		Enter(JobTitle, jobTitle);
+		Enter(EmployedFrom, employedFrom);
+		Click(JobTitle);
+		Enter(EmployedTo, employedTo);
+		Enter(ToolsEquipmentUsed, toolsEquipmentUsed);
+		Enter(HoursUsed, hoursUsed);
+		Click(DoneButton);
+		Sleep(2000);
+		Click(NextButton);
 
 	}
 }

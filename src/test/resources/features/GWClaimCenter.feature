@@ -5,45 +5,64 @@ Feature: Guidewire ClaimCenter
     When User submit username and password
     Then User should be able to login successfully into GWCC
 
-  @ClaimCreation
-Scenario Outline: Create a Claim in GW ClaimCenter
+  @SheetName_GWCC_Claim @ClaimCreation_NewWorker
+Scenario: Create a Claim in GW ClaimCenter with New Worker
   Given User Logged into ClaimCenter
   When User initiates Manual Registration
-  Then User selects Source of Information as "Form 6"
-  And User enters new worker information as below:
-    | First Name    | <firstname> |
-    | Last Name     | <lastname>  |
-    | Primary Phone | <phonenumber> |
-    | Postal Code   | <postalcode>  |
-    | Gender        | <gender>      |
-    | Date of Birth | <dateofbirth> |
-  And User searches for "<Account#>" with bussiness activity
-  And User enters Accident Details as below:
-    | Date of Accident  |   <dateofaccident> |
-    | Date Reported     |   <datereported>   |
-  And User Enters Body part details as below:
-    | Area of Body      |   <areaofbody>      |
-    | Area of Injury    |   <areaofinjury>    |
-    | Accident Type     |   <accidentType>     |
-    | Detailed Accident Type    |   <detailedaccidentType>    |
-    | Nature of Injury      |   <natureofinjury>      |
-  And Select Third Party accident as "No"
+  Then User selects Source of Information
+  And User enters new worker information
+  And User searches for Account with bussiness activity
+  And User enters Accident Details
+    And User Enters Body part details
+  And Select Third Party accident
   And Select Accident Location from the dropdown
-  And Select Health Care Received as "No"
-  And Select Claim Type as "Lost Time"
+  And Select Health Care Received
+  And Select Claim Type
   And Click on Register Claim button and verify that Claim has been registered Successfully
-  Examples:
-    | firstname | lastname | phonenumber  | postalcode | gender | dateofbirth | Account# | dateofaccident | datereported | areaofbody | areaofinjury | accidentType | detailedaccidentType | natureofinjury |
-    | Kiran     | Kangulaa | 647-800-0000 | M4P 1Z2    | Male   | 01/01/2000  | 1169879  | 17/12/2024     | 17/12/2024   | Head       | Head         | Serious Injury | Burn               | Major Burns    |
 
-@GWCCValidation
-  Scenario Outline: Verify Document Landed Test
+  @SheetName_GWCC_Claim @ClaimCreation_ExistingWorker
+  Scenario: Create a Claim in GW ClaimCenter with New Worker
     Given User Logged into ClaimCenter
-  When Search with firstname "<firstname>" and lastname "<lastname>" & dateofbirth "<dateofbirth>"
-  Then Verify the UNCD document is landed in GWCC with "<Author>", "<Description>"
-    Examples:
-      | firstname |   lastname   |  dateofbirth  | Author     | Description        |
-      | Kiran    |  PAULNMVFQ   |  01/01/2000     | UNCD      |  Worker's Report of Injury|
+    When User initiates Manual Registration
+    Then User selects Source of Information
+    And User searches for Existing Worker
+    And User searches for Account with bussiness activity
+    And User enters Accident Details
+    And User Enters Body part details
+    And Select Third Party accident
+    And Select Accident Location from the dropdown
+    And Select Health Care Received
+    And Select Claim Type
+    And Click on Register Claim button and verify that Claim has been registered Successfully
+
+
+  @SheetName_GWCC_Claim @ClaimNW_withOSPCData
+  Scenario: Setup data on Claim after Creation with New Worker
+    Given I have created a new claim in GW ClaimCenter with New Worker
+    Then Setup Appeals Data on the Claim
+    Then Setup RTW information on the Claim
+    Then Setup Device Details on the Claim
+    Then Setup Independent Living Allowance on the Claim
+    Then Setup Personal Care Allowance on the Claim
+    Then Setup Clothing Allowance on the Claim
+    Then Setup Treatment Details on the Claim
+    Then Setup Medication Details on the Claim
+
+
+
+  @SheetName_GWCC_Claim @ClaimEW_withOSPCData
+  Scenario: Setup data on Claim after Creation with Existing Worker
+    Given I have created a new claim in GW ClaimCenter with Existing Worker
+    Then Setup Appeals Data on the Claim
+    Then Setup RTW information on the Claim
+    Then Setup Device Details on the Claim
+    Then Setup Independent Living Allowance on the Claim
+    Then Setup Personal Care Allowance on the Claim
+    Then Setup Payments data on the Claim
+    Then Setup Clothing Allowance on the Claim
+    Then Setup Treatment Details on the Claim
+    Then Setup Medication Details on the Claim
+
 
   @TestBatchRun
   Scenario: Test Batch Run

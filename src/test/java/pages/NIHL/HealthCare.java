@@ -45,51 +45,51 @@ public class HealthCare extends BaseDriverClass {
 									   String hasVisitedEntSpecialist, String entAppointmentDate, String entSpecialistName, String entSpecialistAddress,
 									   String entSpecialistPhoneNumber, String experienceRingingQuestion, String ringingEarDuration, String hasSevereRingingInEar,
 									   String isRingingConstant) throws InterruptedException {
-		Thread.sleep(5000);
+		Sleep(5000);
 		waitUntilElementVisible(HearingLossNoticedYear);
 
-		HearingLossNoticedYear.sendKeys(hearingLossNoticedYear);
+		Enter(HearingLossNoticedYear, hearingLossNoticedYear);
 		if (wearHearingAid.equalsIgnoreCase("yes")) {
-			wearHearingAidyes.click();
-			this.hearingAidUsageDate.sendKeys(hearingAidUsageDate);
+			Click(wearHearingAidyes);
+			Enter(this.hearingAidUsageDate, hearingAidUsageDate);
 		} else {
-			wearHearingAidno.click();
+			Click(wearHearingAidno);
 		}
-		this.dateOfFirstAudiogram.sendKeys(dateOfFirstAudiogram);
-		this.audiogramClinicName.sendKeys(audiogramClinicName);
-		this.audiogramClinicAddress.sendKeys(audiogramClinicAddress);
-		this.audiogramClinicPhoneNumber.sendKeys(audiogramClinicPhoneNumber);
+		Enter(this.dateOfFirstAudiogram, dateOfFirstAudiogram);
+		Enter(this.audiogramClinicName, audiogramClinicName);
+		Enter(this.audiogramClinicAddress, audiogramClinicAddress);
+		Enter(this.audiogramClinicPhoneNumber, audiogramClinicPhoneNumber);
 		if (hasVisitedEntSpecialist.equalsIgnoreCase("yes")) {
-			hasVisitedEntSpecialistYes.click();
-			this.entAppointmentDate.sendKeys(entAppointmentDate);
-			this.entSpecialistName.sendKeys(entSpecialistName);
-			this.entSpecialistAddress.sendKeys(entSpecialistAddress);
-			this.entSpecialistPhoneNumber.sendKeys(entSpecialistPhoneNumber);
+			Click(hasVisitedEntSpecialistYes);
+			Enter(this.entAppointmentDate, entAppointmentDate);
+			Enter(this.entSpecialistName, entSpecialistName);
+			Enter(this.entSpecialistAddress, entSpecialistAddress);
+			Enter(this.entSpecialistPhoneNumber, entSpecialistPhoneNumber);
 		} else {
-			hasVisitedEntSpecialistNo.click();
+			Click(hasVisitedEntSpecialistNo);
 		}
 		if (experienceRingingQuestion.equalsIgnoreCase("yes")) {
-			experienceRingingQuestionyes.click();
+			Click(experienceRingingQuestionyes);
 			if (ringingEarDuration.equalsIgnoreCase("Less than 2 years")) {
-				ringingEarDurationyes.click();
+				Click(ringingEarDurationyes);
 			} else {
-				ringingEarDurationno.click();
+				Click(ringingEarDurationno);
 			}
 			if (hasSevereRingingInEar.equalsIgnoreCase("yes")) {
-				hasSevereRingingInEaryes.click();
+				Click(hasSevereRingingInEaryes);
 			} else {
-				hasSevereRingingInEarno.click();
+				Click(hasSevereRingingInEarno);
 			}
 			if (isRingingConstant.equalsIgnoreCase("yes")) {
-				isRingingConstantyes.click();
+				Click(isRingingConstantyes);
 			} else {
-				isRingingConstantno.click();
+				Click(isRingingConstantno);
 			}
 		} else {
-			experienceRingingQuestionno.click();
+			Click(experienceRingingQuestionno);
 		}
-		NextButton.click();
-	Thread.sleep(5000);
+		Click(NextButton);
+	Sleep(5000);
 
 	}
 }

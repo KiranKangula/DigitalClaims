@@ -35,19 +35,19 @@ public class MyInformation extends BaseDriverClass {
 
 	public void EnterMyInformation(String firstname, String lastname, String sin, String address, String phone, String language) {
 		waitUntilElementVisible(FirstName);
-		FirstName.sendKeys(firstname);
-		LastName.sendKeys(lastname);
+		Enter(FirstName, firstname);
+		Enter(LastName, lastname);
 		if(!sin.isEmpty()){
-			SocialInsuranceNumber.sendKeys(sin);
+			Enter(SocialInsuranceNumber, sin);
 		}
-		StreetAddress.sendKeys(address.split("//|")[0]);
-		City.sendKeys(address.split("//|")[1]);
-		Province.sendKeys(address.split("//|")[2]);
-		PostalCode.sendKeys(address.split("//|")[3]);
-		Country.sendKeys(address.split("//|")[4]);
-		PhoneNumber.sendKeys(phone);
-		LanguagePreference.sendKeys(language);
-		NextButton.click();
+		Enter(StreetAddress, address.split("\\|")[0]);
+		Enter(City, address.split("\\|")[1]);
+		Enter(Province, address.split("\\|")[2]);
+		Enter(PostalCode, address.split("\\|")[3]);
+		Enter(Country, address.split("\\|")[4]);
+		Enter(PhoneNumber, phone);
+		Enter(LanguagePreference, language); // This is a sendKeys, not a click
+		Click(NextButton);
 
 	}
 }

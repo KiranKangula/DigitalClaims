@@ -7,7 +7,7 @@
     </listeners>
     <test name="API Sanity Test">
         <classes>
-            <class name="testRunner.OSPCAPITests"/>
+            <class name="testRunner.TombstoneEmail_Tests"/>
             <class name="testRunner.UNCDAPITests"/>
 
         </classes>

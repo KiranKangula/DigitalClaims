@@ -45,27 +45,27 @@ public class DIeForm7_EmployerDetails extends BaseDriverClass {
 	public String enterEmployerDetails(String mailingaddress, String branchAddress, String businessYear, String naicsCode) throws InterruptedException {
 		Scenario scenario = Hooks.scenario.get();
 		waitUntilElementVisible(employerDetailsHeading);
-		NextButton.click();
+		Click(NextButton);
 		String RefNum = ReferenceNumber.getText();
-		onBoardContinueId.click();
+		Click(onBoardContinueId);
 		scenario.log("E-Form 7 Reference Number is: " + RefNum);
 		selectRadioButtonOption(employerInfoAddress_radio, mailingaddress);
-		NextButton.click();
+		Click(NextButton);
 		selectRadioButtonOption(employerInfoAddress_radio, branchAddress);
-		NextButton.click();
+		Click(NextButton);
 		// Get the current date
 		LocalDate today = LocalDate.now();
 		// Extract the current year
 		int currentYear = today.getYear();
 		Integer.parseInt(businessYear);
 		if(Integer.parseInt(businessYear)!= currentYear+1) {
-			selectRadioButtonOption(intakeBodySection_checkbox, "Pick");
+			selectRadioButtonOption(intakeBodySection_checkbox, "Pick"); // This is a radio button selection, not a direct click
 			Select(dropdownYear, businessYear);
-			SearchButton.click();
+			Click(SearchButton);
 		}
 
 		selectRadioButtonOption(NAICS_radio, naicsCode);
-		NextButton.click();
+		Click(NextButton);
 		return RefNum;
 	}
 }

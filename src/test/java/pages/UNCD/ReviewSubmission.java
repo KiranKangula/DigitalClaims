@@ -22,9 +22,9 @@ public class ReviewSubmission extends BaseDriverClass {
 
 	public Boolean submitDocument() {
 		waitUntilElementVisible(reviewHeader);
-		emailconfirmation.click();
-		declaration.click();
-		SubmitButton.click();
+		Click(emailconfirmation);
+		Click(declaration);
+		Click(SubmitButton);
 		waitUntilElementVisible(printLink);
 		return printLink.isDisplayed();
 

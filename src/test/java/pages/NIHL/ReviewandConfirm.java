@@ -26,9 +26,9 @@ public class ReviewandConfirm extends BaseDriverClass {
 
 	public void reviewandSubmitNIHLClaim() throws InterruptedException {
 		waitUntilElementVisible(Signature);
-		Signature.sendKeys("Signature");
-		SubmitButton.click();
-		Thread.sleep(5000);
+		Enter(Signature, "Signature");
+		Click(SubmitButton);
+		Sleep(5000);
 
 	}
 

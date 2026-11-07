@@ -20,12 +20,14 @@ public class DIeForm7_HealthCareDetails extends BaseDriverClass {
 
 	private static final String radiobuttonHealth_Radio = "radiobuttonHealth";
 	@FindBy(id = "injuryLocation-wrapper") private WebElement injuryLocation;
-	@FindBy(id = "dropdownReceivedDateDay-wrapper") private WebElement dropdownReceivedDateDay;
-	@FindBy(id = "dropdownReceivedDateMonth-wrapper") private WebElement dropdownReceivedDateMonth;
-	@FindBy(id = "dropdownReceivedDateYear-wrapper") private WebElement dropdownReceivedDateYear;
-	@FindBy(id = "dropdownHCReceivedDateDay-wrapper") private WebElement dropdownHCReceivedDateDay;
-	@FindBy(id = "dropdownHCReceivedDateMonth-wrapper") private WebElement dropdownHCReceivedDateMonth;
-	@FindBy(id = "dropdownHCReceivedDateYear-wrapper") private WebElement dropdownHCReceivedDateYear;
+	private static final String dropdownReceivedDate = "dropdownDobContainer";
+//	@FindBy(id = "dropdownReceivedDateDay-wrapper") private WebElement dropdownReceivedDateDay;
+//	@FindBy(id = "dropdownReceivedDateMonth-wrapper") private WebElement dropdownReceivedDateMonth;
+//	@FindBy(id = "dropdownReceivedDateYear-wrapper") private WebElement dropdownReceivedDateYear;
+	private static final String dropdownHCReceivedDate = "healthCareReceivedDatePicker";
+//	@FindBy(id = "dropdownHCReceivedDateDay-wrapper") private WebElement dropdownHCReceivedDateDay;
+//	@FindBy(id = "dropdownHCReceivedDateMonth-wrapper") private WebElement dropdownHCReceivedDateMonth;
+//	@FindBy(id = "dropdownHCReceivedDateYear-wrapper") private WebElement dropdownHCReceivedDateYear;
 
 
 
@@ -40,14 +42,10 @@ public class DIeForm7_HealthCareDetails extends BaseDriverClass {
 
 		selectRadioButtonOption(radiobuttonHealth_Radio, healthCare.split("\\|")[0]);
 		Select(injuryLocation, healthCare.split("\\|")[1]);
-		selectDropdownValue(dropdownReceivedDateDay, healthCare.split("\\|")[2].split("/")[0]);
-		selectDropdownValue(dropdownReceivedDateMonth, healthCare.split("\\|")[2].split("/")[1]);
-		selectDropdownValue(dropdownReceivedDateYear, healthCare.split("\\|")[2].split("/")[2]);
-		selectDropdownValue(dropdownHCReceivedDateDay, healthCare.split("\\|")[3].split("/")[0]);
-		selectDropdownValue(dropdownHCReceivedDateMonth, healthCare.split("\\|")[3].split("/")[1]);
-		selectDropdownValue(dropdownHCReceivedDateYear, healthCare.split("\\|")[3].split("/")[2]);
+		DatePicker(dropdownReceivedDate, healthCare.split("\\|")[2]);
+		DatePicker(dropdownHCReceivedDate, healthCare.split("\\|")[3]);
 
-		NextButton.click();
+		Click(NextButton);
 		return true;
 	}
 }

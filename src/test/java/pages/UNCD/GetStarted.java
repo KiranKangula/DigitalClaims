@@ -30,11 +30,11 @@ public class GetStarted extends BaseDriverClass {
 	}
 
 	public void SelectNumberedDocument() {
-		NextButton.click();
+		Click(NextButton);
 	}
 
 	public void SelectUnNumberedDocument() {
-		uncd.click();
-		NextButton.click();
+		Click(uncd);
+		Click(NextButton);
 	}
 }

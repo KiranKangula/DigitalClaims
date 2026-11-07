@@ -18,9 +18,10 @@ public class DIeForm7_WorkHistory extends BaseDriverClass {
 
 	@FindBy(id = "pwiEmploymentDetails") private WebElement EmploymentDetailsHeading;
 	@FindBy(id = "jobTitle") private WebElement jobTitle;
-	@FindBy(id = "dropdownDobDate-wrapper") private WebElement dropdownDobDate;
-	@FindBy(id = "dropdownDobMonth-wrapper") private WebElement dropdownDobMonth;
-	@FindBy(id = "dropdownDobYear-wrapper") private WebElement dropdownDobYear;
+	private String hireDatePicker = "hireDatePicker";
+//	@FindBy(id = "dropdownDobDate-wrapper") private WebElement dropdownDobDate;
+//	@FindBy(id = "dropdownDobMonth-wrapper") private WebElement dropdownDobMonth;
+//	@FindBy(id = "dropdownDobYear-wrapper") private WebElement dropdownDobYear;
 
 	@FindBy(id = "employmentLengthYear") private WebElement employmentLengthYear;
 	@FindBy(id = "employmentLengthMonth") private WebElement employmentLengthMonth;
@@ -38,6 +39,7 @@ public class DIeForm7_WorkHistory extends BaseDriverClass {
 	private static final String radiobuttonUnionorLocal_radio = "radiobuttonUnionorLocal";
 	//Employee job details - relationship to employer
 	@FindBy(id = "IsSpouseRelavtive") private WebElement IsSpouseRelavtiveW;
+	@FindBy(xpath = "//*[@id=\"dropdownEmploymentTypeList-wrapper\"]/div/div[1]") private WebElement EmployerRelation;
 	private static final String radiobutton_radio = "radiobutton";
 	private static final String EmployerRelation_radio = "EmployerRelation";
 
@@ -50,32 +52,30 @@ public class DIeForm7_WorkHistory extends BaseDriverClass {
 	public boolean selectWorkHistoryDetails(String jobTitle, String empStartDate, String empYears, String empMonths, String supervisorContact, String employees, String union, String isSpouseRelavtive, String employerRelation) throws InterruptedException {
 
 		waitUntilElementVisible(EmploymentDetailsHeading);
-		this.jobTitle.sendKeys(jobTitle);
-
-		selectDropdownValue(dropdownDobDate,empStartDate.split("/")[0]);
-		selectDropdownValue(dropdownDobMonth,empStartDate.split("/")[1]);
-		selectDropdownValue(dropdownDobYear,empStartDate.split("/")[2]);
-Thread.sleep(2000);
+		Enter(this.jobTitle, jobTitle);
+		DatePicker(hireDatePicker, empStartDate);
+		Sleep(2000);
 		jsMoveSendKeys(this.employmentLengthYear,empYears);
 		jsMoveSendKeys(this.employmentLengthMonth, empMonths);
 
-			pwiAddContact.click();
+			Click(pwiAddContact);
 			waitUntilElementVisible(SupervisorCard);
-			SupervisorfirstName.sendKeys(supervisorContact.split("\\|")[0]);
-			SupervisorlastName.sendKeys(supervisorContact.split("\\|")[1]);
+			Enter(SupervisorfirstName, supervisorContact.split("\\|")[0]);
+			Enter(SupervisorlastName, supervisorContact.split("\\|")[1]);
 			Select(SupervisorLanguage, supervisorContact.split("\\|")[3]);
 			jsMoveSendKeys(SupervisorphoneNumber, supervisorContact.split("\\|")[2]);
-			SupervisorSaveButton.click();
-		NextButton.click();
+			Click(SupervisorSaveButton);
+		Click(NextButton);
 		waitUntilElementVisible(radiobuttonEmployeeW);
 		selectRadioButtonOption(radiobuttonEmployee_radio, employees);
 		selectRadioButtonOption(radiobuttonUnionorLocal_radio, union);
-		NextButton.click();
+		Click(NextButton);
 		waitUntilElementVisible(IsSpouseRelavtiveW);
 		selectRadioButtonOption(radiobutton_radio, isSpouseRelavtive);
-		selectRadioButtonOption(EmployerRelation_radio, employerRelation);
+		selectDropdownValue(EmployerRelation,employerRelation );
+		//selectRadioButtonOption(EmployerRelation_radio, employerRelation);
 
-		NextButton.click();
+		Click(NextButton);
 		return  true;
 
 	}

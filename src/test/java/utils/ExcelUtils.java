@@ -15,11 +15,10 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ExcelUtils {
     private static String BASE_PATH = "src/test/resources/data/";
     private static final Lock fileLock = new ReentrantLock();
-    static ConfigReader prop = Hooks.getConfigReader();
 
     public static void backupExcelFile(String sheetName) throws IOException {
-        String filePath = BASE_PATH + prop.getProperty("env") + "/testData.xlsx";
-        String backupFilePath = BASE_PATH + prop.getProperty("env") + "/backup_testData.xlsx";
+        String filePath = BASE_PATH + System.getProperty("env") + "/testData.xlsx";
+        String backupFilePath = BASE_PATH + System.getProperty("env") + "/backup_testData.xlsx";
         File sourceFile = new File(filePath);
         File backupFile = new File(backupFilePath);
 
@@ -34,14 +33,13 @@ public class ExcelUtils {
     /**
      * Reads data from Excel and returns it as a list of maps.
      *
-     * @param env       Environment (folder name)
      * @param sheetName Sheet name in the Excel file
      * @return List of maps, where each map represents a row with column names as keys
      * @throws IOException If an I/O error occurs
      */
     public static List<Map<String, String>> readExcelData(String sheetName) throws IOException {
         backupExcelFile(sheetName);
-        String filePath = BASE_PATH + prop.getProperty("env") + "/testData.xlsx";
+        String filePath = BASE_PATH + System.getProperty("env") + "/testData.xlsx";
         List<Map<String, String>> data = new ArrayList<>();
 
 
@@ -61,6 +59,10 @@ public class ExcelUtils {
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
                 Map<String, String> rowData = new LinkedHashMap<>();
+                
+                // Store physical row index to ensure updates happen on the correct row
+                rowData.put("excel_row_num", String.valueOf(row.getRowNum()));
+                
                 for (int i = 0; i < headers.size(); i++) {
                     Cell cell = row.getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     String cellValue = getCellValueAsString(cell);
@@ -107,14 +109,13 @@ public class ExcelUtils {
     /**
      * Saves data into Excel by appending a row with dynamic fields and values.
      *
-     * @param env       Environment (folder name)
      * @param sheetName Sheet name in the Excel file
      * @param rowData   Data to save as a map of field names and values
      * @throws IOException If an I/O error occurs
      */
     public static void saveExcelData(String sheetName, Map<String, String> rowData) throws IOException {
         backupExcelFile(sheetName);
-        String filePath = BASE_PATH + prop.getProperty("env") + "/testData.xlsx";
+        String filePath = BASE_PATH + System.getProperty("env") + "/testData.xlsx";
         Workbook workbook;
         Sheet sheet;
         fileLock.lock();
@@ -138,6 +139,7 @@ public class ExcelUtils {
                 headerRow = sheet.createRow(0);
                 int headerIndex = 0;
                 for (String key : rowData.keySet()) {
+                    if(key.equals("excel_row_num")) continue;
                     Cell headerCell = headerRow.createCell(headerIndex++);
                     headerCell.setCellValue(key);
                 }
@@ -148,6 +150,7 @@ public class ExcelUtils {
                 headers.add(cell.getStringCellValue());
             }
             for (String key : rowData.keySet()) {
+                if(key.equals("excel_row_num")) continue;
                 if (!headers.contains(key)) {
                     Cell newHeaderCell = headerRow.createCell(headers.size());
                     newHeaderCell.setCellValue(key);
@@ -155,12 +158,16 @@ public class ExcelUtils {
                 }
             }
 
-            // Find the row index of the current row
-            int currentRowIndex = findRowIndex(sheet, Hooks.currentRow.get());
+            // Determine which row to write to
+            int currentRowIndex = -1;
+            if (rowData.containsKey("excel_row_num")) {
+                currentRowIndex = Integer.parseInt(rowData.get("excel_row_num"));
+            }
 
             Row row;
             if (currentRowIndex != -1) {
                 row = sheet.getRow(currentRowIndex);
+                if (row == null) row = sheet.createRow(currentRowIndex);
             } else {
                 int lastRowNum = sheet.getLastRowNum() + 1;
                 row = sheet.createRow(lastRowNum);
@@ -183,61 +190,45 @@ public class ExcelUtils {
 
 
     public static void updateExcelData(String sheetName, Map<String, String> updatedRowData) throws IOException {
-        String filePath = BASE_PATH + prop.getProperty("env") + "/testData.xlsx";
-        FileInputStream fis = new FileInputStream(filePath);
-        Workbook workbook = new XSSFWorkbook(fis);
-        Sheet sheet = workbook.getSheet(sheetName);
+        String filePath = BASE_PATH + System.getProperty("env") + "/testData.xlsx";
+        
+        fileLock.lock();
+        try (FileInputStream fis = new FileInputStream(filePath);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+            
+            Sheet sheet = workbook.getSheet(sheetName);
 
-        // Find the row index of the current row
-        int currentRowIndex = findRowIndex(sheet, Hooks.currentRow.get());
+            // Directly use the physical row index stored during read
+            int currentRowIndex = -1;
+            if (updatedRowData.containsKey("excel_row_num")) {
+                currentRowIndex = Integer.parseInt(updatedRowData.get("excel_row_num"));
+            }
 
-        if (currentRowIndex != -1) {
-            Row row = sheet.getRow(currentRowIndex);
-            for (Map.Entry<String, String> entry : updatedRowData.entrySet()) {
-                int columnIndex = getColumnIndex(sheet, entry.getKey());
-                if (columnIndex == -1) {
-                    // Add new column if it doesn't exist
-                    Row headerRow = sheet.getRow(0);
-                    columnIndex = headerRow.getLastCellNum();
-                    headerRow.createCell(columnIndex).setCellValue(entry.getKey());
+            if (currentRowIndex != -1) {
+                Row row = sheet.getRow(currentRowIndex);
+                if (row == null) row = sheet.createRow(currentRowIndex);
+                
+                for (Map.Entry<String, String> entry : updatedRowData.entrySet()) {
+                    if (entry.getKey().equals("excel_row_num")) continue;
+                    
+                    int columnIndex = getColumnIndex(sheet, entry.getKey());
+                    if (columnIndex == -1) {
+                        // Add new column if it doesn't exist
+                        Row headerRow = sheet.getRow(0);
+                        columnIndex = headerRow.getLastCellNum();
+                        headerRow.createCell(columnIndex).setCellValue(entry.getKey());
+                    }
+                    Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    cell.setCellValue(entry.getValue());
                 }
-                Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                cell.setCellValue(entry.getValue());
-            }
-        }
-
-        fis.close();
-
-        FileOutputStream fos = new FileOutputStream(filePath);
-        workbook.write(fos);
-        fos.close();
-        workbook.close();
-    }
-
-    private static int findRowIndex(Sheet sheet, Map<String, String> rowData) {
-        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-            Row row = sheet.getRow(i);
-            if (row == null) continue; // Skip empty rows
-            boolean match = true;
-            for (Map.Entry<String, String> entry : rowData.entrySet()) {
-                int columnIndex = getColumnIndex(sheet, entry.getKey());
-                if (columnIndex == -1) {
-                    match = false;
-                    break;
+                
+                try (FileOutputStream fos = new FileOutputStream(filePath)) {
+                    workbook.write(fos);
                 }
-                Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
-                String cellValue = (cell == null) ? "" : getCellValueAsString(cell);
-                //System.out.println("Comparing cell value: " + cellValue + " with expected value: " + entry.getValue());
-//                if (!cellValue.equals(entry.getValue())) {
-//                    match = false;
-//                    break;
-//                }
             }
-            if (match) {
-                return row.getRowNum();
-            }
+        } finally {
+            fileLock.unlock();
         }
-        return -1; // Row not found
     }
 
     private static int getColumnIndex(Sheet sheet, String columnName) {
@@ -251,14 +242,21 @@ public class ExcelUtils {
         }
         return -1; // Column not found
     }
-}
-/// Reading data Example
 
-//String env = "QA";
-//String sheetName = "TestData";
-//List<Map<String, String>> data = ExcelUtils.readExcelData(env, sheetName);
-//
-//for (Map<String, String> row : data) {
-//        System.out.println("Username: " + row.get("Username"));
-//        System.out.println("Password: " + row.get("Password"));
-//        }
+    public static int getRowCount(String sheetName) {
+        String filePath = BASE_PATH + System.getProperty("env") + "/testData.xlsx";
+        File file = new File(filePath);
+        if (!file.exists()) return 0;
+
+        fileLock.lock();
+        try (FileInputStream fis = new FileInputStream(file);
+             Workbook workbook = WorkbookFactory.create(fis)) {
+            Sheet sheet = workbook.getSheet(sheetName);
+            return (sheet == null) ? 0 : sheet.getLastRowNum();
+        } catch (Exception e) {
+            return 0;
+        } finally {
+            fileLock.unlock();
+        }
+    }
+}

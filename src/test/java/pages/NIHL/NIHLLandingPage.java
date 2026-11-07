@@ -34,19 +34,19 @@ public class NIHLLandingPage extends BaseDriverClass {
 	}
 
 	public boolean ClickGradualRadioButton() {
-		NewClaimButton.click();
+		Click(NewClaimButton);
 		waitUntilElementVisible(GradualOption);
-		GradualOption.click();
+		Click(GradualOption);
 		return Email.isDisplayed();
 
 	}
 
 	public void EnterUserDetails(String email, String dob) {
-		Email.sendKeys(email);
+		Enter(Email, email);
 		String[] dob1 = dob.split("/");
-		DateofBirthDay.sendKeys(dob1[0]);
-		DateofBirthMonth.sendKeys(dob1[1]);
-		DateofBirthYear.sendKeys(dob1[2]);
-		StartClaimButton.click();
+		GWSelect(DateofBirthDay, dob1[0]);
+		GWSelect(DateofBirthMonth, dob1[1]);
+		GWSelect(DateofBirthYear, dob1[2]);
+		Click(StartClaimButton);
 	}
 }

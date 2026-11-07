@@ -33,14 +33,14 @@ public class DIeForm7_LosstimeEarningsDetails extends BaseDriverClass {
 		waitUntilElementVisible(LOEDetailsHeading);
 
 		selectRadioButtonOption(LOE_Radio, loe);
-		NextButton.click();
+		Click(NextButton);
 
 		waitUntilElementVisible(RTWDetailsHeading);
 
 		selectRadioButtonOption(TypeofWork_Radio, typeofWork);
 		selectRadioButtonOption(WageLoss_Radio, wageLoss);
 
-		NextButton.click();
+		Click(NextButton);
 		return true;
 	}
 }

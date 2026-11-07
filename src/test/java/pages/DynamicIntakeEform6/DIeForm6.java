@@ -11,6 +11,7 @@ import utils.BaseDriverClass;
 import utils.ConfigReader;
 
 import java.time.Duration;
+import java.util.Date;
 
 import static definitions.Hooks.scenario;
 
@@ -37,9 +38,9 @@ public class DIeForm6 extends BaseDriverClass {
 	@FindBy(id = "inputPhoneNumeber") private WebElement PhoneNumber;
 	@FindBy(xpath = "//*[@id=\"radiobuttonGender\"]/div[2]/label") private WebElement GenderMale;
 	@FindBy(xpath = "//*[@id=\"radiobuttonGender\"]/div[1]/label")	private WebElement GenderFemale;
-	@FindBy(id = "dropdownDobDate-wrapper") private WebElement DateOfBirthDate;
-	@FindBy(id = "dropdownDobMonth-wrapper") private WebElement DateOfBirthMonth;
-	@FindBy(id = "dropdownDobYear-wrapper") private WebElement DateOfBirthYear;
+	@FindBy(id = "dob-atepicker") private WebElement DateOfBirthDate;
+//	@FindBy(id = "dropdownDobMonth-wrapper") private WebElement DateOfBirthMonth;
+//	@FindBy(id = "dropdownDobYear-wrapper") private WebElement DateOfBirthYear;
 	@FindBy(id = "dropdownLanguage-wrapper") private WebElement LanguageDropdown;
 	@FindBy(id = "inputSin") private WebElement SocialInsuranceNumber;
 	@FindBy(xpath = "//*[@id=\"divNoSinContainer\"]/div/div/div[1]/span") private WebElement NoSINCheckbox;
@@ -77,14 +78,14 @@ public class DIeForm6 extends BaseDriverClass {
 
 	public boolean clickSubmitReportButton() {
 		waitUntilElementVisible(submitnewreport);
-		submitnewreport.click();
+		Click(submitnewreport);
 		waitUntilElementVisible(AgreeCheckbox);
 		return AgreeCheckbox.isDisplayed();
 
 	}
 
 	public boolean clickPrivacyStatement() {
-		AgreeCheckbox.click();
+		Click(AgreeCheckbox);
 		jsMoveClick(NextButton);
 		//NextButton.click();
 		waitUntilElementVisible(InjuryorIllnessRadio);
@@ -94,49 +95,49 @@ public class DIeForm6 extends BaseDriverClass {
 
 	public void selectReportType(String reporttype) {
 		if(reporttype.contains("Injury")) {
-			InjuryorIllnessRadio.click();
+			Click(InjuryorIllnessRadio);
 		}
 		else if(reporttype.contains("Exposure")) {
-			ExposureIncidentRadio.click();
+			Click(ExposureIncidentRadio);
 		}
-		NextButton.click();
+		Click(NextButton);
 	}
 
 	public void selectInjuryType(String injurytype) {
 		if(injurytype.contains("Physical")) {
-			PhysicalInjuryRadio.click();
+			Click(PhysicalInjuryRadio);
 		}
 		else if(injurytype.contains("Illness")) {
-			IllnessRadio.click();
+			Click(IllnessRadio);
 		}
 		else if(injurytype.contains("Mental")) {
-			MentalHealthRadio.click();
+			Click(MentalHealthRadio);
 		}
 		else if(injurytype.contains("Noise")) {
-			NoiseInducedHearingLossRadio.click();
+			Click(NoiseInducedHearingLossRadio);
 		}
 		else if(injurytype.contains("Construction")) {
-			ConstructionIncidentRadio.click();
+			Click(ConstructionIncidentRadio);
 		}
 		else if(injurytype.contains("Other")) {
-			OtherIncidentRadio.click();
+			Click(OtherIncidentRadio);
 		}
-		NextButton.click();
+		Click(NextButton);
 	}
 
 	public boolean selectBodyPart(String PhyscialInjury, String bodypart) {
 		if(PhyscialInjury.equalsIgnoreCase("yes")) {
-			InjuryTypeOccuranceYes.click();
+			Click(InjuryTypeOccuranceYes);
 		}
 		else if(PhyscialInjury.equalsIgnoreCase("no")) {
-			InjuryTypeOccuranceNo.click();
+			Click(InjuryTypeOccuranceNo);
 		}
 
 		String dynamicXPath = "//*[@id='radiobuttonFollowupQuestion']/div/label/span[contains(text(),'" + bodypart + "')]";
 		WebElement Bodypart = new WebDriverWait(getDriver(), Duration.ofSeconds(20))
 				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(dynamicXPath)));
-		Bodypart.click();
-		NextButton.click();
+		Click(Bodypart);
+		Click(NextButton);
 		waitUntilElementVisible(ExistingClaimNumber);
 		return ExistingClaimNumber.isDisplayed();
 
@@ -145,24 +146,22 @@ public class DIeForm6 extends BaseDriverClass {
 	public boolean enterExistingClaimNumber(String existingClaimnumber) {
 		if(!existingClaimnumber.isEmpty())
 		{
-			ExistingClaimNumber.sendKeys(existingClaimnumber);
+			Enter(ExistingClaimNumber, existingClaimnumber);
 		}
 
-		NextButton.click();
+		Click(NextButton);
 		waitUntilElementVisible(FirstName);
 		return FirstName.isDisplayed();
 	}
 
 	public boolean enterPersonalInformation(String firstName, String lastname, String phonenumber, String pronouns) throws InterruptedException {
-		FirstName.clear();
-		FirstName.sendKeys(firstName);
-		LastName.clear();
-		LastName.sendKeys(lastname);
-		PronounsDropdown.click();
+		Enter(FirstName, firstName);
+		Enter(LastName, lastname);
+		Click(PronounsDropdown);
 		DynamicTextClick(pronouns);
 
 		jsMoveSendKeys(PhoneNumber, phonenumber);
-		NextButton.click();
+		Click(NextButton);
 		waitUntilElementVisible(DateOfBirthDate);
 		return DateOfBirthDate.isDisplayed();
 
@@ -170,97 +169,74 @@ public class DIeForm6 extends BaseDriverClass {
 
 	public boolean enterAdditionalDetails(String gender, String DateofBirth,  String preferredLang, String sin) throws InterruptedException {
 		if(gender.contains("Male")) {
-			GenderMale.click();
+			Click(GenderMale);
 		}
 		else{
-			GenderFemale.click();
+			Click(GenderFemale);
 		}
 
-		DateOfBirthDate.click();
-		Actions actions = new Actions(getDriver());
-		actions.sendKeys(DateofBirth.split("\\|")[0]).build().perform();
-		actions.sendKeys(Keys.ENTER).build().perform();
-		DateOfBirthMonth.click();
-		actions.sendKeys(DateofBirth.split("\\|")[1]).build().perform();
-		actions.sendKeys(Keys.ENTER).build().perform();
-		DateOfBirthYear.click();
-		actions.sendKeys(DateofBirth.split("\\|")[2]).build().perform();
-		actions.sendKeys(Keys.ENTER).build().perform();
-		LanguageDropdown.click();
+		Click(DateOfBirthDate);
+		Enter(DateOfBirthDate, DateofBirth);
+		Click(LanguageDropdown);
 		DynamicTextClick(preferredLang);
 		if(!sin.isEmpty()){
 		jsMoveSendKeys(SocialInsuranceNumber, sin);}
 		else {
-			NoSINCheckbox.click();
+			Click(NoSINCheckbox);
 		}
-		NextButton.click();
+		Click(NextButton);
 		waitUntilElementVisible(AddressLine1);
 		return AddressLine1.isDisplayed();
 	}
 
 	public boolean enterAdditionalDetails(String gender, String DateofBirth) throws InterruptedException {
 		if(gender.contains("Male")) {
-			GenderMale.click();
+			Click(GenderMale);
 		}
 		else{
-			GenderFemale.click();
+			Click(GenderFemale);
 		}
 
-		DateOfBirthDate.click();
-		Actions actions = new Actions(getDriver());
-		actions.sendKeys(DateofBirth.split("\\|")[0]).build().perform();
-		actions.sendKeys(Keys.ENTER).build().perform();
-		DateOfBirthMonth.click();
-		actions.sendKeys(DateofBirth.split("\\|")[1]).build().perform();
-		actions.sendKeys(Keys.ENTER).build().perform();
-		DateOfBirthYear.click();
-		actions.sendKeys(DateofBirth.split("\\|")[2]).build().perform();
-		actions.sendKeys(Keys.ENTER).build().perform();
+		Click(DateOfBirthDate);
+		Enter(DateOfBirthDate, DateofBirth);
 
-		NextButton.click();
+		Click(NextButton);
 		waitUntilElementVisible(AddressLine1);
 		return AddressLine1.isDisplayed();
 	}
 
-	public boolean enterMailingAddress(String address) throws InterruptedException {
-		AddressLine1.clear();
-		AddressLine1.sendKeys(address.split("\\|")[0]);
-		City.clear();
-		City.sendKeys(address.split("\\|")[1]);
-		ProvinceDropdown.click();
-		Thread.sleep(2000);
+	public boolean enterMailingAddress(String address)  {
+		Enter(AddressLine1, address.split("\\|")[0]);
+		Enter(City, address.split("\\|")[1]);
+		Click(ProvinceDropdown);
+		Sleep(2000);
 		//DynamicTextClick(province);
 //		String dynamicXPath = "//*[contains(text(),'" + province + "')]";
 //		WebElement Element = new WebDriverWait(getDriver(), Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(dynamicXPath)));
-//		Thread.sleep(6000);
+//		Sleep(6000);
 //		Element.click();
 		ClickusingActions(address.split("\\|")[2]);
-		PostalCode.clear();
-		PostalCode.sendKeys(address.split("\\|")[3]);
-		CountryDropdown.click();
-		Thread.sleep(2000);
+		Enter(PostalCode, address.split("\\|")[3]);
+		Click(CountryDropdown);
+		Sleep(2000);
 		DynamicTextClick(address.split("\\|")[4]);
-		Thread.sleep(2000);
-		NextButton.click();
+		Sleep(2000);
+		Click(NextButton);
 		waitUntilElementVisible(EmployerName);
 		return EmployerName.isDisplayed();
 	}
 
 	public Boolean enterEmployerDetails(String employername, String empPhone, String EmployerAddress) throws InterruptedException {
-		EmployerName.clear();
-		EmployerName.sendKeys(employername);
+		Enter(EmployerName, employername);
 		jsMoveSendKeys(EmployerPhoneNumber, empPhone);
-		EmployerAddressLine1.clear();
-		EmployerAddressLine1.sendKeys(EmployerAddress.split("\\|")[0]);
-		EmployerCity.clear();
-		EmployerCity.sendKeys(EmployerAddress.split("\\|")[1]);
-		EmployerProvinceDropdown.click();
+		Enter(EmployerAddressLine1, EmployerAddress.split("\\|")[0]);
+		Enter(EmployerCity, EmployerAddress.split("\\|")[1]);
+		Click(EmployerProvinceDropdown);
 		DynamicTextClick(EmployerAddress.split("\\|")[2]);
-		EmployerPostalCode.clear();
-		EmployerPostalCode.sendKeys(EmployerAddress.split("\\|")[3]);
-		EmployerCountryDropdown.click();
+		Enter(EmployerPostalCode, EmployerAddress.split("\\|")[3]);
+		Click(EmployerCountryDropdown);
 		DynamicTextClick(EmployerAddress.split("\\|")[4]);
-		NextButton.click();
+		Click(NextButton);
 		waitUntilElementVisible(ReferenceNumber);
 		return ReferenceNumber.isDisplayed();
 	}
@@ -268,7 +244,7 @@ public class DIeForm6 extends BaseDriverClass {
 	public String verifyReferenceNumber() {
 		scenario.get().log("E-Form 6 Reference Number is: " + ReferenceNumber.getText());
 		String reference =  ReferenceNumber.getText();
-		ContinueButton.click();
+		Click(ContinueButton);
 		return reference;
 	}
 
@@ -279,10 +255,10 @@ public class DIeForm6 extends BaseDriverClass {
 
 	public void selectSubmissionRequirement(String submissionRequirement) {
 		if (submissionRequirement.equalsIgnoreCase("yes")) {
-			SubmissionReqYes.click();
+			Click(SubmissionReqYes);
 		} else {
-			SubmissionReqNo.click();
+			Click(SubmissionReqNo);
 		}
-		NextButton.click();
+		Click(NextButton);
 	}
 }

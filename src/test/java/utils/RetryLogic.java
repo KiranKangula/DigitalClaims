@@ -1,26 +1,41 @@
 package utils;
 
+import org.testng.IRetryAnalyzer;
 import org.testng.ITestResult;
+import java.io.FileInputStream;
+import java.util.Properties;
 
-public class RetryLogic {
-    private static final int MAX_RETRY_COUNT = 2; // Number of retries
+public class RetryLogic implements IRetryAnalyzer {
+    private int retryCount = 0;
+    private static int MAX_RETRY_COUNT;
 
-    public static boolean shouldRetry(ITestResult result) {
-        int retryCount = getRetryCount(result);
+    static {
+        try {
+            Properties props = new Properties();
+            try (FileInputStream fis = new FileInputStream("src/test/resources/config/Common.properties")) {
+                props.load(fis);
+            }
+            MAX_RETRY_COUNT = Integer.parseInt(props.getProperty("test.retry.count", "0"));
+            System.out.println("[RETRY LOGIC] Max retry count: " + MAX_RETRY_COUNT);
+        } catch (Exception e) {
+            MAX_RETRY_COUNT = 0;
+        }
+    }
+
+    @Override
+    public boolean retry(ITestResult result) {
         if (retryCount < MAX_RETRY_COUNT) {
-            setRetryCount(result, retryCount + 1);
-            System.out.println("Retrying test: " + result.getName() + " | Attempt: " + (retryCount + 1));
+            retryCount++;
             return true;
         }
         return false;
     }
 
-    private static int getRetryCount(ITestResult result) {
-        Integer count = (Integer) result.getAttribute("retryCount");
-        return (count != null) ? count : 0;
+    public boolean isLastAttempt() {
+        return retryCount >= MAX_RETRY_COUNT;
     }
 
-    private static void setRetryCount(ITestResult result, int count) {
-        result.setAttribute("retryCount", count);
+    public int getAttemptNumber() {
+        return retryCount + 1;
     }
 }

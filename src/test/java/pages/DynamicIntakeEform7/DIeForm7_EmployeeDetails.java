@@ -23,9 +23,10 @@ public class DIeForm7_EmployeeDetails extends BaseDriverClass {
 	@FindBy(xpath = "//h1[contains(text(),'Employee details – Additional information')]") private WebElement AdditionalInfoHeading;
 	private static final String Sex_radio = "radiobuttonNihl";
 	@FindBy(id = "dropdownPronounList-wrapper") private WebElement dropdownPronounList;
-	@FindBy(id = "dropdownDobDate-wrapper") private WebElement dropdownDobDate;
-	@FindBy(id = "dropdownDobMonth-wrapper") private WebElement dropdownDobMonth;
-	@FindBy(id = "dropdownDobYear-wrapper") private WebElement dropdownDobYear;
+	private String empDateOfBirth = "dobDatePicker";
+//	@FindBy(id = "dropdownDobDate-wrapper") private WebElement dropdownDobDate;
+//	@FindBy(id = "dropdownDobMonth-wrapper") private WebElement dropdownDobMonth;
+//	@FindBy(id = "dropdownDobYear-wrapper") private WebElement dropdownDobYear;
 	private static final String Language_radio = "radiobuttonLanguageofService";
 	private static final String SIN_checkbox = "pwiAdditionalInfo";
 	@FindBy(id = "inputSin") private WebElement inputSin;
@@ -44,31 +45,32 @@ public class DIeForm7_EmployeeDetails extends BaseDriverClass {
 										 String dateOfBirth, String language, String sin, String address) throws InterruptedException {
 
 		waitUntilElementVisible(employeeDetailsHeading);
-		NextButton.click();
-		pwiEmployeeFName.sendKeys(employeeFirstName);
-		pwiEmployeeLName.sendKeys(employeeLastName);
+		Click(NextButton);
+		Enter(pwiEmployeeFName, employeeFirstName);
+		Enter(pwiEmployeeLName, employeeLastName);
 		jsMoveSendKeys(primaryPhone,phoneNumber); // To scroll into view
-		NextButton.click();
+		Click(NextButton);
 		waitUntilElementVisible(AdditionalInfoHeading);
 		selectRadioButtonOption(Sex_radio,sex);
 		Select(dropdownPronounList,pronouns);
-		selectDropdownValue(dropdownDobDate,dateOfBirth.split("/")[0]);
-		selectDropdownValue(dropdownDobMonth,dateOfBirth.split("/")[1]);
-		selectDropdownValue(dropdownDobYear,dateOfBirth.split("/")[2]);
+		DatePicker(empDateOfBirth, dateOfBirth);
+//		selectDropdownValue(dropdownDobDate,dateOfBirth.split("/")[0]);
+//		selectDropdownValue(dropdownDobMonth,dateOfBirth.split("/")[1]);
+//		selectDropdownValue(dropdownDobYear,dateOfBirth.split("/")[2]);
 		selectRadioButtonOption(Language_radio,language);
 		if(sin.equalsIgnoreCase("")) {
 			selectRadioButtonOption(SIN_checkbox, "I don");
 		}
 		else {
-			inputSin.sendKeys(sin);
+			Enter(inputSin, sin);
 		}
-		NextButton.click();
+		Click(NextButton);
 		waitUntilElementVisible(pwiAddressLine1);
-		pwiAddressLine1.sendKeys(address.split("\\|")[0]);
-		pwiAddressCity.sendKeys(address.split("\\|")[1]);
+		Enter(pwiAddressLine1, address.split("\\|")[0]);
+		Enter(pwiAddressCity, address.split("\\|")[1]);
 		Select(dropdownProvince,address.split("\\|")[2]);
-		inputPostalCode.sendKeys(address.split("\\|")[3]);
-		NextButton.click();
+		Enter(inputPostalCode, address.split("\\|")[3]);
+		Click(NextButton);
 		return true;
 	}
 }

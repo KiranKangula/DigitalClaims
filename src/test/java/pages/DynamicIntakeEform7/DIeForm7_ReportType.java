@@ -9,6 +9,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.BaseDriverClass;
 import utils.ConfigReader;
 
+import static java.lang.Thread.sleep;
+
 public class DIeForm7_ReportType extends BaseDriverClass {
 	ConfigReader prop= Hooks.getConfigReader();
 
@@ -35,13 +37,13 @@ public class DIeForm7_ReportType extends BaseDriverClass {
 	public boolean selectPhysicalInjuryDetails(String physicalInjury, String accidentType, String describedBy) {
 		waitUntilElementVisible(natureOfPhysicalInjury);
 		if(isDisplayed(ModalPopup)) {
-			DistributionPopUpNo.click();
+			Click(DistributionPopUpNo);
 		}
-
+		Sleep(3000);
 		selectRadioButtonOption(PhysicalInjury_radio, physicalInjury);
 		selectRadioButtonOption(AccidentType_radio, accidentType);
 		selectRadioButtonOption(InjuryType_radio, describedBy);
-		NextButton.click();
+		Click(NextButton);
 		return true;
 	}
 }

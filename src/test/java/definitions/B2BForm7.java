@@ -11,16 +11,14 @@ import io.restassured.response.Response;
 import org.junit.Assert;
 import pages.OSPC.OSPCClaimOverview;
 import utils.ConfigReader;
-import utils.ExcelUtils;
+import utils.JsonUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.random.RandomGenerator;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
@@ -32,11 +30,10 @@ public class B2BForm7 {
 	private OSPCClaimOverview OSPCClaimOverview;
 	private String endpoint;
 	private String requestBody;
-	private Response response;
-	private String Filepath = "src/test/resources/config/B2BForm7.properties"; // Path to your properties file
+	private Response response; // Declared as a class field
+	private String Filepath = "src/test/resources/config/"+ System.getProperty("env")+ "/B2BForm7.properties"; // Path to your properties file
 
 	ConfigReader prop= Hooks.getConfigReader();
-	List<Map<String, String>> data = Hooks.data;
 	public B2BForm7() throws Exception {
 
 	}
@@ -44,11 +41,13 @@ public class B2BForm7 {
 	@Given("the API endpoint is configured with {string}")
 	public void theAPIEndpointIsConfiguredWith(String Endpoint) {
 		endpoint = prop.getProperty("AuthHandler")+ Endpoint;
+		Hooks.log("API Endpoint configured: " + endpoint);
 	}
 
 	@Given("the API Token endpoint is configured with {string}")
 	public void theAPITokenEndpointIsConfiguredWith(String TokenEndpoint) {
 		endpoint = prop.getProperty("AuthHandler")+ TokenEndpoint;
+		Hooks.log("API Token Endpoint configured: " + endpoint);
 	}
 
 	@And("the request body is:")
@@ -81,7 +80,7 @@ public class B2BForm7 {
 				.replace("{{Filename}}", Filename)
 				.replace("{{SessionId}}", SessionID)
 				.replace("{{UploadFileId}}", UploadFileID);
-
+		Hooks.log("Request body configured with dynamic parameters.");
 	}
 
 	@When("a POST request is sent")
@@ -89,7 +88,8 @@ public class B2BForm7 {
 		// Disable SSL validation
 		RestAssured.useRelaxedHTTPSValidation();
 		String bearerToken = prop.getProperty("BearerToken");
-		response = RestAssured
+		Hooks.log("Sending POST request to: " + endpoint);
+		response = RestAssured // Removed 'Response' keyword here
 				.given()
 				.log().all() // Logs the request details
 				.header("Authorization", "Bearer " + bearerToken)
@@ -102,8 +102,10 @@ public class B2BForm7 {
 	public void theResponseStatusCodeShouldBe(int statusCode) throws Exception {
 		// Log the response details for debugging
 		//response.then().log().all(); // Logs the response details
+		Hooks.log("Response Pretty Print:");
 		response.prettyPrint(); // Prints the response body
-		assertThat(response.getStatusCode(), is(statusCode));
+		assertThat(response.getStatusCode(), equalTo(statusCode));
+		Hooks.log("Response status code validated: " + statusCode);
 		// Capture the current timestamp
 
 	}
@@ -112,7 +114,8 @@ public class B2BForm7 {
 	public void aPOSTRequestIsSentWithFormData() {
 		String bearerToken = prop.getProperty("BearerToken");
 		File file = new File(prop.getProperty("Filepath")); // Path to the file
-		response = RestAssured
+		Hooks.log("Sending POST request with form-data to: " + endpoint);
+		response = RestAssured // Removed 'Response' keyword here
 				.given()
 				.log().all() // Logs the request details
 				.header("Authorization", "Bearer " + bearerToken)
@@ -129,14 +132,15 @@ public class B2BForm7 {
 		String fileId = response.jsonPath().getString("name");
 		Assert.assertNotNull("File ID should not be null", fileId);
 		prop.setProperty("FileId", fileId, Filepath); // Store the fileId in config.properties
-		System.out.println("Extracted File ID: " + fileId);
+		Hooks.log("Extracted File ID: " + fileId);
 	}
 
 
 	@When("a POST request is sent with Claimid as parameters")
 	public void aPOSTRequestIsSentWithClaimidAsParameters() {
 		String bearerToken = prop.getProperty("BearerToken");
-		response = RestAssured
+		Hooks.log("Sending GET request with ClaimId parameter to: " + endpoint);
+		response = RestAssured // Removed 'Response' keyword here
 				.given()
 				.log().all() // Logs the request details
 				.header("Authorization", "Bearer " + bearerToken)
@@ -150,12 +154,13 @@ public class B2BForm7 {
 		String PublicId = response.jsonPath().getString("result.publicID");
 		Assert.assertNotNull("Public ID should not be null", PublicId);
 		prop.setProperty("DD_publicID", PublicId, Filepath); // Store the fileId in config.properties
-		System.out.println("Extracted PublicId: " + PublicId);
+		Hooks.log("Extracted PublicId: " + PublicId);
 
 	}
 
 	@And("the request body is identified: {string}")
 	public void theRequestBodyIsIdentified(String type) {
+		Hooks.log("Identifying request body for type: " + type);
 		// Fetch ClaimNumber from config.properties
 		if(type.contentEquals("Injury")) {
 			requestBody = """
@@ -290,7 +295,7 @@ public class B2BForm7 {
 					    "params": [
 					        {
 					            "privacyWC": true,
-					            "diwizardStep": "DI_EmployerDetails",
+					            "diwizardStep": "DI_ReviewAndSubmit",
 					            "reportType": "injuryOrIllness",
 					            "intakeChannel": "OSPC_DI_Web",
 					            "originalChannel": "OSPC_DI_Web",
@@ -351,7 +356,7 @@ public class B2BForm7 {
 					    "params": [
 					        {
 					            "privacyWC": true,
-					            "diwizardStep": "DI_EmployerDetails",
+					            "diwizardStep": "DI_ReviewAndSubmit",
 					            "reportType": "exposureIncident",
 					            "intakeChannel": "OSPC_DI_Web",
 					            "originalChannel": "OSPC_DI_Web",
@@ -413,7 +418,7 @@ public class B2BForm7 {
 					    "params": [
 					        {
 					            "privacyWC": true,
-					            "diwizardStep": "DI_EmployerDetails",
+					            "diwizardStep": "DI_ReviewAndSubmit",
 					            "reportType": "exposureIncident",
 					            "intakeChannel": "OSPC_DI_Web",
 					            "originalChannel": "OSPC_DI_Web",
@@ -474,11 +479,12 @@ public class B2BForm7 {
 		String RefNumber = response.jsonPath().getString("result.claimNumber");
 		Assert.assertNotNull("Ref Number should not be null", RefNumber);
 		prop.setProperty("RefNumber", RefNumber, Filepath);
-		System.out.println("Extracted RefNumber: " + RefNumber);
+		Hooks.log("Extracted RefNumber: " + RefNumber);
 	}
 
 	@And("the request body for submit claim is configured: {string}")
 	public void theRequestBodyForSubmitClaimIsConfigured(String type) {
+		Hooks.log("Configuring request body for submit claim: " + type);
 		if(type.contentEquals("Injury")) {
 			requestBody = """
 					{
@@ -618,7 +624,7 @@ public class B2BForm7 {
 					                                				"firstName": "Test",
 					                                				"lastName": "Super",
 					                                				"contactType": "WSIB_PersonOther",
-					                                				"workNumber": "647-666-6666"
+					                                				"workNumber": "234-234-2342"
 					                                			},
 					                                			"accidentHistory": "Test",
 					                                			"onsetFromDate": {
@@ -630,7 +636,8 @@ public class B2BForm7 {
 					                                			"isSubmitEnroll": true,
 					                                			"allowAutoEnrollment": true
 					                                		}
-					                                	]
+					                                	}
+					                                ]
 					                                }
 					 """.replace("{{RefNumber}}", prop.getProperty("RefNumber")); // Replace placeholder with actual value
 		}
@@ -1171,7 +1178,7 @@ public class B2BForm7 {
 		String SessionId = response.jsonPath().getString("result");
 		Assert.assertNotNull("SessionId should not be null", SessionId);
 		prop.setProperty("SessionId", SessionId, Filepath);
-		System.out.println("Extracted SessionId: " + SessionId);
+		Hooks.log("Extracted SessionId: " + SessionId);
 
 	}
 
@@ -1179,7 +1186,8 @@ public class B2BForm7 {
 	public void aPOSTRequestIsSentWithFileAndMetadataAsParameters() {
 		String bearerToken = prop.getProperty("BearerToken");
 		File file = new File(prop.getProperty("Filepath")); // Path to the file
-		response = RestAssured
+		Hooks.log("Sending POST request with file and metadata to: " + endpoint);
+		response = RestAssured // Removed 'Response' keyword here
 				.given()
 				.log().all() // Logs the request details
 				.header("Authorization", "Bearer " + bearerToken)
@@ -1199,7 +1207,7 @@ public class B2BForm7 {
 		String UploadFileId = response.jsonPath().getString("uploadFileID");
 		Assert.assertNotNull("UploadFileId should not be null", UploadFileId);
 		prop.setProperty("UploadFileId", UploadFileId, Filepath);
-		System.out.println("Extracted UploadFileId: " + UploadFileId);
+		Hooks.log("Extracted UploadFileId: " + UploadFileId);
 
 	}
 
@@ -1212,7 +1220,7 @@ public class B2BForm7 {
 		String timeStamp = now.format(formatter);
 		prop.setProperty("timeStamp", timeStamp, Filepath); // Store the timestamp in config.properties
 		// Print the corrected timestamp
-		System.out.println("\"timeStamp\": \"" + timeStamp + "\"");
+		Hooks.log("Captured Document Upload Timestamp: " + timeStamp);
 		Thread.sleep(10000);
 
 	}
@@ -1243,13 +1251,13 @@ public class B2BForm7 {
 
 			if (fileName.equals(expectedFileName) && formattedTimeStamp.equals(expectedTimeStamp)) {
 				isMatchFound = true;
-				System.out.println("Match found: fileName = " + fileName + ", timeStamp = " + formattedTimeStamp);
+				Hooks.log("Match found: fileName = " + fileName + ", timeStamp = " + formattedTimeStamp);
 				break;
 			}
 		}
 
 		if (!isMatchFound) {
-			System.out.println("No matching fileName and timeStamp found in the response.");
+			Hooks.log("Error: No matching fileName and timeStamp found in the response.");
 			Assert.fail("No matching fileName and timeStamp found in the response.");
 		}
 	}
@@ -1264,13 +1272,13 @@ public class B2BForm7 {
 		prop.setProperty("MtimeStamp", timeStamp, Filepath); // Store the timestamp in config.properties
 
 // Print the formatted timestamp
-		System.out.println("\"MtimeStamp\": \"" + timeStamp + "\"");
+		Hooks.log("Captured Message Sent Timestamp: " + timeStamp);
 		Thread.sleep(10000);
 
 	}
 
 	@Then("Verify the sent message is displayed in the response")
-	public void verifyTheSentMessageIsDisplayedInTheResponse() {
+	public void verifyTheSentMessageIsDisplayedIntheResponse() {
 		String expectedBody = "Test API";
 		String expectedTimeStamp = prop.getProperty("MtimeStamp");
 
@@ -1287,13 +1295,13 @@ public class B2BForm7 {
 
 			if (body.equals(expectedBody) && sendDate.equals(expectedTimeStamp)) {
 				isMatchFound = true;
-				System.out.println("Match found: body = " + body + ", sendDate = " + sendDate);
+				Hooks.log("Match found: body = " + body + ", sendDate = " + sendDate);
 				break;
 			}
 		}
 
 		if (!isMatchFound) {
-			System.out.println("No matching body and sendDate found in the response.");
+			Hooks.log("Error: No matching body and sendDate found in the response.");
 			Assert.fail("No matching body and sendDate found in the response.");
 		}
 
@@ -1303,11 +1311,13 @@ public class B2BForm7 {
 	@When("the token request body has set up")
 	public void theTokenRequestBodyHasSetUp() {
 		requestBody = "UserId=" + prop.getProperty("UserId") + "&Password=" + prop.getProperty("Password");
+		Hooks.log("Token request body set up.");
 	}
 
 	@And("a Token POST request is sent")
 	public void aTokenPOSTRequestIsSent() {
-		response = RestAssured
+		Hooks.log("Sending Token POST request to: " + endpoint);
+		response = RestAssured // Removed 'Response' keyword here
 				.given()
 				.log().all() // Logs the request details
 				.header("Content-Type", "application/x-www-form-urlencoded")
@@ -1329,8 +1339,7 @@ public class B2BForm7 {
 		Assert.assertNotNull("Token should not be null", token);
 		// Store the token in the properties file
 		prop.setProperty("authToken", token, Filepath);
-		// Print the extracted token
-		System.out.println("Extracted Token: " + token);
+		Hooks.log("Extracted Auth Token successfully.");
 	}
 
 	@And("the request body is configured")
@@ -1558,28 +1567,33 @@ public class B2BForm7 {
 				</wsibf7:Form7>
 				     
 					 """;
+		Hooks.log("XML request body configured.");
 	}
 
 	@When("a POST request is sent with XML body")
-	public void aPOSTRequestIsSentWithXMLBody() throws IOException {
+	public void aPOSTRequestIsSentWithXMLBody() {
 		RestAssured.useRelaxedHTTPSValidation();
 		String accountNumber = Hooks.currentRow.get().get("accountNumber");
 		String firstname = "First" + generateRandomText(5);
 		String lastname = "Last" + generateRandomText(5);
-		String dateOfBirth = Hooks.currentRow.get().get("DateofBirth").replace("/", "");
+		String dobRaw = Hooks.currentRow.get().get("dateOfBirth");
+		String dateOfBirth = dobRaw != null ? dobRaw.replace("/", "") : "";
+		
 		// Update the current row data with the new values
 		Map<String, String> currentRowData = Hooks.currentRow.get();
 		currentRowData.put("First Name", firstname);
 		currentRowData.put("Last Name", lastname);
-		String sheetName = Hooks.sheetName;
-		ExcelUtils.updateExcelData(sheetName, currentRowData);
+		
+		String sheetName = Hooks.sheetName.get();
+		JsonUtils.writeJsonData(sheetName, Hooks.data.get());
 		Hooks.currentRow.set(currentRowData);
 
-		requestBody = requestBody.replace("{{accountNumber}}", accountNumber)
+		requestBody = requestBody.replace("{{accountNumber}}", accountNumber != null ? accountNumber : "")
 				.replace("{{firstname}}", firstname)
 				.replace("{{lastname}}", lastname)
 				.replace("{{dateOfBirth}}", dateOfBirth);
-		response = RestAssured
+		Hooks.log("Sending XML POST request to: " + endpoint + " for claimant: " + firstname + " " + lastname);
+		response = RestAssured // Removed 'Response' keyword here
 				.given()
 				.queryParam("authHandler", prop.getProperty("authToken"))
 				.log().all() // Logs the request details
@@ -1597,6 +1611,8 @@ public class B2BForm7 {
 		assertThat(statusCode, is(200));
 		String confirmationNumber = response.xmlPath().getString("Response.ACK.result.submission.confirmationNumber");
 		assertThat("Confirmation number should not be null", confirmationNumber, notNullValue());
-		System.out.println("Extracted Confirmation Number: " + confirmationNumber);
+		Hooks.log("Response status code validated: 200. Confirmation Number: " + confirmationNumber);
+		Assert.assertTrue(!response.prettyPrint().contains("error"));
+
 	}
 }

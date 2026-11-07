@@ -1,5 +1,6 @@
 package definitions;
 
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -10,18 +11,15 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.NIHL.*;
 import pages.OSPC.HomePage;
 import pages.OSPC.LoginPage;
-import pages.WT.TravelExpense;
-import pages.WT.WTLandingPage;
-import utils.BaseDriverClass;
 import utils.ConfigReader;
-import utils.ExcelUtils;
+import utils.JsonUtils;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
 import static utils.BaseDriverClass.generateRandomText;
+import static utils.BaseDriverClass.getCurrentDate;
 
 public class NIHL {
 	private WebDriver driver;
@@ -50,7 +48,8 @@ public class NIHL {
 	}
 
 	@Given("User is on NIHL landing page")
-	public void userIsOnLandingPage() throws InterruptedException {
+	public void userIsOnNIHLLandingPage() throws InterruptedException {
+		Hooks.log("Verifying user is on NIHL landing page.");
 		Assert.assertTrue(nihllandingpage.verifyOnNIHLLandingPage());
 
 	}
@@ -58,13 +57,15 @@ public class NIHL {
 
 	@When("User clicks on Gradual over a period of a few years radio button")
 	public void userClicksOnGradualOverAPeriodOfAFewYearsRadioButton() {
+		Hooks.log("Clicking on 'Gradual over a period of a few years' radio button.");
 		Assert.assertTrue(nihllandingpage.ClickGradualRadioButton());
 	}
 
 	@Then("User should be able to enter the Email address and Date of birth and click on Start Claim button")
 	public void userShouldBeAbleToEnterTheEmailAddressAndDateOfBirthAndClickOnStartClaimButton() {
 		String email = Hooks.currentRow.get().get("Email");
-		String dob = Hooks.currentRow.get().get("DateofBirth");
+		String dob = Hooks.currentRow.get().get("dateOfBirth");
+		Hooks.log("Entering Email address: " + email + " and Date of birth: " + dob + " and clicking Start Claim button.");
 		nihllandingpage.EnterUserDetails(email, dob);
 	}
 
@@ -81,19 +82,18 @@ public class NIHL {
 		// Manipulate the first name and last name
 		String manipulatedFirstName = "KKFirst"+ generateRandomText(5) ;
 		String manipulatedLastName = "KKLast"+ generateRandomText(5);
+		Hooks.log("Manipulating First Name to: " + manipulatedFirstName + " and Last Name to: " + manipulatedLastName);
 
-		// Update the Excel sheet with the manipulated names
-		Map<String, String> updatedRowData = new HashMap<>();
-		updatedRowData.put("First Name", manipulatedFirstName);
-		updatedRowData.put("Last Name", manipulatedLastName);
-		try {
-			ExcelUtils.updateExcelData(Hooks.sheetName, updatedRowData);
-		} catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+		// Update the current row data in memory
+		Hooks.currentRow.get().put("First Name", manipulatedFirstName);
+		Hooks.currentRow.get().put("Last Name", manipulatedLastName);
+		
+		// Update the JSON file with the manipulated names
+		JsonUtils.writeJsonData(Hooks.sheetName.get(), Hooks.data.get());
+		Hooks.log("Updated JSON data with manipulated names.");
 
-
-        myinformation.EnterMyInformation(firstname, lastname, SIN, address, phone, Language);
+        myinformation.EnterMyInformation(manipulatedFirstName, manipulatedLastName, SIN, address, phone, Language);
+        Hooks.log("Entered data in My Information Screen.");
 	}
 
 	@And("Enter data in Health care Screen")
@@ -114,6 +114,7 @@ public class NIHL {
 		String ringingEarDuration= Hooks.currentRow.get().get("ringingEarDuration");
 		String hasSevereRingingInEar= Hooks.currentRow.get().get("hasSevereRingingInEar");
 		String isRingingConstant= Hooks.currentRow.get().get("isRingingConstant");
+		Hooks.log("Entering data in Health Care Screen.");
 		healthcare.EnterHealthCareDetails(HearingLossNoticedYear,wearHearingAid,hearingAidUsageDate,dateOfFirstAudiogram,
 				audiogramClinicName,audiogramClinicAddress,audiogramClinicPhoneNumber,hasVisitedEntSpecialist,entAppointmentDate,entSpecialistName,
 				entSpecialistAddress,entSpecialistPhoneNumber,experienceRingingQuestion,ringingEarDuration,hasSevereRingingInEar,isRingingConstant);
@@ -122,27 +123,29 @@ public class NIHL {
 
 	@And("Enter data in Employment Screen")
 	public void enterDataInEmploymentScreen() throws InterruptedException {
-		String Areyouretired= Hooks.currentRow.get().get("Are you retired?");
-		String RetirementDate = Hooks.currentRow.get().get("RetirementDate");
-		String EmployedRadio= Hooks.currentRow.get().get("Are you currently employed?");
-		String EmployerName= Hooks.currentRow.get().get("EmployerName");
-		String EmployerAddress= Hooks.currentRow.get().get("EmployerAddress");
-		String EmployerPhone= Hooks.currentRow.get().get("EmployerPhone");
-		String HazardousNoiseRadio= Hooks.currentRow.get().get("HazardousNoiseRadio");
-		String SelfEmployedRadio= Hooks.currentRow.get().get("SelfEmployedRadio");
-		String InsuranceRadio= Hooks.currentRow.get().get("InsuranceRadio");
-		String BusinessName= Hooks.currentRow.get().get("BusinessName");
-		String BusinessAddress= Hooks.currentRow.get().get("BusinessAddress");
-		String BusinessFrom= Hooks.currentRow.get().get("BusinessFrom");
-		String BusinessTo= Hooks.currentRow.get().get("BusinessTo");
-		String NoisyMachineryOffwork= Hooks.currentRow.get().get("noisyMachineryOffwork");
-		String UsedNoisyMachinery= Hooks.currentRow.get().get("usedNoisyMachinery");
-		String StillInBusiness= Hooks.currentRow.get().get("StillInBusiness");
-		String JobTitle= Hooks.currentRow.get().get("JobTitle");
-		String EmployedFrom= Hooks.currentRow.get().get("EmployedFrom");
-		String EmployedTo= Hooks.currentRow.get().get("EmployedTo");
-		String ToolsEquipmentUsed= Hooks.currentRow.get().get("ToolsEquipmentUsed");
-		String HoursUsed= Hooks.currentRow.get().get("HoursUsed");
+		Map<String, String> row = Hooks.currentRow.get();
+		String Areyouretired= row.getOrDefault("Are you retired?", "");
+		String RetirementDate = row.getOrDefault("RetirementDate", "");
+		String EmployedRadio= row.getOrDefault("Are you currently employed?", "");
+		String EmployerName= row.getOrDefault("EmployerName", "");
+		String EmployerAddress= row.getOrDefault("EmployerAddress", "");
+		String EmployerPhone= row.getOrDefault("EmployerPhone", "");
+		String HazardousNoiseRadio= row.getOrDefault("HazardousNoiseRadio", "");
+		String SelfEmployedRadio= row.getOrDefault("SelfEmployedRadio", "");
+		String InsuranceRadio= row.getOrDefault("InsuranceRadio", "");
+		String BusinessName= row.getOrDefault("BusinessName", "");
+		String BusinessAddress= row.getOrDefault("BusinessAddress", "");
+		String BusinessFrom= row.getOrDefault("BusinessFrom", "");
+		String BusinessTo= row.getOrDefault("BusinessTo", "");
+		String NoisyMachineryOffwork= row.getOrDefault("noisyMachineryOffwork", "");
+		String UsedNoisyMachinery= row.getOrDefault("usedNoisyMachinery", "");
+		String StillInBusiness= row.getOrDefault("StillInBusiness", "");
+		String JobTitle= row.getOrDefault("JobTitle", "");
+		String EmployedFrom= row.getOrDefault("EmployedFrom", "");
+		String EmployedTo= row.getOrDefault("EmployedTo", "");
+		String ToolsEquipmentUsed= row.getOrDefault("ToolsEquipmentUsed", "");
+		String HoursUsed= row.getOrDefault("HoursUsed", "");
+		Hooks.log("Entering data in Employment Screen.");
 		employement.EnterEmploymentDetails(Areyouretired,RetirementDate, EmployedRadio,EmployerName,EmployerAddress,EmployerPhone,
 				HazardousNoiseRadio,SelfEmployedRadio,InsuranceRadio,BusinessName,BusinessAddress,BusinessFrom,BusinessTo,
 				NoisyMachineryOffwork,UsedNoisyMachinery,StillInBusiness,JobTitle,EmployedFrom,EmployedTo,ToolsEquipmentUsed,HoursUsed);
@@ -150,17 +153,87 @@ public class NIHL {
 	}
 
 	@And("Enter data in Supporting Documents Screen")
-	public void enterDataInSupportingDocumentsScreen() throws InterruptedException {
-		supportingdocuments.EnterSupportingDocuments();
+	public void enterDataInSupportingDocumentsScreen()
+			throws InterruptedException {
+
+		Map<String, String> row = Hooks.currentRow.get();
+
+		if (row == null) {
+			throw new IllegalStateException(
+					"NIHL test data is not initialized for this scenario.");
+		}
+
+		String healthCareFiles =
+				row.getOrDefault("HealthCareFiles", "");
+
+		String employmentFiles =
+				row.getOrDefault("EmploymentFiles", "");
+
+		String uploadFolder = prop.getProperty("upload.folder");
+
+		Hooks.log("Entering data in Supporting Documents Screen.");
+
+		supportingdocuments.EnterSupportingDocuments(
+				healthCareFiles,
+				employmentFiles,
+				uploadFolder);
 	}
 
 	@And("Verify the data in Review screen and Submit the claim")
 	public void verifyTheDataInReviewScreenAndSubmitTheClaim() throws InterruptedException {
+		Hooks.log("Verifying data in Review screen and submitting the claim.");
 		reviewandconfirm.reviewandSubmitNIHLClaim();
 	}
 
 	@And("Verify the claim is submitted successfully")
 	public void verifyTheClaimIsSubmittedSuccessfully() {
+		Hooks.log("Verifying claim submission success.");
 		Assert.assertTrue(reviewandconfirm.verifyClaimSubmitted());
+		Hooks.log("Claim Submitted at: " + getCurrentDate("MMM dd, yyyy hh:mm:ss a"));
+	}
+
+
+	@And("Enter data in Supporting Documents Screen with health care files {string} and employment files {string}")
+	public void enterSupportingDocumentsWithFiles(
+			String healthCareFiles,
+			String employmentFiles) throws InterruptedException {
+
+		Map<String, String> row = Hooks.currentRow.get();
+
+		if (row == null) {
+			throw new IllegalStateException(
+					"NIHL test data is not initialized for this scenario.");
+		}
+
+		// Always capture a fresh date for this run—including no-document cases.
+		row.put("NIHLSubmissionDate", getCurrentDate("yyyy-MM-dd"));
+		// Retain this scenario's actual upload inputs for GWCC verification.
+		row.put("HealthCareFiles",
+				healthCareFiles == null ? "" : healthCareFiles.trim());
+		row.put("EmploymentFiles",
+				employmentFiles == null ? "" : employmentFiles.trim());
+		Hooks.log("[NIHL] Captured submission date: "
+				+ row.get("NIHLSubmissionDate"));
+
+		String healthFiles = healthCareFiles == null
+				? "" : healthCareFiles.trim();
+
+		String employerFiles = employmentFiles == null
+				? "" : employmentFiles.trim();
+
+		String uploadFolder = prop.getProperty("upload.folder");
+
+		Hooks.log("Health care files: " + healthFiles);
+		Hooks.log("Employment files: " + employerFiles);
+
+		supportingdocuments.EnterSupportingDocuments(
+				healthFiles,
+				employerFiles,
+				uploadFolder);
+
+		// Retain this example's actual upload inputs for GWCC verification.
+		// This changes scenario data in memory; it does not write the JSON file.
+		row.put("HealthCareFiles", healthFiles);
+		row.put("EmploymentFiles", employerFiles);
 	}
 }

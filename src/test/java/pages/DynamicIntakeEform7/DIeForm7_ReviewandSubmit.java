@@ -33,12 +33,12 @@ public class DIeForm7_ReviewandSubmit extends BaseDriverClass {
 
 	public boolean submitEform7Report() {
 		waitUntilElementVisible(ReviewAndSubmitHeading);
-		reviewDeclaratioInputTitle.sendKeys("Automation Test");
+		Enter(reviewDeclaratioInputTitle, "Automation Test");
 		jsMoveSendKeys(reviewDeclaratioInputPhone, "6478558585");
-		selectRadioButtonOption(Declaration_checkbox, "By checking this box");
-		SubmitButton.click();
+		selectRadioButtonOption(Declaration_checkbox, "By checking this box"); // This is a radio button selection, not a direct click
+		Click(SubmitButton);
 		waitUntilElementVisible(ConfirmationHeading);
-		returnToDashboardButton.click();
+		Click(returnToDashboardButton);
 		return true;
 	}
 }

@@ -17,9 +17,9 @@ public class DIeForm6_WorkHistory extends BaseDriverClass {
 	ConfigReader prop= Hooks.getConfigReader();
 
 	@FindBy(id = "inputJobTitle") private WebElement jobTitle;
-	@FindBy(id = "dropdownStartDate-wrapper") private WebElement startDateDay;
-	@FindBy(id = "dropdownStartMonth-wrapper") private WebElement startDateMonth;
-	@FindBy(id = "dropdownStartYear-wrapper") private WebElement startDateYear;
+	@FindBy(id = "start-date-picker") private WebElement startDate;
+//	@FindBy(id = "dropdownStartMonth-wrapper") private WebElement startDateMonth;
+//	@FindBy(id = "dropdownStartYear-wrapper") private WebElement startDateYear;
 	@FindBy(id = "inputEmploymentDurationYears") private WebElement employmentDurationYears;
 	@FindBy(id = "inputMonths") private WebElement employmentDurationMonths;
 	@FindBy(xpath = "//*[@id=\"AddContactButton\"]/span/span") private WebElement addContactButton;
@@ -35,15 +35,16 @@ public class DIeForm6_WorkHistory extends BaseDriverClass {
 	@FindBy(xpath = "//*[@id=\"intakeBodySection\"]/div[2]/div[1]/span[2]/a/span") private WebElement nextButton;
 	@FindBy(xpath = "//*[@id=\"radiobuttonRelative\"]/div[1]/label") private WebElement relativeYes;
 	@FindBy(xpath = "//*[@id=\"radiobuttonRelative\"]/div[2]/label") private WebElement relativeNo;
+	@FindBy(xpath = "//*[@id=\"dropdownEmploymentType\"]") private WebElement EmploymentType;
+
 	@FindBy(id = "businessNature") private WebElement businessNature;
 	@FindBy(xpath = "//*[@id=\"radiobuttonCommitte\"]/div[1]/label") private WebElement safetyCommitteeYes;
 	@FindBy(xpath = "//*[@id=\"radiobuttonCommitte\"]/div[2]/label") private WebElement safetyCommitteeNo;
 	@FindBy(xpath = "//*[@id=\"radiobuttonRepresentative\"]/div[1]/label") private WebElement safetyRepresentativeYes;
 	@FindBy(xpath = "//*[@id=\"radiobuttonRepresentative\"]/div[2]/label") private WebElement safetyRepresentativeNo;
 	@FindBy(xpath = "\t//*[@id=\"attachReportButton\"]/span/span") private WebElement attachReportButton;
-	@FindBy(id = "dropdownExposureStartDate-wrapper") private WebElement exposureStartDateDay;
-	@FindBy(id = "dropdownExposureStartMonth-wrapper") private WebElement exposureStartDateMonth;
-	@FindBy(id = "dropdownExposureStartYear-wrapper") private WebElement exposureStartDateYear;
+	@FindBy(id = "exposure-start-date-picker") private WebElement exposureStartDate;
+
 
 
 
@@ -55,90 +56,78 @@ public class DIeForm6_WorkHistory extends BaseDriverClass {
 	}
 
 
-	public boolean enterJobDetails(String jobTitle, String startDateDay, String startDateMonth, String startDateYear, String empDurationYears,
+	public boolean enterJobDetails(String jobTitle, String startDate, String empDurationYears,
 								   String empDurationMonths, String supervisorFirstName, String supervisorLastName, String supervisorPhoneNumber,
 								   String companySize, String thirdPartyUnion, String nameOfTheUnion) {
 
 		waitUntilElementVisible(this.jobTitle);
-		this.jobTitle.sendKeys(jobTitle);
-		this.startDateDay.click();
-		ClickusingActions(startDateDay);
-		this.startDateMonth.click();
-		ClickusingActions(startDateMonth);
-		this.startDateYear.click();
-		ClickusingActions(startDateYear);
+		Enter(this.jobTitle, jobTitle);
+		Click(this.startDate);
+		Enter(this.startDate, startDate);
 		jsMoveSendKeys(this.employmentDurationYears, empDurationYears);
 		jsMoveSendKeys(this.employmentDurationMonths, empDurationMonths);
-		this.addContactButton.click();
-		this.SupervisorFirstName.sendKeys(supervisorFirstName);
-		this.SupervisorLastName.sendKeys(supervisorLastName);
+		Click(this.addContactButton);
+		Enter(this.SupervisorFirstName, supervisorFirstName);
+		Enter(this.SupervisorLastName, supervisorLastName);
 		jsMoveSendKeys(this.SupervisorPhoneNumber, supervisorPhoneNumber);
-		this.saveButton.click();
+		Click(this.saveButton);
 		if(companySize.equalsIgnoreCase("yes")) {
-			this.companySizeYes.click();
+			Click(this.companySizeYes);
 		} else {
-			this.companySizeNo.click();
+			Click(this.companySizeNo);
 		}
 		if(thirdPartyUnion.equalsIgnoreCase("yes")) {
-			this.thirdPartyUnionYes.click();
+			Click(this.thirdPartyUnionYes);
 			waitUntilElementVisible(this.nameOfTheUnion);
-			this.nameOfTheUnion.sendKeys(nameOfTheUnion);
+			Enter(this.nameOfTheUnion, nameOfTheUnion);
 		} else {
-			this.thirdPartyUnionNo.click();
+			Click(this.thirdPartyUnionNo);
 		}
-		this.nextButton.click();
+		Click(this.nextButton);
 		waitUntilElementVisible(this.relativeYes);
 		return this.relativeYes.isDisplayed();
 	}
 
 	public void enterJobDetails(String jobTitle, String startDate, String WhatTypeofWork, String companySize) {
-
 		waitUntilElementVisible(this.jobTitle);
-		this.jobTitle.sendKeys(jobTitle);
-		exposureStartDateDay.click();
-		ClickusingActions(startDate.split("\\|")[0]);
-		exposureStartDateMonth.click();
-		ClickusingActions(startDate.split("\\|")[1]);
-		exposureStartDateYear.click();
-		ClickusingActions(startDate.split("\\|")[2]);
-		businessNature.sendKeys(WhatTypeofWork);
+		Enter(this.jobTitle, jobTitle);
+		Enter(exposureStartDate, startDate);
+		Enter(businessNature, WhatTypeofWork);
 
 		if(companySize.equalsIgnoreCase("yes")) {
-			this.companySizeYes.click();
+			Click(this.companySizeYes);
 		} else {
-			this.companySizeNo.click();
+			Click(this.companySizeNo);
 		}
 
-		this.nextButton.click();
+		Click(this.nextButton);
 	}
 
 	public void enterWorkDetails(String relative, String typesofEmployment) {
 		if(relative.equalsIgnoreCase("yes")) {
-			this.relativeYes.click();
+			Click(this.relativeYes);
 		} else {
-			this.relativeNo.click();
+			Click(this.relativeNo);
 		}
-		String dynamicXPath = "//*[@id='radiobuttonFollowupQuestion']/div/label/span[contains(text(),'" + typesofEmployment + "')]";
-		WebElement typeofemp = new WebDriverWait(getDriver(), Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(dynamicXPath)));
-		typeofemp.click();
-		this.nextButton.click();
+		selectDropdownValue(EmploymentType, typesofEmployment);
+		Click(this.nextButton);
 	}
 
 	public void enterJointHealthAndSafetyCommittee(String safetyCommittee, String safetyRepresentative, String nameOfTheUnion) {
 		waitUntilElementVisible(safetyCommitteeYes);
 		if(safetyCommittee.equalsIgnoreCase("yes")) {
-			safetyCommitteeYes.click();
+			Click(safetyCommitteeYes);
 		} else {
-			safetyCommitteeNo.click();
+			Click(safetyCommitteeNo);
 		}
 
 		if(safetyRepresentative.equalsIgnoreCase("yes")) {
-			safetyRepresentativeYes.click();
+			Click(safetyRepresentativeYes);
 		} else {
-			safetyRepresentativeNo.click();
+			Click(safetyRepresentativeNo);
 		}
 
-		this.nameOfTheUnion.sendKeys(nameOfTheUnion);
-		nextButton.click();
+		Enter(this.nameOfTheUnion, nameOfTheUnion);
+		Click(nextButton);
 	}
 }

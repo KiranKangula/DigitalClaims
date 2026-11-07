@@ -12,7 +12,7 @@ import utils.ConfigReader;
 public class DIeForm6_ReviewandSubmit extends BaseDriverClass {
 	ConfigReader prop= Hooks.getConfigReader();
 
-	@FindBy(xpath = "//*[@id='myModal' and @class='modalSurveyLink']") private WebElement ModalPopup;
+	@FindBy(xpath = "//*[@id='myModal' and @class='modal-survey']") private WebElement ModalPopup;
 	@FindBy(xpath = "//*[@class='DistributionPopUpButton2']") private WebElement DistributionPopUpNo;
 	@FindBy(xpath = "//*[@id=\"intakeBodySection\"]/div[2]/div[1]/span[2]/a/span") private WebElement nextButton;
 	@FindBy(xpath = "//*[@id=\"CheckboxContainer\"]/div/div/div[1]/div") private WebElement DeclarationCheckbox;
@@ -32,19 +32,19 @@ public class DIeForm6_ReviewandSubmit extends BaseDriverClass {
 	public boolean verifyReviewAndSubmitReport() {
 
 		waitUntilElementVisible(this.DeclarationCheckbox);
-		this.DeclarationCheckbox.click();
-		nextButton.click();
+		Click(this.DeclarationCheckbox);
+		Click(nextButton);
 		waitUntilElementVisible(this.AddClaimtoProfile);
 		return AddClaimtoProfile.isDisplayed();
 	}
 
 	public boolean verifyReturnToDashBoard() {
 			if(isDisplayed(ModalPopup)) {
-				DistributionPopUpNo.click();
+				Click(DistributionPopUpNo);
 			}
 		if (isDisplayed(returnToDashboardButton)) {
 			waitUntilElementVisible(this.returnToDashboardButton);
-			returnToDashboardButton.click();
+			Click(returnToDashboardButton);
 			waitUntilElementVisible(this.ClaimSummaryPage);
 			return this.ClaimSummaryPage.isDisplayed();
 		} else {
@@ -54,10 +54,9 @@ public class DIeForm6_ReviewandSubmit extends BaseDriverClass {
 	}
 
 	public boolean verifyReviewAndSubmitExposure() {
-
 		waitUntilElementVisible(this.DeclarationCheckbox);
-		this.DeclarationCheckbox.click();
-		submitReportButton.click();
+		Click(this.DeclarationCheckbox);
+		Click(submitReportButton);
 		waitUntilElementVisible(this.confirmationMessage);
 		return confirmationMessage.isDisplayed();
 	}
@@ -65,12 +64,12 @@ public class DIeForm6_ReviewandSubmit extends BaseDriverClass {
 	public boolean selectAddClaimtoProfile(String addClaimtoProfile) throws InterruptedException {
 
 		if (addClaimtoProfile.equalsIgnoreCase("Yes")) {
-			AddClaimtoProfile.click();
+			Click(AddClaimtoProfile);
 		} else {
-			AddClaimtoProfileNo.click();
+			Click(AddClaimtoProfileNo);
 		}
-		submitReportButton.click();
-		Thread.sleep(5000);
+		Click(submitReportButton);
+		Sleep(5000);
 		waitUntilElementVisible(this.confirmationMessage);
 		return confirmationMessage.isDisplayed();
 	}

@@ -19,9 +19,10 @@ public class DIeForm7_InjuryIllnessDetails extends BaseDriverClass {
 	@FindBy(id = "injuryDetailsOneTime") private WebElement InjuryDetailsHeading;
 	@FindBy(id = "injuryDetailsInput") private WebElement WhatHappenedInput;
 	@FindBy(id = "dateContainer") private WebElement dateContainerW;
-	@FindBy(id = "dropdownDobDate-wrapper") private WebElement InjuryDateDay;
-	@FindBy(id = "dropdownDobMonth-wrapper") private WebElement InjuryDateMonth;
-	@FindBy(id = "dropdownDobYear-wrapper") private WebElement InjuryDateYear;
+	private String InjuryDate = "injuryDatePicker";
+//	@FindBy(id = "dropdownDobDate-wrapper") private WebElement InjuryDateDay;
+//	@FindBy(id = "dropdownDobMonth-wrapper") private WebElement InjuryDateMonth;
+//	@FindBy(id = "dropdownDobYear-wrapper") private WebElement InjuryDateYear;
 	//Injury or illness details - affected areas
 	@FindBy(id = "selectBodyparts") private WebElement selectBodypartsW;
 	@FindBy(id = "addBodyPartsBtn") private WebElement addBodyPartsBtn;
@@ -29,9 +30,10 @@ public class DIeForm7_InjuryIllnessDetails extends BaseDriverClass {
 	@FindBy(id = "save") private WebElement save;
 	//Injury or illness reporting details
 	@FindBy(xpath = "//h1[contains(text(),'Injury or illness reporting details')]") private WebElement ReportingDetailsHeader;
-	@FindBy(id = "dropdownDobDate-wrapper") private WebElement EmployerKnownDateDay;
-	@FindBy(id = "dropdownDobMonth-wrapper") private WebElement EmployerKnownDateMonth;
-	@FindBy(id = "dropdownDobYear-wrapper") private WebElement EmployerKnownDateYear;
+	private String EmployerKnownDate = "injuryDatePicker";
+//	@FindBy(id = "dropdownDobDate-wrapper") private WebElement EmployerKnownDateDay;
+//	@FindBy(id = "dropdownDobMonth-wrapper") private WebElement EmployerKnownDateMonth;
+//	@FindBy(id = "dropdownDobYear-wrapper") private WebElement EmployerKnownDateYear;
 	//Injury or illness reporting details - contact
 	@FindBy(xpath = "//h1[contains(text(),'Injury or illness reporting details')]") private WebElement ReportingContactHeader;
 	@FindBy(id = "addSupervisorDetails") private WebElement AddContactButton;
@@ -67,48 +69,44 @@ public class DIeForm7_InjuryIllnessDetails extends BaseDriverClass {
 
 	public boolean selectInjuryIllnessDetails(String whatHappenedInput, String injuryDate, String bodyParts, String employerKnownDate, String reportedTo, String witness, String priorConditions, String thirdParty, String objection) throws InterruptedException {
 		waitUntilElementVisible(InjuryDetailsHeading);
-		WhatHappenedInput.sendKeys(whatHappenedInput);
-		NextButton.click();
+		Enter(WhatHappenedInput, whatHappenedInput); // This is a sendKeys, not a click
+		Click(NextButton);
 		waitUntilElementVisible(dateContainerW);
-		selectDropdownValue(InjuryDateDay, injuryDate.split("/")[0]);
-		selectDropdownValue(InjuryDateMonth, injuryDate.split("/")[1]);
-		selectDropdownValue(InjuryDateYear, injuryDate.split("/")[2]);
-		NextButton.click();
+		DatePicker(InjuryDate, injuryDate);
+		Click(NextButton);
 		waitUntilElementVisible(selectBodypartsW);
-		addBodyPartsBtn.click();
-		selectRadioButtonOption(BodyParts_Checkbox, bodyParts);
-		save.click();
-		Thread.sleep(2000);
-		NextButton.click();
+		Click(addBodyPartsBtn);
+		selectRadioButtonOption(BodyParts_Checkbox, bodyParts); // This is a radio button selection, not a direct click
+		Click(save);
+		Sleep(2000);
+		Click(NextButton);
 		waitUntilElementVisible(ReportingDetailsHeader);
-		selectDropdownValue(EmployerKnownDateDay, employerKnownDate.split("/")[0]);
-		selectDropdownValue(EmployerKnownDateMonth, employerKnownDate.split("/")[1]);
-		selectDropdownValue(EmployerKnownDateYear, employerKnownDate.split("/")[2]);
-		NextButton.click();
+		DatePicker(EmployerKnownDate, employerKnownDate);
+		Click(NextButton);
 		waitUntilElementVisible(ReportingContactHeader);
-		AddContactButton.click();
+		Click(AddContactButton);
 		waitUntilElementVisible(myCardContact);
-		ContactfirstName.sendKeys(reportedTo.split("\\|")[0]);
-		ContactlastName.sendKeys(reportedTo.split("\\|")[1]);
+		Enter(ContactfirstName, reportedTo.split("\\|")[0]);
+		Enter(ContactlastName, reportedTo.split("\\|")[1]);
 		Select(ContactLanguage, reportedTo.split("\\|")[3]);
 		jsMoveSendKeys(ContactphoneNumber,reportedTo.split("\\|")[2] );
-		ContactSaveButton.click();
-		NextButton.click();
+		Click(ContactSaveButton);
+		Click(NextButton);
 		waitUntilElementVisible(WitnessInformationHeading);
-		selectRadioButtonOption(Witness_radio, witness);
-		NextButton.click();
+		selectRadioButtonOption(Witness_radio, witness); // This is a radio button selection, not a direct click
+		Click(NextButton);
 		waitUntilElementVisible(InjuryIncidentLocationHeading);
-		copyAddressButton.click();
-		NextButton.click();
+		Click(copyAddressButton);
+		Click(NextButton);
 		waitUntilElementVisible(PriorConditionHeader);
-		selectRadioButtonOption(PriorConditions_radio, priorConditions);
-		NextButton.click();
+		selectRadioButtonOption(PriorConditions_radio, priorConditions); // This is a radio button selection, not a direct click
+		Click(NextButton);
 		waitUntilElementVisible(ThirdPartyHeader);
-		selectRadioButtonOption(ThirdParty_radio, thirdParty);
-		NextButton.click();
+		selectRadioButtonOption(ThirdParty_radio, thirdParty); // This is a radio button selection, not a direct click
+		Click(NextButton);
 		waitUntilElementVisible(ObjectionHeader);
-		selectRadioButtonOption(Objection_radio, objection);
-		NextButton.click();
+		selectRadioButtonOption(Objection_radio, objection); // This is a radio button selection, not a direct click
+		Click(NextButton);
 		return true;
 
 	}

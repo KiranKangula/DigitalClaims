@@ -69,6 +69,7 @@ public class ClothingAllowance {
 		String OtherDevice = Hooks.currentRow.get().get("OtherDevice");
 		String metalParts = Hooks.currentRow.get().get("metalParts");
 		String repairOrReplaced = Hooks.currentRow.get().get("repairOrReplaced");
+		Hooks.log("Entering data in Clothing Allowance application screen for phone: " + phonenumber);
 		Assert.assertTrue(clothingallowance.enterClothingAllowanceDetails(phonenumber, ppdNel, receivedCa, otherClaimNumber, isEmployed, usesDeviceAtWork, employerPaysForUniform, uniformOverClothing, damage, date, hoursPerDay, daysPerWeek, UpperBody, LowerBody, OtherDevice, metalParts, repairOrReplaced));
 
 	}

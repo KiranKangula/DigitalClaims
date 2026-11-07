@@ -46,23 +46,23 @@ public class TravelExpense extends BaseDriverClass {
 									   String additionalInfo) throws InterruptedException {
 		waitUntilElementVisible(repeatedExpense);
 		if(expenseType.equalsIgnoreCase("Repeated Travel")){
-			repeatedExpense.click();
-			reasonForTravel.click();
-			reasonForTravel.sendKeys(reason);
-			ChooseDate.click();
-			CurrentDate.click();
-			OKButton.click();
-			SelectExpense.click();
+			Click(repeatedExpense);
+			Click(reasonForTravel);
+			GWSelect(reasonForTravel, reason);
+			Click(ChooseDate);
+			Click(CurrentDate);
+			Click(OKButton);
+			Click(SelectExpense);
 			if ( expenses.equalsIgnoreCase("Kilometers")) {
-				KilometersCheckbox.click();
-				Thread.sleep(2000);
-				OkButton.click();
-				Amount.sendKeys(totalKM);
+				Click(KilometersCheckbox);
+				Sleep(2000);
+				Click(OkButton);
+				Enter(Amount, totalKM);// This is a sendKeys, not a click
 			}
 
-			UpdateButton.click();
-			AdditionalInfo.sendKeys(additionalInfo);
-			NextButton.click();
+			Click(UpdateButton);
+			AdditionalInfo.sendKeys(additionalInfo); // This is a sendKeys, not a click
+			Click(NextButton);
 		}
 
 		waitUntilElementVisible(OtherExpenseType);
@@ -71,38 +71,39 @@ public class TravelExpense extends BaseDriverClass {
 
 
 	public boolean otherExpenseDetails(String otherExpenseType, String otherExpenseDescription, String otherExpenseAmount, String otherAdditionalInfo) {
-		OtherExpenseType.sendKeys(otherExpenseType);
+
+		GWSelect(OtherExpenseType, otherExpenseType);
 		ChooseDate.click();
-		CurrentDate.click();
-		OKButton.click();
-		OtherExpenseDescription.sendKeys(otherExpenseDescription);
-		OtherExpenseAmount.sendKeys(otherExpenseAmount);
-		UpdateButton.click();
-		AdditionalInfo.sendKeys(otherAdditionalInfo);
-		NextButton.click();
+		Click(CurrentDate);
+		Click(OKButton);
+		Enter(OtherExpenseDescription, otherExpenseDescription);
+		Enter(OtherExpenseAmount, otherExpenseAmount);
+		Click(UpdateButton);
+		Enter(AdditionalInfo, otherAdditionalInfo);
+		Click(NextButton);
 		waitUntilElementVisible(SummaryHeader);
 		return SummaryHeader.isDisplayed();
 	}
 
-	public boolean reviewAndSubmit(String email) {
+	public boolean reviewAndSubmit(String email) throws InterruptedException {
 
 		if(!email.isEmpty()){
-			isEmailNeeded.click();
-			emailAddress.sendKeys(email);
-		}
-		declaration.click();
-		SubmitButton.click();
+			jsClick(isEmailNeeded);
+			Enter(emailAddress, email);
 
-		try{
-			Thread.sleep(3000);
-			if(DistributionPopUpNo.isDisplayed()){
-				DistributionPopUpNo.click();
-			}
-		}catch (Exception e){
+		}
+		Sleep(5000);
+		jsMoveClick(declaration);
+		jsMoveClick(SubmitButton);
+		Sleep(3000);
+		if(isDisplayed(DistributionPopUpNo)){
+			Click(DistributionPopUpNo);
+		}
+		else {
 			System.out.println("DistributionPopUpNo not displayed");
 		}
-
-		ConfirmationHeader.isDisplayed();
+		Sleep(5000);
+		isDisplayed(ConfirmationHeader);
 		return ConfirmationHeader.isDisplayed();
 	}
 }

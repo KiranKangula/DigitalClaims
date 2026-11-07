@@ -5,8 +5,8 @@ Background: Login to Document Upload Portal
   When User submit email and password
   Then User is on Step 1: Get Started screen
 
-  @UNCD @WSIB
-  Scenario Outline: Upload Numbered WSIB form Document and Verify Document the confirmation screen
+  @SheetName_UNCD_WSIB @UNCD @WSIBForm
+  Scenario: Upload a Single Numbered WSIB form Document and Verify Document is landed in GWCC
     Given User is on Step 1: Get Started screen
     When User clicks on Submitting a document for an existing claim
     Then User enters claim information such as "<claimnumber>", "<lastname>", "<dateofbirth>"
@@ -16,13 +16,23 @@ Background: Login to Document Upload Portal
     And Verify the confirmation screen is displayed
     Then Switch to New tab and Login to ClaimCenter
     And Search for UNCD "<claimnumber>"
-    And Verify the EDOB document is landed in GWCC with "<Author>", "<Description>"
-    Examples:
-      | claimnumber |   lastname   |  dateofbirth  |  wsibform             | filename                                                | Author      |  Description      |
-      | 32710725    |  PAULNMVFQ   |  01/01/2000  | Dental report (0278A) | 0717B_202410_LongTermRateEarningsQuestionnaire_ACES.pdf | UNCD        |  Dental report    |
+    And Verify the document is landed in GWCC with valid Author and Description
 
-  @UNCD @NonWSIB
-  Scenario Outline: Upload Numbered Non-WSIB form Document and Verify Document the confirmation screen
+  @SheetName_UNCD_WSIB @UNCD @WSIBForm
+  Scenario: Upload Multiple Numbered WSIB form Document and Verify Document is landed in GWCC
+    Given User is on Step 1: Get Started screen
+    When User clicks on Submitting a document for an existing claim
+    Then User enters claim information such as "<claimnumber>", "<lastname>", "<dateofbirth>"
+    And User should be able to upload a UNCD documents with "<filenames>"
+    And User should be able to select UNCD WSIB forms "<wsibforms>"
+    And Select delaration and Email consent checkbox and Click on Submit button
+    And Verify the confirmation screen is displayed
+    Then Switch to New tab and Login to ClaimCenter
+    And Search for UNCD "<claimnumber>"
+    And Verify the document are landed in GWCC with valid Author and Description
+
+  @SheetName_UNCD_NonWSIB @UNCD @NonWSIB
+  Scenario: Upload a Single Numbered Non-WSIB form Document and Verify Document is landed in GWCC
     Given User is on Step 1: Get Started screen
     When User clicks on Submitting a document for an existing claim
     Then User enters claim information such as "<claimnumber>", "<lastname>", "<dateofbirth>"
@@ -32,13 +42,23 @@ Background: Login to Document Upload Portal
     And Verify the confirmation screen is displayed
     Then Switch to New tab and Login to ClaimCenter
     And Search for UNCD "<claimnumber>"
-    And Verify the EDOB document is landed in GWCC with "<Author>", "<Description>"
-    Examples:
-      | claimnumber |   lastname   |  dateofbirth  |  nonwsibformcategory | subform                  |  filename                                              | Author      |  Description      |
-      | 32710725    |  PAULNMVFQ   |  01/01/2000  | Expense receipt       | General expense receipt  |0717B_202410_LongTermRateEarningsQuestionnaire_ACES.pdf | UNCD        |  GENERAL WORKER EXPENSE FORM    |
+    And Verify the document is landed in GWCC with valid Author and Description
 
-  @UNCD @Unnumbered
-  Scenario Outline: Upload UnNumbered Document and Verify Document the confirmation screen
+  @SheetName_UNCD_NonWSIB @UNCD @NonWSIB
+  Scenario: Upload Multiple Numbered Non-WSIB form Document and Verify Document is landed in GWCC
+    Given User is on Step 1: Get Started screen
+    When User clicks on Submitting a document for an existing claim
+    Then User enters claim information such as "<claimnumber>", "<lastname>", "<dateofbirth>"
+    And User should be able to upload a UNCD documents with "<filenames>"
+    And User should be able to select UNCD Non WSIB forms "<nonwsibformcategory>", "<subform>"
+    And Select delaration and Email consent checkbox and Click on Submit button
+    And Verify the confirmation screen is displayed
+    Then Switch to New tab and Login to ClaimCenter
+    And Search for UNCD "<claimnumber>"
+    And Verify the document are landed in GWCC with valid Author and Description
+
+  @SheetName_UNCD_UnNumbered @UNCD @UNCDUnnumbered
+  Scenario: Upload UnNumbered Document and Verify Document the confirmation screen
     Given User is on Step 1: Get Started screen
     When User clicks on Reporting a new injury or exposure
     Then User enters claim information such as "<firstname>", "<lastname>", "<dateofbirth>", "<dateofinjury>"
@@ -50,6 +70,3 @@ Background: Login to Document Upload Portal
     Then Switch to New tab and Login to ClaimCenter
     And Search with firstname and lastname & dateofbirth "<dateofbirth>"
     And Verify the UNCD document is landed in GWCC with "<Author>", "<Description>"
-    Examples:
-      | firstname |   lastname   |  dateofbirth  |  dateofinjury|  formcategory                                       |  filename                                             | Author     | Description        |
-      | <dynamicFN>    |  <dynamicLN>   |  01/01/2000  |     01/01/2024 | Worker's report of injury/disease (Form 6) (0006A)  |0717B_202410_LongTermRateEarningsQuestionnaire_ACES.pdf | UNCD      |  Worker's Report of Injury|

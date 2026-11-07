@@ -65,75 +65,75 @@ public class Clothingallowance extends BaseDriverClass {
 												 String damage, String date, String hoursPerDay, String daysPerWeek,
 												 String UpperBody, String LowerBody, String OtherDevice, String metalParts, String repairOrReplaced) throws InterruptedException {
 		waitUntilElementVisible(telephoneNumber);
-		telephoneNumber.sendKeys(telephone);
+		Enter(telephoneNumber, telephone);
 		if(pdpNel.equalsIgnoreCase("Yes")){
-			PDPNelYes.click();
+			Click(PDPNelYes);
 		}else{
-			PDPNelNo.click();
+			Click(PDPNelNo);
 		}
 		if(receivedCa.equalsIgnoreCase("Yes")){
-			receivedCaYes.click();
-			otherClaimNumber.sendKeys(otherClaim);
+			Click(receivedCaYes);
+			Enter(otherClaimNumber, otherClaim);
 		}else{
-			receivedCaNo.click();
+			Click(receivedCaNo);
 		}
 
 		if(isEmployed.equalsIgnoreCase("Yes")){
-			isEmployedYes.click();
+			Click(isEmployedYes);
 		}else{
-			isEmployedNo.click();
+			Click(isEmployedNo);
 		}
 		if(usesDeviceAtWork.equalsIgnoreCase("Yes")){
-			usesDeviceAtWorkYes.click();
+			Click(usesDeviceAtWorkYes);
 		}else{
-			usesDeviceAtWorkNo.click();
+			Click(usesDeviceAtWorkNo);
 
 		}
 		if(employerPaysForUniform.equalsIgnoreCase("Yes")){
-			employerPaysForUniformYes.click();
+			Click(employerPaysForUniformYes);
 		}else{
-			employerPaysForUniformNo.click();
+			Click(employerPaysForUniformNo);
 		}
 		if(uniform.equalsIgnoreCase("Over")){
-			uniformOverClothing.click();
+			Click(uniformOverClothing);
 		}else{
-			uniformInsteadClothing.click();
+			Click(uniformInsteadClothing);
 		}
-		this.damage.sendKeys(damage);
+		Enter(this.damage, damage);
 		String[] dob = date.split("/");
-		day.sendKeys(dob[0]);
-		month.sendKeys(dob[1]);
-		year.sendKeys(dob[2]);
-		this.hoursPerDay.sendKeys(hoursPerDay);
-		this.daysPerWeek.sendKeys(daysPerWeek);
+		GWSelect(day, dob[0]);
+		GWSelect(month, dob[1]);
+		GWSelect(year, dob[2]);
+		Enter(this.hoursPerDay, hoursPerDay);
+		Enter(this.daysPerWeek, daysPerWeek);
 		if (UpperBody.equalsIgnoreCase("Arm Brace")) {
-			armBrace.click();
+			Click(armBrace);
 		} else if (UpperBody.equalsIgnoreCase("Back Brace")) {
-			backBrace.click();
+			Click(backBrace);
 		} else if (UpperBody.equalsIgnoreCase("Back Support")) {
-			backSupport.click();
+			Click(backSupport);
 		} else if (UpperBody.equalsIgnoreCase("Cervical Brace")) {
-			cervicalBrace.click();
+			Click(cervicalBrace);
 		}
 
 		if(LowerBody.equalsIgnoreCase("Leg brace (permanent)")){
-			legBrace.click();
+			Click(legBrace);
 		}else if(LowerBody.equalsIgnoreCase("Leg Prothesis")){
-			legProsthesis.click();
+			Click(legProsthesis);
 		}else if(LowerBody.equalsIgnoreCase("Under arm/forearm supported crutches")){
-			crutches.click();
+			Click(crutches);
 		} else if(LowerBody.equalsIgnoreCase("Wheelchair")) {
-			wheelChair.click();
+			Click(wheelChair);
 		}
 
 		if(!OtherDevice.isEmpty()){
-			otherDevice.sendKeys(OtherDevice);
+			Enter(otherDevice, OtherDevice);
 		}
 		if(metalParts.equalsIgnoreCase("Yes")){
-			jsMoveClick(metalPartsYes);
-			//metalPartsYes.click();
+			Click(metalPartsYes);
+			//Click(metalPartsYes);
 		}else{
-			jsMoveClick(metalPartsNo);
+			Click(metalPartsNo);
 		}
 
 		if(repairOrReplaced.equalsIgnoreCase("Yes")){
@@ -150,11 +150,11 @@ public class Clothingallowance extends BaseDriverClass {
 	public boolean reviewAndSubmit(String email) {
 
 		if(!email.isEmpty()){
-			isEmailNeeded.click();
-			emailAddress.sendKeys(email);
+			Click(isEmailNeeded);
+			Enter(emailAddress, email);
 		}
-		declaration.click();
-		SubmitButton.click();
+		Click(declaration);
+		Click(SubmitButton);
 		ConfirmationHeader.isDisplayed();
 		return ConfirmationHeader.isDisplayed();
 	}

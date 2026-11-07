@@ -12,4 +12,4 @@ Background: Launch to Worker Travel Portal
     And User should be able to review and Submit the application
     Then Switch to New tab and Login to ClaimCenter
     And Search for "<claimnumber>"
-    And Verify the document is landed in GWCC with "<Author>", "<Description>"
+    And Verify the document is landed in GWCC with valid Author and Description

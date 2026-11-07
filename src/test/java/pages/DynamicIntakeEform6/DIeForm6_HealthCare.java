@@ -17,12 +17,10 @@ public class DIeForm6_HealthCare extends BaseDriverClass {
 	@FindBy(xpath = "//*[@id=\"returnToWorkRadios\"]/div[2]/label/span") private WebElement healthCareNo;
 	@FindBy(xpath = "//*[@id=\"returnToWorkRadios\"]/div[3]/label/span") private WebElement healthCareUnsure;
 	@FindBy(id = "sourceOfInfection-wrapper") private WebElement fromWhere;
-	@FindBy(id = "dropdownHealthCareReceivedDate-wrapper") private WebElement healthCareReceivedDateDay;
-	@FindBy(id = "dropdownHealthCareReceivedMonth-wrapper") private WebElement healthCareReceivedDateMonth;
-	@FindBy(id = "dropdownHealthCareReceivedYear-wrapper") private WebElement healthCareReceivedDateYear;
-	@FindBy(id = "dropdownEmployerReportedDate-wrapper") private WebElement employerReportedDateDay;
-	@FindBy(id = "dropdownEmployerReportedMonth-wrapper") private WebElement employerReportedDateMonth;
-	@FindBy(id = "dropdownEmployerReportedYear-wrapper") private WebElement employerReportedDateYear;
+	@FindBy(id = "healthcare-received-date-picker") private WebElement healthCareReceivedDate;
+
+	@FindBy(id = "employer-reported-date-picker") private WebElement employerReportedDate;
+
 	@FindBy(xpath = "//*[@id=\"AddReporterButton\"]/span/span") private WebElement addReporterButton;
 	@FindBy(id = "inputFirstName") private WebElement ReporterFirstName;
 	@FindBy(id = "inputLastName") private WebElement ReporterLastName;
@@ -43,9 +41,8 @@ public class DIeForm6_HealthCare extends BaseDriverClass {
 	@FindBy(id = "inputPostalCode") private WebElement ProviderOrgPostalCode;
 	@FindBy(id = "dropdownCountry-wrapper") private WebElement ProviderOrgCountryDropdown;
 	@FindBy(id = "orgBtnSave") private WebElement saveButtonProviderOrg;
-	@FindBy(id = "dropdownExpectedDate-wrapper") private WebElement whendoyouexpectDay;
-	@FindBy(id = "dropdownExpectedMonth-wrapper") private WebElement whendoyouexpectMonth;
-	@FindBy(id = "dropdownExpectedYear-wrapper") private WebElement whendoyouexpectYear;
+	@FindBy(id = "expected-healthcare-date-picker") private WebElement whendoyouexpect;
+
 	@FindBy(xpath = "//*[@id=\"divNoPhoneContainer\"]/div/div/div[1]/span") private WebElement NoDatePlannedYetCheckbox;
 
 
@@ -58,71 +55,59 @@ public class DIeForm6_HealthCare extends BaseDriverClass {
 
 
 	public void enterHealthCareDetails(String healthCareReceived, String whereHealthCareReceived, String healthCareReceivedDate, String emplReportedDate,
-									   String reporter, String provider, String providerOrg, String providerOrgAddress, String whendoyouexpect) throws InterruptedException {
+									   String reporter, String provider, String providerOrg, String providerOrgAddress, String whendoyouexpect)  {
 
 		if (healthCareReceived.equalsIgnoreCase("Yes")) {
-			healthCareYes.click();
-			fromWhere.click();
+			Click(healthCareYes);
+			Click(fromWhere);
 			DynamicTextClick(whereHealthCareReceived);
-			healthCareReceivedDateDay.click();
-			ClickusingActions(healthCareReceivedDate.split("\\|")[0]);
-			healthCareReceivedDateMonth.click();
-			ClickusingActions(healthCareReceivedDate.split("\\|")[1]);
-			healthCareReceivedDateYear.click();
-			ClickusingActions(healthCareReceivedDate.split("\\|")[2]);
-			employerReportedDateDay.click();
-			ClickusingActions(emplReportedDate.split("\\|")[0]);
-			employerReportedDateMonth.click();
-			ClickusingActions(emplReportedDate.split("\\|")[1]);
-			employerReportedDateYear.click();
-			ClickusingActions(emplReportedDate.split("\\|")[2]);
-			addReporterButton.click();
-			ReporterFirstName.sendKeys(reporter.split("\\|")[0]);
-			ReporterLastName.sendKeys(reporter.split("\\|")[1]);
-			ReporterPosition.sendKeys(reporter.split("\\|")[2]);
+			Click(this.healthCareReceivedDate);
+			Enter(this.healthCareReceivedDate, healthCareReceivedDate);
+			Click(this.employerReportedDate);
+			Enter(this.employerReportedDate, emplReportedDate);
+			Click(addReporterButton);
+			Enter(ReporterFirstName, reporter.split("\\|")[0]);
+			Enter(ReporterLastName, reporter.split("\\|")[1]);
+			Enter(ReporterPosition, reporter.split("\\|")[2]);
 			jsMoveSendKeys(ReporterPhoneNumber, reporter.split("\\|")[3]);
-			saveButtonReporter.click();
-			Thread.sleep(3000);
+			Click(saveButtonReporter);
+			Sleep(3000);
 			if(!provider.isEmpty()) {
-				addProviderContactButton.click();
-				ProviderFirstName.sendKeys(provider.split("\\|")[0]);
-				ProviderLastName.sendKeys(provider.split("\\|")[1]);
+				Click(addProviderContactButton);
+				Enter(ProviderFirstName, provider.split("\\|")[0]);
+				Enter(ProviderLastName, provider.split("\\|")[1]);
 				jsMoveSendKeys(ProviderPhoneNumber, provider.split("\\|")[2]);
-				saveButtonProvider.click();
+				Click(saveButtonProvider);
 			}
 			else if(!providerOrg.isEmpty()) {
-				addProviderOrgButton.click();
-				ProviderOrgName.sendKeys(providerOrg.split("\\|")[0]);
+				Click(addProviderOrgButton);
+				Enter(ProviderOrgName, providerOrg.split("\\|")[0]);
 				jsMoveSendKeys(ProviderOrgPhoneNumber, providerOrg.split("\\|")[1]);
-				ProviderOrgAddressLine1.sendKeys(providerOrgAddress.split("\\|")[0]);
-				ProviderOrgCity.sendKeys(providerOrgAddress.split("\\|")[1]);
-				ProviderOrgProvinceDropdown.click();
+				Enter(ProviderOrgAddressLine1, providerOrgAddress.split("\\|")[0]);
+				Enter(ProviderOrgCity, providerOrgAddress.split("\\|")[1]);
+				Click(ProviderOrgProvinceDropdown);
 				ClickusingActions(providerOrgAddress.split("\\|")[2]);
-				ProviderOrgPostalCode.sendKeys(providerOrgAddress.split("\\|")[3]);
-				ProviderOrgCountryDropdown.click();
+				Enter(ProviderOrgPostalCode, providerOrgAddress.split("\\|")[3]); // This is a sendKeys, not a click
+				Click(ProviderOrgCountryDropdown);
 				ClickusingActions(providerOrgAddress.split("\\|")[4]);
-				saveButtonProviderOrg.click();
+				Click(saveButtonProviderOrg);
 			}
 
 
 		} else if (healthCareReceived.equalsIgnoreCase("No")) {
-			healthCareNo.click();
+			Click(healthCareNo);
 
 		} else {
-			healthCareUnsure.click();
+			Click(healthCareUnsure);
 			if(whendoyouexpect.isEmpty()) {
-				NoDatePlannedYetCheckbox.click();
+				Click(NoDatePlannedYetCheckbox);
 			}else {
-				whendoyouexpectDay.click();
-				ClickusingActions(whendoyouexpect.split("\\|")[0]);
-				whendoyouexpectMonth.click();
-				ClickusingActions(whendoyouexpect.split("\\|")[1]);
-				whendoyouexpectYear.click();
-				ClickusingActions(whendoyouexpect.split("\\|")[2]);
+				Click(this.whendoyouexpect);
+				Enter(this.whendoyouexpect, whendoyouexpect);
 			}
 
 		}
-		Thread.sleep(3000);
-		nextButton.click();
+		Sleep(3000);
+		Click(nextButton);
 	}
 }

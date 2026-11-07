@@ -16,9 +16,10 @@ import java.time.Duration;
 public class HomePage extends BaseDriverClass {
 	ConfigReader prop= Hooks.getConfigReader();
 
-	@FindBy(xpath = "//*[@id='divTitle']/h1") private WebElement homepageHeader;
-	@FindBy(xpath = "//*[contains(@aria-label,'Go to Report an injury or illness (Form 7)')]") private WebElement GOButton;
+	@FindBy(xpath = "//*[@id='claimTitleContainer']") private WebElement homepageHeader;
+	@FindBy(xpath = "//*[contains(@aria-label,'Report an injury or illness Go')]") private WebElement GOButton;
 	@FindBy(id = "reportsGoButton") private WebElement reportsGoButton;
+	@FindBy(xpath = "//*[@id=\"submitnewreport\"]/span/span") private WebElement StartNewReport;
 
 	public HomePage(WebDriver driver, WebDriverWait wait) {
 		super(driver, wait);
@@ -36,7 +37,7 @@ public class HomePage extends BaseDriverClass {
 		String dynamicXPath = "//*[contains(text(),'" + claimNumber + "')]";
 		WebElement claimElement = new WebDriverWait(getDriver(), Duration.ofSeconds(20))
 				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(dynamicXPath)));
-		claimElement.click();
+		Click(claimElement);
 	}
 
 
@@ -46,7 +47,8 @@ public class HomePage extends BaseDriverClass {
 	}
 
 	public boolean verifyOSBCUnifiedLandingPage() {
-		waitUntilElementVisible(reportsGoButton);
-		return reportsGoButton.isDisplayed();
+
+		waitUntilElementVisible(GOButton);
+		return GOButton.isDisplayed();
 	}
 }

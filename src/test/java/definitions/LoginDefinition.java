@@ -36,21 +36,25 @@ public class LoginDefinition {
 
 	@Given("^User is on login page$")
 	public void loginPage() {
+		Hooks.log("Verifying User is on Login Page.");
 		Assert.assertTrue(loginPage.verifyOnLoginPage());
 	}
 
 	@When("^User submit email and password$")
 	public void submitEmailPassword() {
+		Hooks.log("Submitting Email and Password.");
 		loginPage.loginToSite(prop.getProperty("OSPC_username"), prop.getProperty("OSPC_Password"));
 	}
 
 	@Then("^User should be able to login successfully and new page open$")
 	public void successLogin() {
+		Hooks.log("Verifying successful login.");
 		Assert.assertTrue(homePage.verifyOnHomePage());
 	}
 
 	@Then("User should be able to login successfully and retrieve the token")
 	public void userShouldBeAbleToLoginSuccessfullyAndRetrieveTheToken() throws Exception {
+		Hooks.log("Verifying login and retrieving OAuth token.");
 		Assert.assertTrue(homePage.verifyOnHomePage());
 		// Retrieve browser logs
 		LogEntries logEntries = driver.manage().logs().get("browser");
@@ -69,17 +73,19 @@ public class LoginDefinition {
 			}
 		}
 		if (token == null) {
+			Hooks.log("Error: Bearer token not found in console logs.");
 			throw new RuntimeException("Bearer token not found in console logs.");
 		}
-		System.out.println("Bearer Token: " + token);
+		Hooks.log("Bearer Token retrieved successfully.");
 		// Path to the properties file
-		String propertiesFilePath = "src/test/resources/config/OSPC_API.properties";
+		String propertiesFilePath = "src/test/resources/config/"+System.getProperty("env")+ "/OSPC_API.properties";
 		// Update the BearerToken value
 		prop.setProperty("BearerToken", token, propertiesFilePath);
 	}
 
 	@Then("User should be able to login successfully and retrieve the token for UNCD")
 	public void userShouldBeAbleToLoginSuccessfullyAndRetrieveTheTokenUNCD() throws Exception {
+		Hooks.log("Verifying Get Started page and retrieving token from session storage.");
 		Assert.assertTrue(getStarted.verifyOnGetStartedPage());
 
 		// Use JavascriptExecutor to retrieve all keys from sessionStorage
@@ -106,12 +112,13 @@ public class LoginDefinition {
 		}
 
 		if (secret == null || secret.isEmpty()) {
+			Hooks.log("Error: Secret with credentialType:IdToken not found in sessionStorage.");
 			throw new RuntimeException("Secret with credentialType:IdToken not found in sessionStorage.");
 		}
 
-		System.out.println("Retrieved Secret: " + secret);
+		Hooks.log("Retrieved Secret successfully.");
 		// Path to the properties file
-		String propertiesFilePath = "src/test/resources/config/UNCD_API.properties";
+		String propertiesFilePath = "src/test/resources/config/"+System.getProperty("env")+"/UNCD_API.properties";
 		// Update the BearerToken value
 		prop.setProperty("BearerToken", secret, propertiesFilePath);
 	}
@@ -119,6 +126,7 @@ public class LoginDefinition {
 
 	@Then("Regenerate the Token for Claim Submission")
 	public void regenerateTheTokenForClaimSubmission() throws Exception {
+		Hooks.log("Regenerating Token for Claim Submission.");
 		loginPage();
 		submitEmailPassword();
 		userShouldBeAbleToLoginSuccessfullyAndRetrieveTheToken();
@@ -128,7 +136,7 @@ public class LoginDefinition {
 
 	@Then("User should be able to login successfully to OSBC portal")
 	public void userShouldBeAbleToLoginSuccessfullyToOSBCPortal() {
-
+		Hooks.log("Verifying successful login to OSBC portal.");
 		Assert.assertTrue(homePage.verifyOSBCUnifiedLandingPage());
 	}
 }

@@ -19,9 +19,8 @@ public class DIeForm6_ExposureDetails extends BaseDriverClass {
 	@FindBy(xpath = "//*[@id=\"intakeBodySection\"]/div[2]/div[1]/span[2]/a/span") private WebElement nextButton;
 	@FindBy(xpath = "//*[@id=\"radiobuttonOccurance\"]/div[1]/label") private WebElement exposureToInfectiousSubstance;
 	@FindBy(xpath = "//*[@id=\"radiobuttonOccurance\"]/div[2]/label") private WebElement exposureToOther;
-	@FindBy(id = "dropdownExposureDate-wrapper") private WebElement exposureDateDay;
-	@FindBy(id = "dropdownExposureMonth-wrapper") private WebElement exposureDateMonth;
-	@FindBy(id = "dropdownExposureYear-wrapper") private WebElement exposureDateYear;
+	@FindBy(id = "exposure-date-picker") private WebElement exposureDate;
+
 	@FindBy(id = "sourceOfInfection-wrapper") private WebElement sourceOfInfection;
 	@FindBy(id = "exposureSource") private WebElement exposureSource;
 	@FindBy(id = "suspectedSubstance-wrapper") private WebElement suspectedSubstance;
@@ -39,34 +38,24 @@ public class DIeForm6_ExposureDetails extends BaseDriverClass {
 									 String whatSubstance, String DescribeWhere, String Whatareyouwearing) throws InterruptedException {
 			waitUntilElementVisible(exposureToInfectiousSubstance);
 		if(exposureTo.equalsIgnoreCase("infectious Substance")) {
-			exposureToInfectiousSubstance.click();
-			waitUntilElementVisible(exposureDateDay);
-			exposureDateDay.click();
-			ClickusingActions(exposureDate.split("\\|")[0]);
-			exposureDateMonth.click();
-			ClickusingActions(exposureDate.split("\\|")[1]);
-			exposureDateYear.click();
-			ClickusingActions(exposureDate.split("\\|")[2]);
-			sourceOfInfection.click();
+			Click(exposureToInfectiousSubstance);
+			waitUntilElementVisible(this.exposureDate);
+			Enter(this.exposureDate, exposureDate);
+			Click(sourceOfInfection);
 			DynamicTextClick(howContacted);
-			exposureSource.sendKeys(sourceofExposure);
-			suspectedSubstance.click();
+			Enter(exposureSource, sourceofExposure);
+			Click(suspectedSubstance);
 			DynamicTextClick(whatSubstance);
 		} else {
-			exposureToOther.click();
-			waitUntilElementVisible(exposureDateDay);
-			exposureDateDay.click();
-			ClickusingActions(exposureDate.split("\\|")[0]);
-			exposureDateMonth.click();
-			ClickusingActions(exposureDate.split("\\|")[1]);
-			exposureDateYear.click();
-			ClickusingActions(exposureDate.split("\\|")[2]);
-			contactedByCeir.click();
+			Click(exposureToOther);
+			waitUntilElementVisible(this.exposureDate);
+			Enter(this.exposureDate, exposureDate);
+			Click(contactedByCeir);
 			DynamicTextClick(howContacted);
-			affectedAreaDetails.sendKeys(	DescribeWhere);
-			protectiveEquipmentInfo.sendKeys( Whatareyouwearing);
+			Enter(affectedAreaDetails, DescribeWhere);
+			Enter(protectiveEquipmentInfo, Whatareyouwearing);
 
 		}
-		nextButton.click();
+		Click(nextButton);
 	}
 }

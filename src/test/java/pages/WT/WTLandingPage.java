@@ -27,13 +27,13 @@ public class WTLandingPage extends BaseDriverClass {
 	}
 
 	public void ValidateClaimantInformation(String claimnumber, String lastname, String dateOfbirth) {
-		claimNumber.sendKeys(claimnumber);
-		lastName.sendKeys(lastname);
+		Enter(claimNumber, claimnumber);
+		Enter(lastName, lastname);
 		String[] dob = dateOfbirth.split("/");
-		DateofBirthDay.sendKeys(dob[0]);
-		DateofBirthMonth.sendKeys(dob[1]);
-		DateofBirthYear.sendKeys(dob[2]);
-		NextButton.click();
+		GWSelect(DateofBirthDay, dob[0]);
+		GWSelect(DateofBirthMonth, dob[1]);
+		GWSelect(DateofBirthYear, dob[2]);
+		jsMoveClick(NextButton);
 
 	}
 }

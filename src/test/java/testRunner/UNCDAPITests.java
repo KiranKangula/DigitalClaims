@@ -13,7 +13,7 @@ import java.util.Date;
         glue = "definitions",
         monochrome = true,
         plugin = {"pretty"},
-        publish = true
+        publish = false
 )
 public class UNCDAPITests extends AbstractTestNGCucumberTests {
     public UNCDAPITests() {

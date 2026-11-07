@@ -17,9 +17,18 @@ public class OSPCDirectDeposit extends BaseDriverClass {
 	ConfigReader prop= Hooks.getConfigReader();
 	public static String randommessage;
 
-	@FindBy(id = "directDepositButton") private WebElement directDepositButton;
-	@FindBy(xpath = "//*[@id=\"diBodySection\"]/div/div/div[2]/div[1]/button/span/span/span") private WebElement AddDirectdepositLink;
-	@FindBy(xpath = "\t//*[@id=\"diBodySection\"]/div/div/div[2]/div[1]/div[6]/button/span/span/span") private WebElement editDirectdepositLink;
+	@FindBy(id = "setupDepositButton") private WebElement directDepositButton;
+	@FindBy(id = "Question1-wrapper") private WebElement Question1;
+	@FindBy(id = "answer_oneQuestion1") private WebElement answer_oneQuestion1;
+	@FindBy(id = "Question2-wrapper") private WebElement Question2;
+	@FindBy(id = "answer_oneQuestion2") private WebElement answer_oneQuestion2;
+	@FindBy(id = "Question3-wrapper") private WebElement Question3;
+	@FindBy(id = "answer_oneQuestion3") private WebElement answer_oneQuestion3;
+
+
+
+	@FindBy(xpath = "//*[@id=\"diBodySection\"]/div/div/div[2]/div/div[2]/h1") private WebElement AddDirectdepositHeader;
+	@FindBy(xpath = "//*[contains(text(), 'Edit')]") private WebElement editDirectdepositLink;
 	@FindBy(id = "monthDropdown-wrapper") private WebElement monthDropdown;
 	@FindBy(id = "yearDropdown-wrapper") private WebElement yearDropdown;
 	@FindBy(xpath = "//*[@id=\"dobinputSection\"]/div/div/button/span/span") private WebElement ConfirmButton;
@@ -31,7 +40,9 @@ public class OSPCDirectDeposit extends BaseDriverClass {
 	@FindBy(id = "nextButton") private WebElement nextButton;
 	@FindBy(id = "review") private WebElement reviewStep;
 	@FindBy(xpath = "//*[@id=\"termagreeSection\"]/div[1]/div[1]/div/div/div[1]/span") private WebElement confirmCheckbox_Review;
-	@FindBy(xpath = "//*[@id=\"diBodySection\"]/div/div/div[3]/div/div[4]/div/span[2]/a/span") private WebElement SubmitButton;
+	@FindBy(xpath = "//*[contains(text(), 'Submit')]") private WebElement SubmitButton;
+	@FindBy(xpath = "//*[contains(text(), 'Submit changes')]") private WebElement SubmitChanges;
+
 	@FindBy(xpath = "//*[@id=\"navigationSection\"]/a/span") private WebElement navigationSection;
 	@FindBy(xpath = "//*[@id=\"diBodySection\"]/div/div/div[2]/div[1]/div") private WebElement NoDirectDepositMessage;
 
@@ -40,65 +51,69 @@ public class OSPCDirectDeposit extends BaseDriverClass {
 		PageFactory.initElements(driver, this);
 	}
 
-	public boolean LandOnDirectDeposit() throws InterruptedException {
-		directDepositButton.click();
-		Thread.sleep(2000);
-		if(isDisplayed(AddDirectdepositLink)) {
-			waitUntilElementVisible(AddDirectdepositLink);
-			return AddDirectdepositLink.isDisplayed();
+	public boolean LandOnDirectDeposit()  {
+		Click(directDepositButton);
+		Sleep(2000);
+		waitUntilElementVisible(Question1);
+		return	Question1.isDisplayed();
+
+	}
+
+	public boolean AddDirectDepositInformation() {
+		//Click(AddDirectdepositLink);
+		//waitUntilElementVisible(monthDropdown);
+		//Click(monthDropdown);
+		selectDropdownValue(Question1, "Name of the city or town where your grandparents live(d).");
+		Enter(answer_oneQuestion1, "Toronto");
+		selectDropdownValue(Question2, "In what city or town did your parents meet?");
+		Enter(answer_oneQuestion2, "Toronto");
+		selectDropdownValue(Question3, "Name of a college or university you applied to but didn't attend.");
+		Enter(answer_oneQuestion3, "Toronto");
+		Click(nextButton);
+
+		if(isDisplayed(AddDirectdepositHeader)) {
+			return AddDirectdepositHeader.isDisplayed();
 		}else if(isDisplayed(editDirectdepositLink)) {
-			waitUntilElementVisible(editDirectdepositLink);
 			return editDirectdepositLink.isDisplayed();
 		}
 		return false;
 	}
 
-	public boolean AddDirectDepositInformation(String Month, String Year) {
-		AddDirectdepositLink.click();
-		waitUntilElementVisible(monthDropdown);
-		monthDropdown.click();
-		Actions actions = new Actions(getDriver());
-		actions.sendKeys(Month).build().perform();
-		actions.sendKeys(Keys.ENTER).build().perform();
-		yearDropdown.click();
-		actions.sendKeys(Year).build().perform();
-		actions.sendKeys(Keys.ENTER).build().perform();
-
-		ConfirmButton.click();
-		waitUntilElementVisible(transitInput);
-		return transitInput.isDisplayed();
-	}
-
 	public boolean editDirectDepositInformation(String Month, String Year) {
-		waitUntilElementVisible(editDirectdepositLink);
-		editDirectdepositLink.click();
-		waitUntilElementVisible(monthDropdown);
-		monthDropdown.click();
-
-		Actions actions = new Actions(getDriver());
-		actions.sendKeys(Month).build().perform();
-		actions.sendKeys(Keys.ENTER).build().perform();
-		yearDropdown.click();
-		actions.sendKeys(Year).build().perform();
-		actions.sendKeys(Keys.ENTER).build().perform();
-
-		ConfirmButton.click();
-		waitUntilElementVisible(transitInput);
+		if(isDisplayed(editDirectdepositLink)) {
+			Click(editDirectdepositLink);
+			waitUntilElementVisible(transitInput);
+		}
+		else{
+			AddDirectDepositInformation();
+		}
 		return transitInput.isDisplayed();
 	}
 
 	public boolean AddandValidateDDInformation(String transit, String institution, String AcctNumber) {
-		transitInput.sendKeys(transit);
-		institutionInput.sendKeys(institution);
-		accountNumber.sendKeys(AcctNumber);
-		Reenter_accountNumber.sendKeys(AcctNumber);
-		confirmCheckbox.click();
-		nextButton.click();
-		waitUntilElementVisible(reviewStep);
-		confirmCheckbox_Review.click();
-		SubmitButton.click();
-		waitUntilElementVisible(navigationSection);
-		return navigationSection.isDisplayed();
+		if(isDisplayed(editDirectdepositLink)) {
+			Click(editDirectdepositLink);
+			waitUntilElementVisible(transitInput);
+		}
+		Enter(transitInput, transit);
+		Enter(institutionInput, institution);
+		Enter(accountNumber, AcctNumber);
+		Enter(Reenter_accountNumber, AcctNumber);
+		Click(confirmCheckbox);
+		if(isDisplayed(nextButton))
+		{
+			Click(nextButton);
+		}else {
+			Click(SubmitChanges);
+		}
+
+		if(isDisplayed(confirmCheckbox_Review))
+		{
+			Click(confirmCheckbox_Review);
+			Click(SubmitButton);
+		}
+		waitUntilElementVisible(nextButton);
+		return nextButton.isDisplayed();
 
 	}
 
@@ -113,10 +128,10 @@ public class OSPCDirectDeposit extends BaseDriverClass {
 		Set<String> windowHandles = getDriver().getWindowHandles();
 		List<String> tabs = new ArrayList<>(windowHandles);
 		getDriver().close();
-		getDriver().switchTo().window(tabs.get(0));
-		navigationSection.click();
+		getDriver().switchTo().window(tabs.get(0)); // Assuming the first tab is the main one
+		Click(navigationSection);
 		waitUntilElementVisible(directDepositButton);
-		directDepositButton.click();
+		Click(directDepositButton);
 		waitUntilElementVisible(NoDirectDepositMessage);
 		return NoDirectDepositMessage.isDisplayed();
 

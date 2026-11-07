@@ -19,6 +19,8 @@ import utils.ConfigReader;
 
 import java.time.Duration;
 
+import static utils.BaseDriverClass.getCurrentDate;
+
 public class WorkerTravel {
 	private WebDriver driver;
 	private WebDriverWait wait;
@@ -39,6 +41,7 @@ public class WorkerTravel {
 
 	@Given("User is on landing page")
 	public void userIsOnLandingPage() throws InterruptedException {
+		Hooks.log("Verifying User is on Claimant Information Page.");
 		Assert.assertTrue(WTlandingpage.verifyOnClaimantInformationPage());
 
 	}
@@ -48,6 +51,7 @@ public class WorkerTravel {
 		claimnumber = Hooks.currentRow.get().get("Claim Number");
 		lastname = Hooks.currentRow.get().get("lastname");
 		dateOfbirth = Hooks.currentRow.get().get("dateofbirth");
+		Hooks.log("Entering Claimant Information: Claim=" + claimnumber + ", Last Name=" + lastname + ", DOB=" + dateOfbirth);
 		WTlandingpage.ValidateClaimantInformation(claimnumber, lastname, dateOfbirth);
 	}
 
@@ -61,6 +65,7 @@ public class WorkerTravel {
 		String Parking = Hooks.currentRow.get().get("Parking");
 		String Others = Hooks.currentRow.get().get("Others");
 		String AdditionalInfo = Hooks.currentRow.get().get("AdditionalInfo");
+		Hooks.log("Entering Travel Expense details for type: " + expenseType);
 		Assert.assertTrue(travelExpense.enterExpenseDetails( expenseType, Reason, Expenses, TotalKM, PubTransit, Parking, Others, AdditionalInfo));
 
 	}
@@ -72,12 +77,15 @@ public class WorkerTravel {
 		String OtherExpenseAmount = Hooks.currentRow.get().get("OtherExpenseAmount");
 		String OtherAdditionalInfo = Hooks.currentRow.get().get("OtherAdditionalInfo");
 
+		Hooks.log("Entering Other Expenses: Type=" + OtherExpenseType + ", Amount=" + OtherExpenseAmount);
 		Assert.assertTrue(travelExpense.otherExpenseDetails( OtherExpenseType, OtherExpenseDescription, OtherExpenseAmount, OtherAdditionalInfo));
 	}
 
 	@And("User should be able to review and Submit the application")
-	public void userShouldBeAbleToReviewAndSubmitTheApplication() {
+	public void userShouldBeAbleToReviewAndSubmitTheApplication() throws InterruptedException {
 		String email = Hooks.currentRow.get().get("email");
+		Hooks.log("Reviewing and submitting the application for email: " + email);
 		Assert.assertTrue(travelExpense.reviewAndSubmit( email));
+		Hooks.log("Submission Submitted at: " + getCurrentDate("MMM dd, yyyy hh:mm:ss a"));
 	}
 }

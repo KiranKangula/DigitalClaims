@@ -29,7 +29,7 @@ public class DIeForm7_ReporterDetails extends BaseDriverClass {
 
 		selectRadioButtonOption(ReporterDetails_radio, reportedby);
 
-		NextButton.click();
+		Click(NextButton);
 		return true;
 	}
 }
